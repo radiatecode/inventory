@@ -76,17 +76,68 @@ class Products
 
     public function allProducts(){
         $products = $this->_db->select(['products.*','brands.brand_name',
-            'categories.name','suppliers.name AS supplier'])
+            'categories.name','suppliers.name AS supplier','sum(qty) AS product_qty'])
             ->table('products')
             ->join('brands','brands.id','products.brand_id')
             ->join('categories','categories.id','products.category_id')
             ->join('suppliers','suppliers.id','products.supplier_id')
+            ->leftJoin('purchase','purchase.product_id','products.id')
+            ->groupBy('purchase.product_id')
             ->orderBy('products.id','DESC')
             ->get();
         if (!$products){
             Session::flush('failed','Query Error! '.$this->_db->sql_error());
         }
         return $products;
+    }
+
+    public function viewProduct($id){
+
+        $product = $this->_db->find('products',$id);
+        if ($this->_db->numRows($product)==0){
+            $this->messages[] = 'Product Query Error '.$this->_db->sql_error();
+        }
+
+        $product_attributes = $this->_db->select(['products_attributes.*'])
+            ->table('products_attributes')
+            ->where('product_id','=',$id)
+            ->get();
+        if ($this->_db->numRows($product)==0){
+            $this->messages[] = 'Attributes Query Error '.$this->_db->sql_error();
+        }
+
+        $purchased = $this->_db->select(['purchase.*'])
+            ->table('purchase')
+            ->where('product_id','=',$id)
+            ->get();
+        if ($this->_db->numRows($product)==0){
+            $this->messages[] = 'Purchased Query Error '.$this->_db->sql_error();
+        }
+
+        if ($product && $product_attributes && $purchased){
+            $data = [
+                'product'=>$product,
+                'attributes'=>$product_attributes,
+                'stock'=>$purchased
+            ];
+            return $data;
+        }
+
+        return false;
+    }
+
+    public function purchase($product_id,$qty){
+        $insert = $this->_db->insert('purchase',[
+            'product_id'=>$product_id,
+            'qty'=>$qty,
+            'purchase_date'=>date('Y-m-d h:i:s')
+        ]);
+
+        if (!$insert){
+            return $this->_db->sql_error();
+        }
+
+        return 'success';
     }
 
     public function __destruct()

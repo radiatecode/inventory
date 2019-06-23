@@ -61,7 +61,13 @@ $product = new Products();
                                             <tr>
                                                 <td><input type="checkbox" name="ids" id="ids" value="<?= $row['id'] ?>"></td>
                                                 <td><?= $row['name'] ?></td>
-                                                <td><?= $row['product_name'] ?></td>
+                                                <td>
+                                                    <?php if (!empty($row['thumb'])){ ?>
+                                                        <img src="../assets/images/<?= $row['thumb'] ?>" class="image"
+                                                             style="height: 30px; width: 30px; border-radius: 30px">
+                                                    <?php } ?>
+                                                    <?= $row['product_name'] ?>
+                                                </td>
                                                 <td><?= $row['brand_name'] ?></td>
                                                 <td><?= $row['supplier'] ?></td>
                                                 <td>
@@ -72,16 +78,16 @@ $product = new Products();
                                                     <?php } ?>
                                                 </td>
                                                 <td><?= $row['product_price'] ?></td>
-                                                <td></td>
+                                                <td><?= $row['product_qty'] ?></td>
                                                 <td></td>
                                                 <td><?= $row['created_at'] ?></td>
                                                 <td>
-                                                    <button type="button" class="btn btn-success btn-xs edit">
+                                                    <button data-product="<?= $row['product_name'] ?>" type="button" id="<?= $row['id'] ?>" class="btn btn-success btn-xs purchase">
                                                         <i class="fa fa-cart-arrow-down"></i>
                                                     </button>
-                                                    <button type="button" class="btn btn-info btn-xs edit">
+                                                    <a href="products-view.php?id=<?= $row['id'] ?>" class="btn btn-info btn-xs edit">
                                                         <i class="fa fa-eye"></i>
-                                                    </button>
+                                                    </a>
                                                     <button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>
                                                 </td>
                                             </tr>
@@ -109,7 +115,32 @@ $product = new Products();
 </div>
 <?php include('../include/_script.php') ?>
 <script>
-
+    $('.purchase').click(function () {
+        var id = $(this).attr('id');
+        var product = $(this).attr('data-product');
+        Swal.fire({
+            title: "Enter Quantity",
+            text: "Add Quantity for the product : "+product,
+            input: 'text',
+            showCancelButton: true
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url:'ajax.php?ajax=purchase&id='+id+'&qty='+result.value,
+                    type:'GET',
+                    dataType:'json',
+                    success:function (response) {
+                        if (response==="success"){
+                            window.location.reload();
+                        }
+                    },
+                    error:function (error) {
+                        console.log(error);
+                    }
+                })
+            }
+        });
+    })
 </script>
 </body>
 </html>

@@ -200,8 +200,14 @@ class DB
         $this->SQL .= $table;
         return $this;
     }
+
     public function join($table,$leftTable,$rightTable){
         $this->SQL .= " INNER JOIN ".$table." ON ".$leftTable."=".$rightTable;
+        return $this;
+    }
+
+    public function leftJoin($table,$leftTable,$rightTable){
+        $this->SQL .= " LEFT JOIN ".$table." ON ".$leftTable."=".$rightTable;
         return $this;
     }
 
@@ -214,6 +220,11 @@ class DB
         $this->whereCount++;
         $this->SQL .= $this->WHERE_SQL;
         return $this;
+    }
+
+    public function groupBy($column){
+       $this->SQL .= " GROUP BY ".$column;
+       return $this;
     }
 
     public function orderBy($column,$by){
