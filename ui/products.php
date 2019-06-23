@@ -76,6 +76,9 @@ $product = new Products();
                                                 <td></td>
                                                 <td><?= $row['created_at'] ?></td>
                                                 <td>
+                                                    <button type="button" class="btn btn-success btn-xs edit">
+                                                        <i class="fa fa-cart-arrow-down"></i>
+                                                    </button>
                                                     <button type="button" class="btn btn-info btn-xs edit">
                                                         <i class="fa fa-eye"></i>
                                                     </button>

@@ -28,6 +28,11 @@ class Validation
                     }
                 }
             }
+            if (self::numberRules($rule_break)){
+                if (!empty($post[$key]) && !is_numeric($post[$key]) ){
+                    self::$errors[] = ucwords($key)." Field Value Must Be Numeric";
+                }
+            }
 
         }
         return self::$errors;
@@ -40,5 +45,10 @@ class Validation
     private static function arrayRules($rules){
         return in_array('array',$rules);
     }
+
+    private static function numberRules($rules){
+        return in_array('number',$rules);
+    }
+
 
 }

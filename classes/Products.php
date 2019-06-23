@@ -23,7 +23,7 @@ class Products
              'supplier'=>'required',
              'product_name'=>'required',
              'description'=>'required',
-             'product_price'=>'required',
+             'product_price'=>'required|number',
              'category'=>'required',
              'attribute'=>'required|array',
              'attribute_value'=>'required|array'
