@@ -113,24 +113,16 @@ class DB
         return true;
     }
 
-    public function update($table,array $update_data,array $whereConditions){
+    public function update($table,array $update_data){
+        $this->emptySql();
         $set_columns_and_values=[];
-        $where_columns=[];
         foreach ($update_data as $key=>$value) {
             $set_columns_and_values[] = $key."='".$value."'";
         }
-        foreach ($whereConditions as $key=>$value) {
-            $where_columns[] = $key."='".$value."'";
-        }
         $sql_columns_values=implode(',',$set_columns_and_values);
-        $sql_where_columns=implode(' AND ',$where_columns);
 
-        $SQL="UPDATE ".$table." SET ".$sql_columns_values." WHERE ".$sql_where_columns;
-        $result=$this->query($SQL);
-        if(!$result){
-            return false;
-        }
-        return true;
+        $this->SQL .="UPDATE ".$table." SET ".$sql_columns_values;
+        return $this;
     }
 
     public function all($table){
@@ -150,6 +142,12 @@ class DB
             return false;
         }
         return $result;
+    }
+
+    public function delete($table){
+        $this->emptySql();
+        $this->SQL .= "DELETE FROM ".$table;
+        return $this;
     }
 
     public function joinAndGet(array $tables,

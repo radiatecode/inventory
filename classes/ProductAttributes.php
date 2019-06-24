@@ -81,6 +81,16 @@ class ProductAttributes
         return $this->_db->fetchAll($result);
     }
 
+    public function delete_attributes($id){
+        $result = $this->_db->delete('products_attributes')
+            ->where('id','=',$id)
+            ->get();
+        if (!$result){
+            return false;
+        }
+        return true;
+    }
+
     public function __destruct()
     {
         $this->_db->close();
