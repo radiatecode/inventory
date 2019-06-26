@@ -9,6 +9,7 @@ return array(
     'Auth' => $baseDir . '/classes/Auth.php',
     'Brand' => $baseDir . '/classes/Brand.php',
     'Category' => $baseDir . '/classes/Category.php',
+    'Customers' => $baseDir . '/classes/Customers.php',
     'DB' => $baseDir . '/function/DB.php',
     'ProductAttributes' => $baseDir . '/classes/ProductAttributes.php',
     'Products' => $baseDir . '/classes/Products.php',

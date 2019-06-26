@@ -32,7 +32,7 @@ $product = new Products();
                     <?php session_message() ?>
                     <!-- Page Container -->
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                        <button class="btn btn-success btn-md" data-toggle="modal" data-target=".add_modal"><i class="fa fa-plus-circle"></i> Add</button>
+                        <a class="btn btn-success btn-md" href="products-add.php"><i class="fa fa-plus-circle"></i> Add</a>
                         <div class="x_panel">
                             <div class="x_title">
                                 <h2>Products <small>List</small></h2>
@@ -47,11 +47,10 @@ $product = new Products();
                                                 <th>Category</th>
                                                 <th>Product Name</th>
                                                 <th>Brand</th>
-                                                <th>Supplier</th>
                                                 <th>Enable</th>
-                                                <th>Price</th>
-                                                <th>Qty</th>
-                                                <th>Available Qty</th>
+                                                <th>Purchase Price</th>
+                                                <th>MRP</th>
+                                                <th>Stock Qty</th>
                                                 <th>Created At</th>
                                                 <th>Action</th>
                                             </tr>
@@ -69,7 +68,6 @@ $product = new Products();
                                                     <?= $row['product_name'] ?>
                                                 </td>
                                                 <td><?= $row['brand_name'] ?></td>
-                                                <td><?= $row['supplier'] ?></td>
                                                 <td>
                                                     <?php if ($row['enable']==1){ ?>
                                                       <i class="fa fa-check-circle"></i>
@@ -77,9 +75,9 @@ $product = new Products();
                                                         <i class="fa fa-close"></i>
                                                     <?php } ?>
                                                 </td>
-                                                <td><?= $row['product_price'] ?></td>
-                                                <td><?= $row['product_qty'] ?></td>
-                                                <td></td>
+                                                <td><?= $row['purchase_price'] ?></td>
+                                                <td><?= $row['mrp'] ?></td>
+                                                <td><?= $row['qty'] ?></td>
                                                 <td><?= $row['created_at'] ?></td>
                                                 <td>
                                                     <button data-product="<?= $row['product_name'] ?>" type="button" id="<?= $row['id'] ?>" class="btn btn-success btn-xs purchase">

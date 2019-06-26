@@ -24,9 +24,33 @@ if (isset($_GET['ajax']) && $_GET['ajax']=='dpa'){
         $productAttr = new ProductAttributes();
         $deleted = $productAttr->delete_attributes($_GET['id']);
         if ($deleted){
-            echo json_encode('success');
+            echo 'success';
         }else {
-            echo json_encode('error');
+            echo 'error';
+        }
+    }
+}
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='dps'){
+    if (isset($_GET['id'])){
+        $product = new Products();
+        $deleted = $product->delete_stock($_GET['id']);
+        if ($deleted){
+            echo 'success';
+        }else {
+            echo 'error';
+        }
+    }
+}
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='dc'){
+    if (isset($_GET['id'])){
+        $customer = new Customers();
+        $deleted = $customer->delete_customer($_GET['id']);
+        if ($deleted){
+            echo 'success';
+        }else {
+            echo 'error';
         }
     }
 }

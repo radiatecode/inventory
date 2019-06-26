@@ -44,17 +44,14 @@ class Suppliers
         if (isset($post['name']) && isset($post['address']) &&
             isset($post['email']) && isset($post['phone'])){
 
-            $update = $this->_db->update('suppliers',
-                [
+            $update = $this->_db->update('suppliers', [
                     'name'=>$this->_db->escapeString($post['name']),
                     'address'=>$this->_db->escapeString($post['address']),
                     'email'=>$this->_db->escapeString($post['email']),
                     'phone'=>$this->_db->escapeString($post['phone']),
-                ],
-                [
-                    'id'=>$post['edit_id']
-                ]
-            );
+                ])
+                ->where('id','=',$post['edit_id'])
+                ->get();
             if ($update) {
                 Session::flush('success','Successfully Updated Supplier Data');
             }else{

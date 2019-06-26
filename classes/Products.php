@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: lenovo
+ * User: Radiate Noor
  * Date: 6/18/2019
  * Time: 5:42 PM
  */
@@ -20,10 +20,13 @@ class Products
     public function store($post,$files){
          $validation = Validation::PostValidate($post,[
              'brand'=>'required',
-             'supplier'=>'required',
              'product_name'=>'required',
+             'model'=>'required',
              'description'=>'required',
-             'product_price'=>'required|number',
+             'purchase_price'=>'required|number',
+             'qty'=>'required|number',
+             'sale_price'=>'required|number',
+             'mrp'=>'required|number',
              'category'=>'required',
              'attribute'=>'required|array',
              'attribute_value'=>'required|array'
@@ -42,12 +45,17 @@ class Products
              $insert = $this->_db->insert('products',[
                  'brand_id'=>$this->_db->escapeString($post['brand']),
                  'category_id'=>$this->_db->escapeString($post['category']),
-                 'supplier_id'=>$this->_db->escapeString($post['supplier']),
                  'product_name'=>$this->_db->escapeString($post['product_name']),
+                 'model'=>$this->_db->escapeString($post['model']),
                  'product_details'=>$this->_db->escapeString($post['description']),
                  'enable'=>1,
                  'thumb'=>$rename,
-                 'product_price'=>$this->_db->escapeString($post['product_price']),
+                 'purchase_price'=>$this->_db->escapeString($post['purchase_price']),
+                 'purchase_discount'=>$this->_db->escapeString($post['purchase_discount']),
+                 'qty'=>$this->_db->escapeString($post['qty']),
+                 'sale_price'=>$this->_db->escapeString($post['sale_price']),
+                 'sale_discount'=>$this->_db->escapeString($post['sale_discount']),
+                 'mrp'=>$this->_db->escapeString($post['mrp']),
                  'created_at'=>date('Y-m-d h:i:s')
              ]);
              if (!empty($post['attribute'])){
@@ -88,13 +96,16 @@ class Products
                 $extension = pathinfo($photo,PATHINFO_EXTENSION);
                 $rename = time().".".$extension;
                 move_uploaded_file($photo_tmp, "../assets/images/" . $rename);
+                $this->_db->update('products',[
+                    'thumb'=>$rename
+                ])->where('id','=',$id)
+                ->get();
             }
             $update = $this->_db->update('products',[
                 'brand_id'=>$this->_db->escapeString($post['brand']),
                 'supplier_id'=>$this->_db->escapeString($post['supplier']),
                 'product_name'=>$this->_db->escapeString($post['product_name']),
                 'product_details'=>$this->_db->escapeString($post['description']),
-                'thumb'=>$rename,
                 'product_price'=>$this->_db->escapeString($post['product_price'])
             ])->where('id','=',$id)
             ->get();
@@ -109,11 +120,10 @@ class Products
 
     public function update_attributes($post,$id){
         $pa_update=null;$pa_insert=null;
-        if (!empty($post['product_attribute_id'])){
+        if (!empty($post['product_attribute_id'][0])){
             $attribute_id = $post['product_attribute_id'];
             $update_attribute = $post['update_attribute'];
             $update_attribute_value = $post['update_attribute_value'];
-
             for ($i=0;$i<count($attribute_id);$i++){
                 $pa_update = $this->_db->update('products_attributes',[
                     'attribute_id'=>$this->_db->escapeString($update_attribute[$i]),
@@ -147,7 +157,7 @@ class Products
 
     public function update_stock($post){
         $purchase_update=null;
-        if (!empty($post['purchase_id'])){
+        if (!empty($post['purchase_id'][0])){
             $purchase_id = $post['purchase_id'];
             $qty = $post['qty'];
             foreach ($purchase_id as $i=>$value){
@@ -170,6 +180,20 @@ class Products
 
     public function allProducts(){
         $products = $this->_db->select(['products.*','brands.brand_name',
+            'categories.name'])
+            ->table('products')
+            ->join('brands','brands.id','products.brand_id')
+            ->join('categories','categories.id','products.category_id')
+            ->orderBy('products.id','DESC')
+            ->get();
+        if (!$products){
+            Session::flush('failed','Query Error! '.$this->_db->sql_error());
+        }
+        return $products;
+    }
+
+    public function stock(){
+        $products = $this->_db->select(['products.*','brands.brand_name',
             'categories.name','suppliers.name AS supplier','sum(qty) AS product_qty'])
             ->table('products')
             ->join('brands','brands.id','products.brand_id')
@@ -180,7 +204,7 @@ class Products
             ->orderBy('products.id','DESC')
             ->get();
         if (!$products){
-            Session::flush('failed','Query Error! '.$this->_db->sql_error());
+            Session::flush('failed','Stock Query Error! '.$this->_db->sql_error());
         }
         return $products;
     }
@@ -204,18 +228,10 @@ class Products
             $this->messages[] = 'Attributes Query Error '.$this->_db->sql_error();
         }
 
-        $purchased = $this->_db->select(['purchase.*'])
-            ->table('purchase')
-            ->where('product_id','=',$id)
-            ->get();
-        if ($this->_db->numRows($product)==0){
-            $this->messages[] = 'Purchased Query Error '.$this->_db->sql_error();
-        }
-        if ($product && $product_attributes && $purchased){
+        if ($product && $product_attributes){
             $data = [
                 'product'=>$this->_db->fetchAssoc($product),
-                'attributes'=>$this->_db->fetchAll($product_attributes),
-                'stock'=>$this->_db->fetchAll($purchased)
+                'attributes'=>$this->_db->fetchAll($product_attributes)
             ];
             return $data;
         }
@@ -235,6 +251,17 @@ class Products
         }
 
         return 'success';
+    }
+
+    public function delete_stock($id){
+        $delete = $this->_db->delete('purchase')
+            ->where('id','=',$id)
+            ->get();
+
+        if (!$delete){
+            return $this->_db->sql_error();
+        }
+        return true;
     }
 
     public function __destruct()

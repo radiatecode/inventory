@@ -41,3 +41,30 @@
             header('location:index.php');
         }
     }
+
+    function abort($code){
+        $status = [
+            '404'=> [
+                'title'=>'Sorry but we could not find this page',
+                'details'=>'This page you are looking for does not exist Report this?'
+            ],
+            '403'=>[
+                'title'=>'Access denied',
+                'details'=>'Full authentication is required to access this resource. Report this?'
+            ],
+            '500'=>[
+                'title'=>'Internal Server Error',
+                'details'=>'We track these errors automatically, but if the problem persists feel free to contact us. In the meantime, try refreshing. Report this?'
+            ]
+        ];
+        //var_dump($status['404']['title']);
+        if (array_key_exists($code,$status)) {
+            Session::set('error', [
+                'code' => $code,
+                'title' => $status[$code]['title'],
+                'details' => $status[$code]['details']
+            ]);
+            echo Session::get('error','title');
+        }
+        header('location:error.php');
+    }

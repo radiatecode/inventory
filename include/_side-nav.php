@@ -27,6 +27,7 @@
                 <h3>General</h3>
                 <ul class="nav side-menu">
                     <li><a href="index.php"><i class="fa fa-home"></i> Dashboard</a></li>
+                    <li><a href="stock.php"><i class="fa fa-home"></i> Stock</a></li>
                     <li><a><i class="fa fa-home"></i> Products <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="products-add.php">New</a></li>
@@ -39,6 +40,12 @@
                             <li><a href="category.php">Category</a></li>
                             <li><a href="suppliers.php">Supplier</a></li>
                             <li><a href="attributes.php">Attributes</a></li>
+                        </ul>
+                    </li>
+                    <li><a><i class="fa fa-home"></i> Customer <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li><a href="customer-add.php">New</a></li>
+                            <li><a href="customers.php">List</a></li>
                         </ul>
                     </li>
                 </ul>

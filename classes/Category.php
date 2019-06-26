@@ -35,15 +35,12 @@ class Category
     public function update($post){
         if (isset($post['name'])){
 
-            $update = $this->_db->update('categories',
-                [
+            $update = $this->_db->update('categories', [
                     'name'=>$post['name'],
                     'description'=>$post['description']
-                ],
-                [
-                    'id'=>$post['edit_id']
-                ]
-            );
+                ])
+                ->where('id','=',$post['edit_id'])
+                ->get();
             if ($update) {
                 Session::flush('success','Successfully Updated Category Data');
             }else{

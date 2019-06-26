@@ -43,14 +43,11 @@ class Brand
     public function update($post,$files=null){
         if (isset($post['brand_name'])){
 
-            $update = $this->_db->update('brands',
-                [
+            $update = $this->_db->update('brands', [
                   'brand_name'=>$post['brand_name']
-                ],
-                [
-                  'id'=>$post['edit_id']
-                ]
-            );
+                ])
+                ->where('id','=',$post['edit_id'])
+                ->get();
 
             if (!empty($files['photo']['name'])){
                 var_dump($files['photo']['name']);
@@ -58,14 +55,11 @@ class Brand
                 $photo_tmp = $files['photo']['tmp_name'];
                 $extension = pathinfo($photo,PATHINFO_EXTENSION);
                 $rename = time().".".$extension;
-                $update = $this->_db->update('brands',
-                    [
+                $update = $this->_db->update('brands', [
                         'logo'=>$rename
-                    ],
-                    [
-                        'id'=>$post['edit_id']
-                    ]
-                );
+                    ])
+                    ->where('id','=',$post['edit_id'])
+                    ->get();
                 move_uploaded_file($photo_tmp,'../assets/images/'.$rename);
             }
 

@@ -14,6 +14,7 @@ class ComposerStaticInitf29a6195b0a6d553983392a199d62eca
         'Auth' => __DIR__ . '/../..' . '/classes/Auth.php',
         'Brand' => __DIR__ . '/../..' . '/classes/Brand.php',
         'Category' => __DIR__ . '/../..' . '/classes/Category.php',
+        'Customers' => __DIR__ . '/../..' . '/classes/Customers.php',
         'DB' => __DIR__ . '/../..' . '/function/DB.php',
         'ProductAttributes' => __DIR__ . '/../..' . '/classes/ProductAttributes.php',
         'Products' => __DIR__ . '/../..' . '/classes/Products.php',

@@ -39,15 +39,12 @@ class ProductAttributes
     public function update($post){
         if (isset($post['attribute_name']) && isset($post['category'])){
 
-            $update = $this->_db->update('attributes',
-                [
+            $update = $this->_db->update('attributes', [
                     'category_id'=>$this->_db->escapeString($post['category']),
                     'attribute_name'=>$this->_db->escapeString($post['attribute_name'])
-                ],
-                [
-                    'id'=>$post['edit_id']
-                ]
-            );
+                ])
+                ->where('id','=',$post['edit_id'])
+                ->get();
             if ($update) {
                 Session::flush('success','Successfully Updated Attribute Data');
             }else{

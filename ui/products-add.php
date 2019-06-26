@@ -5,7 +5,6 @@ require_once '../vendor/autoload.php';
 $product = new Products();
 $brand = new Brand();
 $category = new Category();
-$supplier = new Suppliers();
 if (isset($_POST['submit'])){
     $product->store($_POST,$_FILES);
 }
@@ -53,7 +52,9 @@ if (isset($_POST['submit'])){
                                         <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
                                             <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Basic</a>
                                             </li>
-                                            <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Attributes</a>
+                                            <li role="presentation" class=""><a href="#tab_content2" role="tab" id="attribute-tab" data-toggle="tab" aria-expanded="false">Attributes</a>
+                                            </li>
+                                            <li role="presentation" class=""><a href="#tab_content3" role="tab" id="stock-tab" data-toggle="tab" aria-expanded="false">Data</a>
                                             </li>
                                         </ul>
                                         <div id="myTabContent" class="tab-content">
@@ -72,18 +73,6 @@ if (isset($_POST['submit'])){
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class="control-label" for="last-name">Supplier <span class="required">*</span>
-                                                        </label>
-                                                        <div class="">
-                                                            <select name="supplier" id="supplier" class="form-control">
-                                                                <option value="">-- Select Supplier --</option>
-                                                                <?php foreach ($supplier->allSuppliers() as $row){ ?>
-                                                                    <option value="<?= $row['id'] ?>"><?= $row['name'] ?></option>
-                                                                <?php } ?>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
                                                         <label class="control-label" for="last-name">Product Name <span class="required">*</span>
                                                         </label>
                                                         <div class="">
@@ -91,17 +80,17 @@ if (isset($_POST['submit'])){
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
+                                                        <label class="control-label" for="last-name">Product Model <span class="required">*</span>
+                                                        </label>
+                                                        <div class="">
+                                                            <input type="text" id="model" name="model" class="form-control col-md-7 col-xs-12">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
                                                         <label class="control-label" for="last-name">Product Details <span class="required">*</span>
                                                         </label>
                                                         <div class="">
                                                             <textarea name="description" id="description"></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="control-label" for="last-name">Product Price <span class="required">*</span>
-                                                        </label>
-                                                        <div class="">
-                                                            <input type="text" id="product_price" name="product_price" class="form-control col-md-7 col-xs-12">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -122,7 +111,7 @@ if (isset($_POST['submit'])){
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+                                            <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="attribute-tab">
                                                 <div class="form-group">
                                                     <label class="control-label" for="last-name">Category <span class="required">*</span>
                                                     </label>
@@ -170,6 +159,50 @@ if (isset($_POST['submit'])){
                                                     </div>
                                                 </div>
 
+                                            </div>
+                                            <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="stock-tab">
+                                                <div class="form-group">
+                                                    <label class="control-label" for="last-name">Purchase Price <span class="required">*</span>
+                                                    </label>
+                                                    <div class="">
+                                                        <input type="text" id="purchase_price" name="purchase_price" class="form-control col-md-7 col-xs-12">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label" for="last-name">Purchase Discount <span class="required">*</span>
+                                                    </label>
+                                                    <div class="">
+                                                        <input type="text" id="purchase_discount" name="purchase_discount" class="form-control col-md-7 col-xs-12">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label" for="last-name">Purchase Qty <span class="required">*</span>
+                                                    </label>
+                                                    <div class="">
+                                                        <input type="text" id="qty" name="qty" class="form-control col-md-7 col-xs-12">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label" for="last-name">Sale Price <span class="required">*</span>
+                                                    </label>
+                                                    <div class="">
+                                                        <input type="text" id="sale_price" name="sale_price" class="form-control col-md-7 col-xs-12">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label" for="last-name">Sale Discount <span class="required">*</span>
+                                                    </label>
+                                                    <div class="">
+                                                        <input type="text" id="sale_discount" name="sale_discount" class="form-control col-md-7 col-xs-12">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="control-label" for="last-name">MRP <span class="required">*</span>
+                                                    </label>
+                                                    <div class="">
+                                                        <input type="text" id="mrp" name="mrp" class="form-control col-md-7 col-xs-12">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
