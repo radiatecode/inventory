@@ -155,22 +155,21 @@ class Products
 
     }
 
-    public function update_stock($post){
-        $purchase_update=null;
-        if (!empty($post['purchase_id'][0])){
-            $purchase_id = $post['purchase_id'];
-            $qty = $post['qty'];
-            foreach ($purchase_id as $i=>$value){
-                $purchase_update = $this->_db->update('purchase',[
-                    'qty'=>$this->_db->escapeString($qty[$i])
-                ])
-                ->where('id','=',$purchase_id[$i])
-                ->get();
-                if (!$purchase_update){
-                    $this->messages[] = 'Purchase Stock Update Error. '.$this->_db->sql_error();
-                }
-            }
-            Session::flush('success','Successfully Purchase Stock Updated');
+    public function update_data($post,$id){
+        $update = $this->_db->update('products',[
+            'purchase_price'=>$this->_db->escapeString($post['purchase_price']),
+            'purchase_discount'=>$this->_db->escapeString($post['purchase_discount']),
+            'qty'=>$this->_db->escapeString($post['qty']),
+            'sale_price'=>$this->_db->escapeString($post['sale_price']),
+            'sale_discount'=>$this->_db->escapeString($post['sale_discount']),
+            'mrp'=>$this->_db->escapeString($post['mrp'])
+        ])->where('id','=',$id)
+        ->get();
+
+        if ($update){
+            Session::flush('success','Successfully Updated Product Data');
+        }else{
+            Session::flush('failed','Update Error! '.$this->_db->sql_error());
         }
     }
 
@@ -251,17 +250,6 @@ class Products
         }
 
         return 'success';
-    }
-
-    public function delete_stock($id){
-        $delete = $this->_db->delete('purchase')
-            ->where('id','=',$id)
-            ->get();
-
-        if (!$delete){
-            return $this->_db->sql_error();
-        }
-        return true;
     }
 
     public function __destruct()

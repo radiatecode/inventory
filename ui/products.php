@@ -80,7 +80,10 @@ $product = new Products();
                                                 <td><?= $row['qty'] ?></td>
                                                 <td><?= $row['created_at'] ?></td>
                                                 <td>
-                                                    <button data-product="<?= $row['product_name'] ?>" type="button" id="<?= $row['id'] ?>" class="btn btn-success btn-xs purchase">
+                                                    <button type="button" id="<?= $row['id'] ?>"
+                                                            data-products='<?= json_encode([ $row['purchase_price'],$row['purchase_discount'],
+                                                                $row['qty'], $row['sale_price'], $row['sale_discount'] ] )?>'
+                                                            class="btn btn-success btn-xs purchase">
                                                         <i class="fa fa-cart-arrow-down"></i>
                                                     </button>
                                                     <a href="products-view.php?id=<?= $row['id'] ?>" class="btn btn-info btn-xs edit">
@@ -114,28 +117,51 @@ $product = new Products();
 <?php include('../include/_script.php') ?>
 <script>
     $('.purchase').click(function () {
+        var products = JSON.parse($(this).attr('data-products'));
         var id = $(this).attr('id');
-        var product = $(this).attr('data-product');
         Swal.fire({
-            title: "Enter Quantity",
-            text: "Add Quantity for the product : "+product,
-            input: 'text',
-            showCancelButton: true
-        }).then((result) => {
-            if (result.value) {
+            title: "Add Product Quantity",
+            text: "Add Quantity for the product ",
+            showCancelButton: true,
+            confirmButtonText:"Submit",
+            html:'<form class="form-horizontal">' +
+            '<label>Purchase Price</label>'+
+            '<input type="number" id="purchase_price" value="'+products[0]+'" class="form-control" placeholder="Purchase Price">' +
+            '<label>Purchase Discount</label>'+
+            '<input type="number" id="purchase_discount" value="'+products[1]+'" class="form-control" placeholder="Purchase Discount">' +
+            '<label>Product Quantity</label>'+
+            '<input type="number" id="qty" class="form-control" value="'+products[2]+'" placeholder="Purchase Qty">' +
+            '<label>Sales Price</label>'+
+            '<input type="number" id="sale_price" class="form-control" value="'+products[3]+'" placeholder="Sales Price">' +
+            '<label>Sales Discount</label>'+
+            '<input type="number" id="sale_discount" class="form-control" value="'+products[4]+'" placeholder="Sales Discount"></form>',
+            preConfirm: () => {
+                var purchase_price = document.getElementById('purchase_price').value;
+                var purchase_discount = document.getElementById('purchase_discount').value;
+                var qty = document.getElementById('qty').value;
+                var sale_price = parseFloat(document.getElementById('sale_price').value);
+                var sale_discount = parseFloat(document.getElementById('sale_discount').value);
+                var mrp = (sale_price * sale_discount)/100;
                 $.ajax({
-                    url:'ajax.php?ajax=purchase&id='+id+'&qty='+result.value,
-                    type:'GET',
-                    dataType:'json',
+                    url:'ajax.php?ajax=add_product_quantity&id='+id,
+                    type:'POST',
+                    data: {
+                        'purchase_price':purchase_price,
+                        'purchase_discount':purchase_discount,
+                        'qty':qty,
+                        'sale_price':sale_price,
+                        'sale_discount':sale_discount,
+                        'mrp':mrp
+                    },
                     success:function (response) {
-                        if (response==="success"){
+                        if (response==='success') {
                             window.location.reload();
                         }
                     },
                     error:function (error) {
                         console.log(error);
                     }
-                })
+                });
             }
         });
     })

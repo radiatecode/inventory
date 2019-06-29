@@ -54,3 +54,11 @@ if (isset($_GET['ajax']) && $_GET['ajax']=='dc'){
         }
     }
 }
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='add_product_quantity'){
+    if (isset($_GET['id'])){
+        $product = new Products();
+        $product->update_data($_POST,$_GET['id']);
+        echo 'success';
+    }
+}

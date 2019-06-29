@@ -14,8 +14,8 @@ if (isset($_GET['id']) && isset($_POST['update_basic'])){
     $product->update_basic($_POST,$_GET['id']);
 }elseif (isset($_GET['id']) && isset($_POST['update_attributes'])){
     $product->update_attributes($_POST,$_GET['id']);
-}elseif (isset($_GET['id']) && isset($_POST['update_stock'])){
-    $product->update_stock($_POST);
+}elseif (isset($_GET['id']) && isset($_POST['update_data'])){
+    $product->update_data($_POST,$_GET['id']);
 }
 if (isset($_GET['id'])){
     $data = $product->viewProduct($_GET['id']);
@@ -230,48 +230,56 @@ if (isset($_GET['id'])){
                                                 </form>
                                             </div>
                                             <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="stock-tab">
-                                                <div class="form-group">
-                                                    <label class="control-label" for="last-name">Purchase Price <span class="required">*</span>
-                                                    </label>
-                                                    <div class="">
-                                                        <input type="text" id="purchase_price" name="purchase_price" value="<?= $view_product['purchase_price'] ?>" class="form-control col-md-7 col-xs-12">
+                                                <form action="products-view.php?id=<?= $_GET['id'] ?>" method="post" enctype="multipart/form-data">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="last-name">Purchase Price <span class="required">*</span>
+                                                        </label>
+                                                        <div class="">
+                                                            <input type="text" id="purchase_price" name="purchase_price" value="<?= $view_product['purchase_price'] ?>" class="form-control col-md-7 col-xs-12">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label" for="last-name">Purchase Discount <span class="required">*</span>
-                                                    </label>
-                                                    <div class="">
-                                                        <input type="text" id="purchase_discount" name="purchase_discount" value="<?= $view_product['purchase_discount'] ?>" class="form-control col-md-7 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="last-name">Purchase Discount (%) <span class="required">*</span>
+                                                        </label>
+                                                        <div class="">
+                                                            <input type="text" id="purchase_discount" name="purchase_discount" value="<?= $view_product['purchase_discount'] ?>" class="form-control col-md-7 col-xs-12">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label" for="last-name">Purchase Qty <span class="required">*</span>
-                                                    </label>
-                                                    <div class="">
-                                                        <input type="text" id="qty" name="qty" value="<?= $view_product['qty'] ?>" class="form-control col-md-7 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="last-name">Purchase Qty <span class="required">*</span>
+                                                        </label>
+                                                        <div class="">
+                                                            <input type="text" id="qty" name="qty" value="<?= $view_product['qty'] ?>" class="form-control col-md-7 col-xs-12">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label" for="last-name">Sale Price <span class="required">*</span>
-                                                    </label>
-                                                    <div class="">
-                                                        <input type="text" id="sale_price" name="sale_price" value="<?= $view_product['sale_price'] ?>" class="form-control col-md-7 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="last-name">Sale Price <span class="required">*</span>
+                                                        </label>
+                                                        <div class="">
+                                                            <input type="text" id="sale_price" name="sale_price" value="<?= $view_product['sale_price'] ?>" class="form-control col-md-7 col-xs-12">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label" for="last-name">Sale Discount <span class="required">*</span>
-                                                    </label>
-                                                    <div class="">
-                                                        <input type="text" id="sale_discount" name="sale_discount" value="<?= $view_product['sale_discount'] ?>" class="form-control col-md-7 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="last-name">Sale Discount (%) <span class="required">*</span>
+                                                        </label>
+                                                        <div class="">
+                                                            <input type="text" id="sale_discount" name="sale_discount" value="<?= $view_product['sale_discount'] ?>" class="form-control col-md-7 col-xs-12">
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="control-label" for="last-name">MRP <span class="required">*</span>
-                                                    </label>
-                                                    <div class="">
-                                                        <input type="text" id="mrp" name="mrp" value="<?= $view_product['mrp'] ?>" class="form-control col-md-7 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="last-name">MRP <span class="required">*</span>
+                                                        </label>
+                                                        <div class="">
+                                                            <input type="text" id="mrp" name="mrp" value="<?= $view_product['mrp'] ?>" class="form-control col-md-7 col-xs-12">
+                                                        </div>
                                                     </div>
-                                                </div>
+                                                    <div class="col-md-12 col-lg-12 col-xs-12">
+                                                        <div>
+                                                            <br>
+                                                            <button type="submit" name="update_data" id="submit" class="btn btn-success btn-md"><i class="fa fa-save"></i> Update Data</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -410,55 +418,11 @@ if (isset($_GET['id'])){
             }
         });
     });
-    $('.delete_stock').click(function () {
-        var id = $(this).attr('id');
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You want to delete?",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, Delete it!'
-        }).then(function(result) {
-            if (result.value) {
-                var url = "ajax.php?ajax=dps&id="+id;
-                $.ajax({
-                    url:url,
-                    type:'GET',
-                    contentType:false,
-                    processData:false,
-                    beforeSend:function () {
-                        Swal.fire({
-                            title: 'Deleting Data.......',
-                            showConfirmButton: false,
-                            html: '<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>',
-                            allowOutsideClick: false
-                        });
-                    },
-                    success:function (response) {
-                        Swal.close();
-                        console.log(response);
-                        if (response==="success"){
-                            Swal.fire({
-                                title: 'Successfully Deleted',
-                                type: 'success',
-                                confirmButtonColor: '#3085d6',
-                                confirmButtonText: 'Ok'
-                            }).then(function(result) {
-                                if (result.value) {
-                                    window.location.reload();
-                                }
-                            });
-                        }
-                    },
-                    error:function (error) {
-                        Swal.close();
-                        console.log(error);
-                    }
-                })
-            }
-        });
+    $('#sale_discount').keyup(function () {
+        var price = parseFloat($('#sale_price').val());
+        var discount =  parseFloat($(this).val());
+        var mrp = (price * discount)/100;
+        $('#mrp').val(mrp);
     });
 </script>
 </body>
