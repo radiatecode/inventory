@@ -1,12 +1,17 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 require_once '../vendor/autoload.php';
+$product = new Products();
+$products = $product->allProducts();
+$customer = new Customers();
+$customers = $customer->allCustomers();
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?php include('../include/_head.php') ?>
+    <link rel="stylesheet" href="../assets/js/bootstrap-datepicker/css/bootstrap-datepicker.css">
 </head>
 
 <body class="nav-md">
@@ -50,6 +55,9 @@ require_once '../vendor/autoload.php';
                                                 <div class="">
                                                    <select class="form-control" name="customer">
                                                        <option value="">-- Select Customer --</option>
+                                                       <?php foreach ($customers as $row){ ?>
+                                                           <option value="<?= $row['id'] ?>"><?= $row['name'] ?></option>
+                                                       <?php } ?>
                                                    </select>
                                                 </div>
                                             </div>
@@ -100,8 +108,9 @@ require_once '../vendor/autoload.php';
                                                  </div>
                                              </div>
                                         </div>
+                                        <div ng-app="appTable" ng-controller="ItemsController">
                                         <div class="col-md-12 col-lg-12 col-xs-12">
-                                            <button class="btn btn-info btn-xs"><i class="fa fa-plus-circle"></i></button>
+                                            <button type="button" ng-click="addItem()" class="btn btn-info btn-xs add_product"><i class="fa fa-plus-circle"></i></button>
                                             <div class="table-responsive">
                                                 <table class="table table-bordered">
                                                     <thead>
@@ -110,28 +119,38 @@ require_once '../vendor/autoload.php';
                                                            <th>Unit Price</th>
                                                            <th>Quantity</th>
                                                            <th>Total</th>
+                                                           <th></th>
                                                        </tr>
                                                     </thead>
                                                     <tbody>
-                                                       <tr>
+                                                       <tr ng-repeat="item in items" ng-model="newItemName" >
                                                            <td>
-                                                               <select class="form-control" name="product[]">
+                                                               <select class="form-control select_product" ng-model="item.product"
+                                                                       ng-change="selectChange(item);" name="product[]">
                                                                    <option value="">-- Select Product --</option>
+                                                                   <?php foreach ($products as $row){ ?>
+                                                                       <option value="<?= $row['id'] ?>"><?= $row['product_name'] ?></option>
+                                                                   <?php } ?>
                                                                </select>
                                                            </td>
                                                            <td>
-                                                               <input type="text" name="unit_price[]" class="form-control col-md-7 col-xs-12">
+                                                               <input type="text" name="unit_price[]" class="form-control col-md-7 col-xs-12" ng-model="item.unit_price" ng-change="calculate(item);getTotal();">
                                                            </td>
                                                            <td>
-                                                               <input type="text" name="quantity[]" class="form-control col-md-7 col-xs-12">
+                                                               <input type="text" name="quantity[]" class="form-control col-md-7 col-xs-12" ng-model="item.quantity" ng-change="calculate(item);getTotal();">
                                                            </td>
                                                            <td>
-                                                               <input type="text" name="total[]" class="form-control col-md-7 col-xs-12">
+                                                               <input type="text" name="total[]" class="form-control col-md-7 col-xs-12" ng-model="item.total">
+                                                           </td>
+                                                           <td>
+                                                               <a ng-click="deleteItem($index)" class="btn btn-danger btn-xs" title="Remove This Row">
+                                                                   <i class="glyphicon glyphicon-remove-circle"></i></a></td>
                                                            </td>
                                                        </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
+                                        </div>
                                         </div>
                                         <div class="col-md-8 col-lg-8 col-xs-12">
                                             <div class="form-group">
@@ -204,7 +223,7 @@ require_once '../vendor/autoload.php';
 
                                     <div class="col-md-12 col-lg-12 col-xs-12">
                                         <div>
-                                            <button type="submit" name="submit" id="submit" class="btn btn-success btn-md"><i class="fa fa-save"></i> Save</button>
+                                            <button type="submit" name="submit" id="submit" class="btn btn-success btn-md pull-right"><i class="fa fa-save"></i> Save</button>
                                         </div>
                                     </div>
                                 </form>
@@ -227,7 +246,99 @@ require_once '../vendor/autoload.php';
     </div>
 </div>
 <?php include('../include/_script.php') ?>
+<script src="../assets/js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.js"></script>
 <script>
+    $('#order_date').datepicker({
+        format: 'yyyy-mm-dd',
+        startDate: "now()",
+        todayHighlight: true,
+        autoclose: true
+    });
+    $('#delivery_date').datepicker({
+        format: 'yyyy-mm-dd',
+        startDate: "now()",
+        todayHighlight: true,
+        autoclose: true
+    });
+    var products = <?php echo json_encode($products) ?>;
+    //$(function () {
+    //    var drop_down = '';
+
+    //    $.each(products,function (key,value) {
+    //        drop_down += '<option value="'+value.id+'">'+value.product_name+'</option>';
+    //    });
+    //    $('.add_product').click(function () {
+    //        $("table tbody").append('<tr><td><select class="form-control select_product" name="product[]">' +
+    //            '<option value="">-- Select Product --</option>'+drop_down+'</select></td>' +
+    //            '<td><input type="text" name="unit_price[]" class="form-control col-md-7 col-xs-12 set_unit_price"></td>' +
+    //            '<td><input type="text" name="quantity[]" class="form-control col-md-7 col-xs-12 set_quantity"></td>' +
+    //            '<td><input type="text" name="total[]" class="form-control col-md-7 col-xs-12 set_total"></td>' +
+    //            '<td><button type="button" class="btn btn-danger btn-xs remCF"><i class="fa fa-trash-o"></i></button></td></tr>');
+    //    });
+    //    $("table").on('click','.remCF',function(){
+    //        $(this).parent().parent().remove();
+    //    });
+    //
+    //    $('.select_product').change(function () {
+    //        var id = $(this).val();
+    //        var obj = searchObjects(products,id);
+    //        console.log(obj);
+    //    });
+    //});
+    function searchObjects(data,id) {
+       var searchField = "id";
+       for (var i=0 ; i < data.length ; i++)
+       {
+           if (data[i][searchField] === id) {
+               return data[i];
+           }
+       }
+    }
+
+    var app = angular.module("appTable",[]);
+    app.controller("ItemsController",function($scope,$http) {
+        $scope.items = [{newItemName:''}];
+        $scope.addItem = function (index) {
+            $scope.items.push({newItemName:''});
+        };
+
+        $scope.deleteItem = function (index) {
+            if(!index){
+                alert("\tDelete Error. \n Root Row not deletable.");
+                $scope.items.push({newItemName:''});
+            }
+            $scope.items.splice(index, 1);
+            this.getTotal();
+        };
+
+        $scope.selectChange = function (i) {
+            var product = i.product;
+            var obj = searchObjects(products,product);
+            i.unit_price = obj.sale_price;
+        };
+
+        $scope.calculate = function(i){
+            var unite_price = parseFloat(i.unit_price);
+            var quantity = parseFloat(i.quantity);
+            var total_price = unite_price*quantity;
+            i.total = total_price;
+        };
+
+        $scope.getTotal = function(){
+            var total_qty = 0;
+            var total_bdt = 0;
+
+            for(var i = 0; i < $scope.items.length; i++){
+                var product         = $scope.items[i];
+                total_qty           += parseFloat(product.quantity);
+                total_bdt           += parseFloat(product.total);
+            }
+            //$scope.tQty=  total_qty;
+            //$scope.tBdt =  total_bdt;
+            document.getElementById('sub_total').value = total_bdt;
+        }
+    });
 
 </script>
 </body>

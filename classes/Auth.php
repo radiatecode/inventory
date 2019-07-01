@@ -29,10 +29,11 @@ class Auth
     }
 
     private function login(){
-        // check user exist or not
-        $SQL = "SELECT * FROM `users` WHERE email='$this->email'";
         // query execute
-        $result = $this->_db->query($SQL);
+        $result = $this->_db->select(['users.*'])
+            ->table('users')
+            ->where('email','=',$this->email)
+            ->get();
         // count database row
         $row = $this->_db->numRows($result);
         // mysqli_fetch_assoc or mysqli_fetch_array for data
@@ -64,8 +65,10 @@ class Auth
                     $this->attempt =  $this->attempt+1;
                     $this->timestamp = time()+50;
                     // update the attempt and timestamp for that specific user
-                    $SQL = "UPDATE `users` SET attempt='$this->attempt',`timestamp`='$this->timestamp' WHERE email='$this->email'";
-                    $this->_db->query($SQL);
+                    $this->_db->update('users',[
+                        'attempt'=>$this->attempt,
+                        'timestamp'=>$this->timestamp
+                    ])->where('email','=',$this->email)->get();
                     if($this->attempt<4){
                         $this->messages[] = "PASSWORD NOT MATCH, TRY AGAIN";
                     }else{
@@ -94,5 +97,8 @@ class Auth
         return $this->messages;
     }
 
+    public function allUsers(){
+
+    }
 
 }

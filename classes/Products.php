@@ -188,7 +188,7 @@ class Products
         if (!$products){
             Session::flush('failed','Query Error! '.$this->_db->sql_error());
         }
-        return $products;
+        return $this->_db->fetchAll($products);
     }
 
     public function stock(){
