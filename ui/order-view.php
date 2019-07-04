@@ -6,10 +6,13 @@ $products = $product->allProducts();
 $customer = new Customers();
 $customers = $customer->allCustomers();
 $order = new Order();
-if (isset($_POST['submit'])){
-    $order->store($_POST);
-}
+if (isset($_GET['id'])){
+    if (isset($_POST['submit'])){
+        $order->store($_POST);
+    }
+    $view_order = $order->viewOrder($_GET['id']);
 
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +36,7 @@ if (isset($_POST['submit'])){
         <div class="right_col" role="main">
             <div class="">
                 <div class="title_left">
-                    <h3>New Sale Order</h3>
+                    <h3>Edit Sale Order</h3>
                 </div>
                 <div class="clearfix"></div>
 
@@ -46,11 +49,11 @@ if (isset($_POST['submit'])){
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>New Sale <small>Order</small></h2>
+                                <h2>Edit Sale <small>Order</small></h2>
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
-                                <form action="order-add.php" method="post" class="form-horizontal">
+                                <form action="order-view.php" method="post" class="form-horizontal">
                                     <div class="row">
                                          <div class="col-md-4 col-lg-6 col-xs-12">
                                             <div class="form-group">

@@ -211,9 +211,21 @@ class DB
 
     public function where($column,$operation,$value){
         if ($this->whereCount>0){
-            $this->WHERE_SQL .= " AND ".$column." ".$operation." ".$value;
+            $this->WHERE_SQL .= " AND ".$column." ".$operation." '".$value."'";
         }else{
-            $this->WHERE_SQL .= " WHERE ".$column." ".$operation." ".$value;
+            $this->WHERE_SQL .= " WHERE ".$column." ".$operation." '".$value."'";
+        }
+        $this->whereCount++;
+        $this->SQL .= $this->WHERE_SQL;
+        return $this;
+    }
+
+    public function whereNotIn($column,$values){
+        $not_in_values = implode(',',$values);
+        if ($this->whereCount>0){
+            $this->WHERE_SQL .= " AND ".$column." NOT IN (".$not_in_values.")";
+        }else{
+            $this->WHERE_SQL .= " WHERE ".$column." NOT IN (".$not_in_values.")";
         }
         $this->whereCount++;
         $this->SQL .= $this->WHERE_SQL;

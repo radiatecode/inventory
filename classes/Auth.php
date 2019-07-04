@@ -38,7 +38,7 @@ class Auth
         $row = $this->_db->numRows($result);
         // mysqli_fetch_assoc or mysqli_fetch_array for data
         // retrieve from mysqli_query result
-        while ($data = $this->_db->fetchArray($result)){
+        foreach ($result as $data){
             $this->db_pass= $data['password'];
             $this->active = $data['active'];
             $this->attempt = $data['attempt'];
@@ -78,8 +78,10 @@ class Auth
                     if ($this->attempt >=4 && $this->timestamp > time()){
                         $this->messages[] = "YOU ARE STILL BLOCKED, TRY TO LOGIN AFTER 1 MINUTE";
                     }else{
-                        $SQL = "UPDATE `users` SET attempt=0,`timestamp`=0 WHERE email='$this->email'";
-                        $this->_db->query($SQL);
+                        $this->_db->update('users',[
+                            'attempt'=>0,
+                            'timestamp'=>0
+                        ])->where('email','=',$this->email)->get();
                         Session::set('user',$this->user);
                         header('location:index.php');
                     }
@@ -98,7 +100,15 @@ class Auth
     }
 
     public function allUsers(){
-
+        $auth_id = Session::get('user','id');
+        if ($auth_id) {
+            $users = $this->_db->select(['users.*'])
+                ->table('users')
+                ->whereNotIn('id', [$auth_id])
+                ->get();
+            return $this->_db->fetchAll($users);
+        }
+        return [];
     }
 
 }
