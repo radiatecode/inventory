@@ -34,6 +34,15 @@ class Validation
                 }
             }
 
+            if (self::requiredIf($rule_break)){
+                $field = self::requiredIf($rule_break);
+                $element = $post[$field];
+
+                if (!empty($post[$key]) && !is_numeric($post[$key]) ){
+                    self::$errors[] = ucwords($key)." Field Value Must Be Numeric";
+                }
+            }
+
         }
         return self::$errors;
     }
@@ -48,6 +57,18 @@ class Validation
 
     private static function numberRules($rules){
         return in_array('number',$rules);
+    }
+
+    private static function requiredIf($rules){
+        foreach ($rules as $rule){
+            if (strpos($rule, 'required_if') !== false) {
+                $break = explode(':',$rule);
+                $field = $break[1];
+                return $field;
+            }else{
+                return false;
+            }
+        }
     }
 
 

@@ -76,7 +76,7 @@ $orders = new Order();
                                                 <td><?= $row['order_status'] ?></td>
                                                 <td><?= $row['created_at'] ?></td>
                                                 <td>
-                                                    <a href="products-view.php?id=<?= $row['order_id'] ?>" class="btn btn-info btn-xs edit">
+                                                    <a href="order-view.php?id=<?= $row['order_id'] ?>" class="btn btn-info btn-xs edit">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
                                                     <button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>

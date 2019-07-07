@@ -90,6 +90,86 @@ class Order
             }
         }
     }
+    public function update($post,$order_id){
+        $validation = Validation::PostValidate($post,[
+            'customer'=>'required',
+            'contact'=>'required',
+            'billing_address'=>'required',
+            'order_date'=>'required',
+            'delivery_date'=>'required',
+            'total'=>'required_if:product|array',
+            'sub_total'=>'required|number',
+            'discount'=>'required|number',
+            'total_amount'=>'required|number',
+            'vat'=>'required|number',
+            'vat_amount'=>'required|number',
+            'grand_total'=>'required|number',
+            'paid'=>'required|number',
+            'due'=>'required|number',
+        ]);
+        if ($validation){
+            $this->messages = $validation;
+        }else{
+            $oi_insert=null;$oi_update=null;
+            $created_at = date('Y-m-d h:i:s');
+            $update_orders = $this->_db->update('orders',[
+                'customer_id'=>$this->_db->escapeString($post['customer']),
+                'contact'=>$this->_db->escapeString($post['contact']),
+                'email'=>$this->_db->escapeString($post['email']),
+                'order_date'=>$this->_db->escapeString($post['order_date']),
+                'delivery_date'=>$this->_db->escapeString($post['delivery_date']),
+                'billing_address'=>$this->_db->escapeString($post['billing_address']),
+                'note'=>$this->_db->escapeString($post['note'])
+            ])->where('id','=',$order_id)->get();
+
+            if (!empty($post['order_items_id'])){
+                $order_items_id = $post['order_items_id'];
+                $edit_product = $post['edit_product'];
+                $edit_unit_price = $post['edit_unit_price'];
+                $edit_quantity = $post['edit_quantity'];
+                $edit_total = $post['edit_total'];
+                for ($i=0;$i<count($order_items_id);$i++){
+                    $oi_update = $this->_db->update('order_items',[
+                        'order_id'=>$order_id,
+                        'product_id'=>$this->_db->escapeString($edit_product[$i]),
+                        'quantity'=>$this->_db->escapeString($edit_quantity[$i]),
+                        'unit_price'=>$this->_db->escapeString($edit_unit_price[$i]),
+                        'total'=>$this->_db->escapeString($edit_total[$i]),
+                    ])->where('id','=',$order_items_id[$i])->get();
+                }
+            }
+            if (!empty($post['product'])){
+                $product = $post['product'];
+                $unit_price = $post['unit_price'];
+                $quantity = $post['quantity'];
+                $total = $post['total'];
+                for ($i=0;$i<count($product);$i++){
+                    $oi_insert = $this->_db->insert('order_items',[
+                        'order_id'=>$order_id,
+                        'product_id'=>$this->_db->escapeString($product[$i]),
+                        'quantity'=>$this->_db->escapeString($quantity[$i]),
+                        'unit_price'=>$this->_db->escapeString($unit_price[$i]),
+                        'total'=>$this->_db->escapeString($total[$i]),
+                        'created_at'=>$created_at,
+                    ]);
+                }
+            }
+            $payments = $this->_db->update('order_payment',[
+                'payment_method'=>$this->_db->escapeString($post['payment_method']),
+                'sub_total'=>$this->_db->escapeString($post['sub_total']),
+                'discount'=>$this->_db->escapeString($post['discount']),
+                'vat'=>$this->_db->escapeString($post['vat']),
+                'paid_amount'=>$this->_db->escapeString($post['paid']),
+                'due_amount'=>$this->_db->escapeString($post['due']),
+            ])->where('order_id','=',$order_id)->get();
+
+            if (!$update_orders || !$oi_insert || !$payments || !$oi_update) {
+                Session::flush('failed', 'Data Update Error! ' . $this->_db->sql_error());
+            }else{
+                Session::flush('success','Successfully Data Updated');
+            }
+        }
+    }
 
     public function getMessage(){
         return $this->messages;
@@ -112,13 +192,20 @@ class Order
     }
 
     public function viewOrder($id){
-       $order = $this->_db->select('order.*','order_payment.*','order_items.*')
-           ->table('order')
+       $order = $this->_db->select(['orders.*','order_payment.*'])
+           ->table('orders')
            ->join('order_payment','orders.id','order_payment.order_id')
-           ->join('order_items','orders.id','order_items.order_id')
-           ->where('order.id','=',$id)
+           ->where('orders.id','=',$id)
            ->get();
+       return $this->_db->fetchAssoc($order);
+    }
 
+    public function viewOrderItems($id){
+        $items = $this->_db->select(['order_items.*'])
+            ->table('order_items')
+            ->where('order_id','=',$id)
+            ->get();
+        return $this->_db->fetchAll($items);
     }
 
 }
