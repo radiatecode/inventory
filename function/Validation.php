@@ -37,9 +37,23 @@ class Validation
             if (self::requiredIf($rule_break)){
                 $field = self::requiredIf($rule_break);
                 $element = $post[$field];
-
-                if (!empty($post[$key]) && !is_numeric($post[$key]) ){
-                    self::$errors[] = ucwords($key)." Field Value Must Be Numeric";
+                $key_elm = $post[$key];
+                if (is_array($element)){
+                    if (count($element)>0){
+                        foreach ($element as $i=>$val){
+                            if (!empty($element[$i])){
+                                if (empty($key_elm[$i])){
+                                    self::$errors[] = ucwords($key)." Field Must Have A Value";
+                                }
+                            }
+                        }
+                    }
+                }else{
+                    if (!empty($element)){
+                        if (empty($key_elm)){
+                            self::$errors[] = ucwords($key)." Field Must Have Value";
+                        }
+                    }
                 }
             }
 

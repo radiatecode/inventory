@@ -34,6 +34,18 @@
                             <li><a href="products.php">List</a></li>
                         </ul>
                     </li>
+                    <li><a><i class="fa fa-home"></i> Purchase <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li><a href="order-add.php">New</a></li>
+                            <li><a href="orders.php">List</a></li>
+                        </ul>
+                    </li>
+                    <li><a><i class="fa fa-home"></i> Sale <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li><a href="order-add.php">New</a></li>
+                            <li><a href="orders.php">List</a></li>
+                        </ul>
+                    </li>
                     <li><a><i class="fa fa-home"></i> Catalogue <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="brand.php">Brand</a></li>

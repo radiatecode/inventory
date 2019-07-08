@@ -97,7 +97,7 @@ class Order
             'billing_address'=>'required',
             'order_date'=>'required',
             'delivery_date'=>'required',
-            'total'=>'required_if:product|array',
+            'total'=>'required_if:product',
             'sub_total'=>'required|number',
             'discount'=>'required|number',
             'total_amount'=>'required|number',
@@ -105,7 +105,7 @@ class Order
             'vat_amount'=>'required|number',
             'grand_total'=>'required|number',
             'paid'=>'required|number',
-            'due'=>'required|number',
+            'due'=>'required|number'
         ]);
         if ($validation){
             $this->messages = $validation;
@@ -163,7 +163,7 @@ class Order
                 'due_amount'=>$this->_db->escapeString($post['due']),
             ])->where('order_id','=',$order_id)->get();
 
-            if (!$update_orders || !$oi_insert || !$payments || !$oi_update) {
+            if (!$update_orders || !$payments || !$oi_update) {
                 Session::flush('failed', 'Data Update Error! ' . $this->_db->sql_error());
             }else{
                 Session::flush('success','Successfully Data Updated');
@@ -206,6 +206,16 @@ class Order
             ->where('order_id','=',$id)
             ->get();
         return $this->_db->fetchAll($items);
+    }
+
+    public function delete_order($id){
+        $result = $this->_db->delete('orders')
+            ->where('id','=',$id)
+            ->get();
+        if (!$result){
+            return false;
+        }
+        return true;
     }
 
 }

@@ -43,7 +43,7 @@ if (isset($_POST['submit'])){
                     messages($order->getMessage())
                     ?>
                     <!-- Page Container -->
-                    <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-md-12 col-sm-12 col-xs-12" ng-app="app" ng-controller="ItemsController">
                         <div class="x_panel">
                             <div class="x_title">
                                 <h2>New Sale <small>Order</small></h2>
@@ -115,7 +115,7 @@ if (isset($_POST['submit'])){
                                                  </div>
                                              </div>
                                         </div>
-                                        <div ng-app="appTable" ng-controller="ItemsController">
+                                        <div>
                                         <div class="col-md-12 col-lg-12 col-xs-12">
                                             <button type="button" ng-click="addItem()" class="btn btn-info btn-xs add_product"><i class="fa fa-plus-circle"></i></button>
                                             <div class="table-responsive">
@@ -147,7 +147,7 @@ if (isset($_POST['submit'])){
                                                                <input type="text" name="quantity[]" class="form-control col-md-7 col-xs-12" ng-model="item.quantity" ng-change="calculate(item);getTotal();">
                                                            </td>
                                                            <td>
-                                                               <input type="text" name="total[]" class="form-control col-md-7 col-xs-12" ng-model="item.total">
+                                                               <input type="text" name="total[]" class="form-control col-md-7 col-xs-12" ng-model="item.total" readonly>
                                                            </td>
                                                            <td>
                                                                <a ng-click="deleteItem($index)" class="btn btn-danger btn-xs" title="Remove This Row">
@@ -173,56 +173,57 @@ if (isset($_POST['submit'])){
                                                 <label class="control-label" for="last-name">Sub Total <span class="required">*</span>
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="sub_total" name="sub_total" class="form-control col-md-7 col-xs-12">
+                                                    <input type="text" id="sub_total" name="sub_total" ng-model="sub_total"
+                                                           class="form-control col-md-7 col-xs-12" readonly>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label" for="last-name">Discount <span class="required">*</span>
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="discount" name="discount" class="form-control col-md-7 col-xs-12">
+                                                    <input type="text" id="discount" name="discount" ng-model="discount" ng-change="getTotal();" class="form-control col-md-7 col-xs-12">
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label" for="last-name">Total Amount <span class="required">*</span>
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="total_amount" name="total_amount" class="form-control col-md-7 col-xs-12">
+                                                    <input type="text" id="total_amount" name="total_amount" ng-model="total_amount" class="form-control col-md-7 col-xs-12" readonly>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label" for="last-name">VAT (%) <span class="required">*</span>
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="vat" name="vat" class="form-control col-md-7 col-xs-12">
+                                                    <input type="text" id="vat" name="vat" class="form-control col-md-7 col-xs-12" ng-model="vat" ng-change="getTotal();">
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label" for="last-name">VAT <span class="required">*</span>
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="vat_amount" name="vat_amount" class="form-control col-md-7 col-xs-12">
+                                                    <input type="text" id="vat_amount" ng-model="vat_amount" name="vat_amount" class="form-control col-md-7 col-xs-12" readonly>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label" for="last-name">Grand Total <span class="required">*</span>
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="grand_total" name="grand_total" class="form-control col-md-7 col-xs-12">
+                                                    <input type="text" id="grand_total" name="grand_total" ng-model="grand_total" class="form-control col-md-7 col-xs-12" readonly>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label" for="last-name">Paid Amount <span class="required">*</span>
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="paid" name="paid" class="form-control col-md-7 col-xs-12">
+                                                    <input type="text" id="paid" name="paid"  ng-model="paid" ng-change="getTotal();" class="form-control col-md-7 col-xs-12" >
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label" for="last-name">Due Amount <span class="required">*</span>
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="due" name="due" class="form-control col-md-7 col-xs-12">
+                                                    <input type="text" id="due" name="due" ng-model="due" class="form-control col-md-7 col-xs-12" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -303,7 +304,7 @@ if (isset($_POST['submit'])){
        }
     }
 
-    var app = angular.module("appTable",[]);
+    var app = angular.module("app",[]);
     app.controller("ItemsController",function($scope,$http) {
         $scope.items = [{newItemName:''}];
         $scope.addItem = function (index) {
@@ -330,6 +331,7 @@ if (isset($_POST['submit'])){
             var quantity = parseFloat(i.quantity);
             var total_price = unite_price*quantity;
             i.total = total_price;
+
         };
 
         $scope.getTotal = function(){
@@ -343,7 +345,23 @@ if (isset($_POST['submit'])){
             }
             //$scope.tQty=  total_qty;
             //$scope.tBdt =  total_bdt;
-            document.getElementById('sub_total').value = total_bdt;
+            $scope.sub_total = total_bdt;
+
+            var sub_total = parseFloat($scope.sub_total);
+            var discount = parseFloat($scope.discount);
+
+            var total_amount = sub_total-((sub_total*discount)/100);
+            $scope.total_amount = total_amount;
+
+            var vat = parseFloat($scope.vat);
+            var vat_amount = (total_amount*vat)/100;
+            $scope.vat_amount = vat_amount;
+            $scope.grand_total = total_amount+vat_amount;
+
+            var paid = parseFloat($scope.paid);
+            var grand_total = parseFloat($scope.grand_total);
+            $scope.due = grand_total-paid;
+
         }
     });
 

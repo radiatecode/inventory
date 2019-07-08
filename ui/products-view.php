@@ -246,10 +246,10 @@ if (isset($_GET['id'])){
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class="control-label" for="last-name">Purchase Qty <span class="required">*</span>
+                                                        <label class="control-label" for="last-name">Repurchase Qty <span class="required">*</span>
                                                         </label>
                                                         <div class="">
-                                                            <input type="text" id="qty" name="qty" value="<?= $view_product['qty'] ?>" class="form-control col-md-7 col-xs-12">
+                                                            <input type="text" id="repurchase_qty" name="repurchase_qty" value="<?= $view_product['repurchase_qty'] ?>" class="form-control col-md-7 col-xs-12">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">

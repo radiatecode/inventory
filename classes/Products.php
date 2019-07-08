@@ -24,7 +24,7 @@ class Products
              'model'=>'required',
              'description'=>'required',
              'purchase_price'=>'required|number',
-             'qty'=>'required|number',
+             'repurchase_qty'=>'required|number',
              'sale_price'=>'required|number',
              'mrp'=>'required|number',
              'category'=>'required',
@@ -52,7 +52,7 @@ class Products
                  'thumb'=>$rename,
                  'purchase_price'=>$this->_db->escapeString($post['purchase_price']),
                  'purchase_discount'=>$this->_db->escapeString($post['purchase_discount']),
-                 'qty'=>$this->_db->escapeString($post['qty']),
+                 'repurchase_qty'=>$this->_db->escapeString($post['repurchase_qty']),
                  'sale_price'=>$this->_db->escapeString($post['sale_price']),
                  'sale_discount'=>$this->_db->escapeString($post['sale_discount']),
                  'mrp'=>$this->_db->escapeString($post['mrp']),
@@ -159,7 +159,7 @@ class Products
         $update = $this->_db->update('products',[
             'purchase_price'=>$this->_db->escapeString($post['purchase_price']),
             'purchase_discount'=>$this->_db->escapeString($post['purchase_discount']),
-            'qty'=>$this->_db->escapeString($post['qty']),
+            'repurchase_qty'=>$this->_db->escapeString($post['repurchase_qty']),
             'sale_price'=>$this->_db->escapeString($post['sale_price']),
             'sale_discount'=>$this->_db->escapeString($post['sale_discount']),
             'mrp'=>$this->_db->escapeString($post['mrp'])

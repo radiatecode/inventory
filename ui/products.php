@@ -50,7 +50,7 @@ $product = new Products();
                                                 <th>Enable</th>
                                                 <th>Purchase Price</th>
                                                 <th>MRP</th>
-                                                <th>Stock Qty</th>
+                                                <th>Repurchase Qty</th>
                                                 <th>Created At</th>
                                                 <th>Action</th>
                                             </tr>
@@ -77,7 +77,7 @@ $product = new Products();
                                                 </td>
                                                 <td><?= $row['purchase_price'] ?></td>
                                                 <td><?= $row['mrp'] ?></td>
-                                                <td><?= $row['qty'] ?></td>
+                                                <td><?= $row['repurchase_qty'] ?></td>
                                                 <td><?= $row['created_at'] ?></td>
                                                 <td>
                                                     <button type="button" id="<?= $row['id'] ?>"

@@ -55,6 +55,18 @@ if (isset($_GET['ajax']) && $_GET['ajax']=='dc'){
     }
 }
 
+if (isset($_GET['ajax']) && $_GET['ajax']=='do'){
+    if (isset($_GET['id'])){
+        $order = new Order();
+        $deleted = $order->delete_order($_GET['id']);
+        if ($deleted){
+            echo 'success';
+        }else {
+            echo 'error';
+        }
+    }
+}
+
 if (isset($_GET['ajax']) && $_GET['ajax']=='add_product_quantity'){
     if (isset($_GET['id'])){
         $product = new Products();

@@ -259,11 +259,17 @@ class DB
 
     public function sql_error()
     {
-        if( empty( $error ) )
+        $this->errno = $this->connection->errno;
+        $this->error = $this->connection->error;
+        return $this->errno . ' : ' . $this->error;
+    }
+
+    public function sql_errorno(){
+        if( empty( $this->error ) )
         {
-            $errno = $this->connection->errno;
-            $error = $this->connection->error;
+            $this->errno = $this->connection->errno;
+            $this->error = $this->connection->error;
         }
-        return $errno . ' : ' . $error;
+        return $this->errno;
     }
 }
