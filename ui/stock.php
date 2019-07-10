@@ -46,18 +46,18 @@ $product = new Products();
                                             <th>Category</th>
                                             <th>Product Name</th>
                                             <th>Brand</th>
-                                            <th>Supplier</th>
                                             <th>Enable</th>
                                             <th>Price</th>
-                                            <th>Stock Qty</th>
-                                            <th>Ordered Qty</th>
-                                            <th>Return Qty</th>
+                                            <th>Purchase Qty</th>
+                                            <th>Sale Qty</th>
                                             <th>Available Qty</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <?php $sl=1; foreach ($product->stock() as $row){ ?>
-                                            <tr style="<?= $row['product_qty']<=255 ? 'background-color: #cd494c; color: white':'' ?>">
+                                        <?php $sl=1; foreach ($product->stock() as $row){
+                                            $available = ($row['purchase_quantity']-$row['sale_quantity'])
+                                            ?>
+                                            <tr style="<?= $available<=$row['repurchase_qty'] ? 'background-color: #cd494c; color: white':'' ?>">
                                                 <td><?= $sl ?></td>
                                                 <td><?= $row['name'] ?></td>
                                                 <td>
@@ -68,7 +68,6 @@ $product = new Products();
                                                     <?= $row['product_name'] ?>
                                                 </td>
                                                 <td><?= $row['brand_name'] ?></td>
-                                                <td><?= $row['supplier'] ?></td>
                                                 <td>
                                                     <?php if ($row['enable']==1){ ?>
                                                         <i class="fa fa-check-circle"></i>
@@ -76,11 +75,10 @@ $product = new Products();
                                                         <i class="fa fa-close"></i>
                                                     <?php } ?>
                                                 </td>
-                                                <td><?= $row['product_price'] ?></td>
-                                                <td><?= $row['product_qty'] ?></td>
-                                                <td>0</td>
-                                                <td>0</td>
-                                                <td><?= $row['product_qty'] ?></td>
+                                                <td><?= $row['mrp'] ?></td>
+                                                <td><?= $row['purchase_quantity'] ?></td>
+                                                <td><?= $row['sale_quantity'] ?></td>
+                                                <td><?= $available ?></td>
                                             </tr>
                                         <?php $sl++; } ?>
                                         </tbody>

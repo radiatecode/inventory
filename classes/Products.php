@@ -193,19 +193,38 @@ class Products
 
     public function stock(){
         $products = $this->_db->select(['products.*','brands.brand_name',
-            'categories.name','suppliers.name AS supplier','sum(qty) AS product_qty'])
+            'categories.name','repurchase_qty',
+            'sum(purchase_items.quantity) AS purchase_quantity',
+            'sum(order_items.quantity) AS sale_quantity'])
             ->table('products')
             ->join('brands','brands.id','products.brand_id')
             ->join('categories','categories.id','products.category_id')
-            ->join('suppliers','suppliers.id','products.supplier_id')
-            ->leftJoin('purchase','purchase.product_id','products.id')
-            ->groupBy('purchase.product_id')
+            ->leftJoin('purchase_items','purchase_items.product_id','products.id')
+            ->leftJoin('order_items','order_items.product_id','products.id')
+            ->groupBy(['purchase_items.product_id','order_items.product_id'])
             ->orderBy('products.id','DESC')
             ->get();
         if (!$products){
             Session::flush('failed','Stock Query Error! '.$this->_db->sql_error());
         }
         return $products;
+    }
+
+    public function stock_available($product_id){
+        $purchase = $this->_db->select(['SUM(quantity) AS purchase_qty'])
+            ->table('purchase_items')
+            ->where('product_id','=',$product_id)
+            ->groupBy(['purchase_items.product_id'])
+            ->orderBy('id','DESC')
+            ->get();
+        $sale = $this->_db->select(['SUM(quantity) AS sale_qty'])
+            ->table('order_items')
+            ->where('product_id','=',$product_id)
+            ->groupBy(['order_items.product_id'])
+            ->orderBy('id','DESC')
+            ->get();
+        $available = ($purchase-$sale);
+        return $available;
     }
 
     public function viewProduct($id){

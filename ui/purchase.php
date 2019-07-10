@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 require_once '../vendor/autoload.php';
-$orders = new Order();
+$purchase = new Purchase();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,22 +19,21 @@ $orders = new Order();
         <!-- top navigation -->
         <?php include('../include/_top-nav.php')  ?>
         <!-- /top navigation -->
-
         <!-- page content -->
         <div class="right_col" role="main">
             <div class="">
                 <div class="title_left">
-                    <h3>Order List</h3>
+                    <h3>Purchased List</h3>
                 </div>
                 <div class="clearfix"></div>
                 <div class="row">
                     <?php session_message() ?>
                     <!-- Page Container -->
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                        <a class="btn btn-success btn-md" href="order-add.php"><i class="fa fa-plus-circle"></i> Add</a>
+                        <a class="btn btn-success btn-md" href="purchase-add.php"><i class="fa fa-plus-circle"></i> Add</a>
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>Sales Order <small>List</small></h2>
+                                <h2>Purchased Order <small>List</small></h2>
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
@@ -43,42 +42,34 @@ $orders = new Order();
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Customer</th>
-                                                <th>Order ID</th>
+                                                <th>Supplier</th>
+                                                <th>Order No</th>
                                                 <th>Order Date</th>
                                                 <th>Total Products</th>
                                                 <th>Grand Total</th>
                                                 <th>Paid</th>
                                                 <th>Due</th>
-                                                <th>Order Status</th>
                                                 <th>Created At</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <?php foreach ($orders->allOrders() as $row){ ?>
+                                        <?php foreach ($purchase->allPurchased() as $row){ ?>
                                             <tr>
-                                                <td><input type="checkbox" name="ids" id="ids" value="<?= $row['order_id'] ?>"></td>
+                                                <td><input type="checkbox" name="ids" id="ids" value="<?= $row['purchase_id'] ?>"></td>
                                                 <td><?= $row['name'] ?></td>
-                                                <td>
-                                                    #ODI <?= $row['order_id'] ?>
-                                                </td>
+                                                <td><?= $row['purchase_order_no'] ?></td>
                                                 <td><?= $row['order_date'] ?></td>
-                                                <td>
-                                                    <?= $row['total_qty'] ?>
-                                                </td>
-                                                <td>
-                                                    <?= $row['sub_total'] ?>
-                                                </td>
+                                                <td><?= $row['total_qty'] ?></td>
+                                                <td><?= $row['sub_total'] ?></td>
                                                 <td><?= $row['paid_amount'] ?></td>
                                                 <td><?= $row['due_amount'] ?></td>
-                                                <td><?= $row['order_status'] ?></td>
                                                 <td><?= $row['created_at'] ?></td>
                                                 <td>
-                                                    <a href="order-view.php?id=<?= $row['order_id'] ?>" class="btn btn-info btn-xs edit">
+                                                    <a href="purchase-view.php?id=<?= $row['purchase_id'] ?>" class="btn btn-info btn-xs edit">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
-                                                    <button type="button" id="<?= $row['order_id'] ?>" class="btn btn-danger btn-xs delete_order"><i class="fa fa-trash-o"></i></button>
+                                                    <button type="button" id="<?= $row['purchase_id'] ?>" class="btn btn-danger btn-xs delete_purchase"><i class="fa fa-trash-o"></i></button>
                                                 </td>
                                             </tr>
                                         <?php } ?>
@@ -105,7 +96,7 @@ $orders = new Order();
 </div>
 <?php include('../include/_script.php') ?>
 <script>
-    $('.delete_order').click(function () {
+    $('.delete_purchase').click(function () {
         var id = $(this).attr('id');
         Swal.fire({
             title: 'Are you sure?',
@@ -117,7 +108,7 @@ $orders = new Order();
             confirmButtonText: 'Yes, Delete it!'
         }).then(function(result) {
             if (result.value) {
-                var url = "ajax.php?ajax=do&id="+id;
+                var url = "ajax.php?ajax=dp&id="+id;
                 $.ajax({
                     url:url,
                     type:'GET',

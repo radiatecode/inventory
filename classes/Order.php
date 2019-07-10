@@ -182,7 +182,7 @@ class Order
             ->join('customers','orders.customer_id','customers.id')
             ->join('order_payment','orders.id','order_payment.order_id')
             ->leftJoin('order_items','orders.id','order_items.order_id')
-            ->groupBy('order_items.order_id')
+            ->groupBy(['order_items.order_id'])
             ->orderBy('orders.id','DESC')
             ->get();
         if ($orders){

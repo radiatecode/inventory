@@ -33,7 +33,7 @@ if (isset($_POST['submit'])){
         <div class="right_col" role="main">
             <div class="">
                 <div class="title_left">
-                    <h3>New Purchase Order</h3>
+                    <h3>Purchase Return</h3>
                 </div>
                 <div class="clearfix"></div>
 
@@ -46,60 +46,77 @@ if (isset($_POST['submit'])){
                     <div class="col-md-12 col-sm-12 col-xs-12" ng-app="app" ng-controller="ItemsController">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>New Purchase <small>Order</small></h2>
+                                <h2>Purchase <small>Return</small></h2>
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
                                 <form action="purchase-add.php" method="post" class="form-horizontal">
                                     <div class="row">
-                                         <div class="col-md-4 col-lg-6 col-xs-12">
+                                        <div class="col-md-6 col-lg-3 col-xs-12">
                                             <div class="form-group">
                                                 <label class="control-label" for="last-name">Supplier <span class="required">*</span>
                                                 </label>
                                                 <div class="">
-                                                   <select class="form-control" name="supplier">
-                                                       <option value="">-- Select Supplier --</option>
-                                                       <?php foreach ($suppliers as $row){ ?>
-                                                           <option value="<?= $row['id'] ?>"><?= $row['name'] ?></option>
-                                                       <?php } ?>
-                                                   </select>
-                                                </div>
-                                            </div>
-                                             <div class="form-group">
-                                                 <label class="control-label" for="last-name">Contact <span class="required">*</span>
-                                                 </label>
-                                                 <div class="">
-                                                     <input type="text" id="contact" name="contact" class="form-control col-md-7 col-xs-12">
-                                                 </div>
-                                             </div>
-                                            <div class="form-group">
-                                                <label class="control-label" for="last-name">Email
-                                                </label>
-                                                <div class="">
-                                                    <input type="email" id="email" name="email" class="form-control col-md-7 col-xs-12">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label" for="last-name">Billing Address <span class="required">*</span>
-                                                </label>
-                                                <div class="">
-                                                    <textarea class="form-control" name="billing_address"></textarea>
+                                                    <select class="form-control" name="supplier" id="supplier">
+                                                        <option value="">-- Select Supplier --</option>
+                                                        <?php foreach ($suppliers as $row){ ?>
+                                                            <option value="<?= $row['id'] ?>"><?= $row['name'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-md-6 col-lg-3 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="control-label" for="last-name">Order No <span class="required">*</span>
+                                                </label>
+                                                <div class="">
+                                                    <select class="form-control" name="order_no" id="order_no" ng-model="order_no" ng-change="selectChange()">
+                                                        <option value="">-- Select Order No --</option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-3 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="control-label" for="last-name"></label>
+                                                <div class="">
+                                                    <button class="btn btn-success btn-md"><i class="fa fa-search"></i> Find</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
                                          <div class="col-md-4 col-lg-6 col-xs-12">
                                              <div class="form-group">
-                                                 <label class="control-label" for="last-name">Order Date <span class="required">*</span>
-                                                 </label>
-                                                 <div class="">
-                                                     <input type="text" id="order_date" name="order_date" class="form-control col-md-7 col-xs-12">
-                                                 </div>
+                                                 <label class="control-label" >Contact :</label>
+                                                 <label class="control-label" >{{ order.contact }}</label>
                                              </div>
                                              <div class="form-group">
-                                                 <label class="control-label" for="last-name">Payment Date <span class="required">*</span>
+                                                 <label class="control-label" >Email :
+                                                 </label>
+                                                 <label class="control-label" >{{ order.email }}</label>
+                                             </div>
+                                             <div class="form-group">
+                                                 <label class="control-label" >Billing Address :</label>
+                                                 <label class="control-label" >{{ order.billing_address }}</label>
+                                             </div>
+                                             <div class="form-group">
+                                                 <label class="control-label" >Order Date :</label>
+                                                 <label class="control-label" >{{ order.order_date }}</label>
+                                             </div>
+                                             <div class="form-group">
+                                                 <label class="control-label" >Discount Given :</label>
+                                                 <label class="control-label" >{{ order.discount }}</label>
+                                             </div>
+                                        </div>
+                                         <div class="col-md-4 col-lg-6 col-xs-12">
+                                             <div class="form-group">
+                                                 <label class="control-label" for="last-name">Return Date <span class="required">*</span>
                                                  </label>
                                                  <div class="">
-                                                     <input type="text" id="payment_date" name="payment_date" class="form-control col-md-7 col-xs-12">
+                                                     <input type="text" id="return_date" name="return_date" class="form-control col-md-7 col-xs-12">
                                                  </div>
                                              </div>
                                              <div class="form-group">
@@ -117,41 +134,41 @@ if (isset($_POST['submit'])){
                                         </div>
                                         <div>
                                         <div class="col-md-12 col-lg-12 col-xs-12">
-                                            <button type="button" ng-click="addItem()" class="btn btn-info btn-xs add_product"><i class="fa fa-plus-circle"></i></button>
                                             <div class="table-responsive">
                                                 <table class="table table-bordered">
                                                     <thead>
                                                        <tr>
+                                                           <th>#</th>
                                                            <th>Product</th>
+                                                           <th>Purchased Quantity</th>
                                                            <th>Unit Price</th>
-                                                           <th>Quantity</th>
+                                                           <th>Return Quantity</th>
                                                            <th>Total</th>
-                                                           <th></th>
                                                        </tr>
                                                     </thead>
                                                     <tbody>
-                                                       <tr ng-repeat="item in items" ng-model="newItemName" >
+                                                       <tr ng-repeat="item in items">
                                                            <td>
-                                                               <select class="form-control select_product" ng-model="item.product"
-                                                                       ng-change="selectChange(item);" name="product[]">
-                                                                   <option value="">-- Select Product --</option>
+                                                               <input type="checkbox" name="purchase_return_items[]" ng-model="item.id">
+                                                           </td>
+                                                           <td>
+                                                               <select class="form-control select_product" ng-model="item.product_id">
                                                                    <?php foreach ($products as $row){ ?>
                                                                        <option value="<?= $row['id'] ?>"><?= $row['product_name'] ?></option>
                                                                    <?php } ?>
                                                                </select>
                                                            </td>
                                                            <td>
-                                                               <input type="text" name="unit_price[]" class="form-control col-md-7 col-xs-12" ng-model="item.unit_price" ng-change="calculate(item);getTotal();">
+                                                               <input type="text" class="form-control col-md-7 col-xs-12" ng-model="item.quantity" readonly>
                                                            </td>
                                                            <td>
-                                                               <input type="text" name="quantity[]" class="form-control col-md-7 col-xs-12" ng-model="item.quantity" ng-change="calculate(item);getTotal();">
+                                                               <input type="text" name="unit_price[]" class="form-control col-md-7 col-xs-12" ng-model="item.unit_price" >
                                                            </td>
                                                            <td>
-                                                               <input type="text" name="total[]" class="form-control col-md-7 col-xs-12" ng-model="item.total" readonly>
+                                                               <input type="text" name="quantity[]" class="form-control col-md-7 col-xs-12" ng-model="item.return_quantity" ng-change="calculate(item);getTotal();">
                                                            </td>
                                                            <td>
-                                                               <a ng-click="deleteItem($index)" class="btn btn-danger btn-xs" title="Remove This Row">
-                                                                   <i class="glyphicon glyphicon-remove-circle"></i></a></td>
+                                                               <input type="text" name="total[]" class="form-control col-md-7 col-xs-12" ng-model="item.return_total" readonly>
                                                            </td>
                                                        </tr>
                                                     </tbody>
@@ -178,20 +195,6 @@ if (isset($_POST['submit'])){
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label" for="last-name">Discount <span class="required">*</span>
-                                                </label>
-                                                <div class="">
-                                                    <input type="text" id="discount" name="discount" ng-model="discount" ng-change="getTotal();" class="form-control col-md-7 col-xs-12">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label" for="last-name">Total Amount <span class="required">*</span>
-                                                </label>
-                                                <div class="">
-                                                    <input type="text" id="total_amount" name="total_amount" ng-model="total_amount" class="form-control col-md-7 col-xs-12" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
                                                 <label class="control-label" for="last-name">VAT (%) <span class="required">*</span>
                                                 </label>
                                                 <div class="">
@@ -213,17 +216,17 @@ if (isset($_POST['submit'])){
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label" for="last-name">Paid Amount <span class="required">*</span>
+                                                <label class="control-label" for="last-name">Receipt Amount <span class="required">*</span>
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="paid" name="paid"  ng-model="paid" ng-change="getTotal();" class="form-control col-md-7 col-xs-12" >
+                                                    <input type="text" id="receipt_amount" name="receipt_amount"  ng-model="receipt_amount" ng-change="getTotal();" class="form-control col-md-7 col-xs-12" >
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label" for="last-name">Due Amount <span class="required">*</span>
+                                                <label class="control-label" for="last-name">Adjust Amount <span class="required">*</span>
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="due" name="due" ng-model="due" class="form-control col-md-7 col-xs-12" readonly>
+                                                    <input type="text" id="adjust_amount" name="adjust_amount" ng-model="adjust_amount" class="form-control col-md-7 col-xs-12" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -257,43 +260,34 @@ if (isset($_POST['submit'])){
 <script src="../assets/js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.js"></script>
 <script>
-    $('#order_date').datepicker({
+    $('#return_date').datepicker({
         format: 'yyyy-mm-dd',
         startDate: "now()",
         todayHighlight: true,
         autoclose: true
     });
-    $('#payment_date').datepicker({
-        format: 'yyyy-mm-dd',
-        startDate: "now()",
-        todayHighlight: true,
-        autoclose: true
+    $('#supplier').change(function () {
+       var supplier = $(this).val();
+       var dropdown = '';
+        $.ajax({
+            url:"ajax.php?ajax=order&id="+supplier,
+            type:'GET',
+            dataType:'json',
+            success:function (response) {
+                $('#order_no').children('option:not(:first)').remove();
+                attribute_dropdown = '';
+                $.each(response,function (key,value) {
+                    dropdown += '<option value="'+value.id+'">'+value.purchase_order_no+'</option>';
+                });
+                $('#order_no').append(dropdown);
+            },
+            error:function (error) {
+                console.log(error);
+            }
+        });
     });
     var products = <?php echo json_encode($products) ?>;
-    //$(function () {
-    //    var drop_down = '';
 
-    //    $.each(products,function (key,value) {
-    //        drop_down += '<option value="'+value.id+'">'+value.product_name+'</option>';
-    //    });
-    //    $('.add_product').click(function () {
-    //        $("table tbody").append('<tr><td><select class="form-control select_product" name="product[]">' +
-    //            '<option value="">-- Select Product --</option>'+drop_down+'</select></td>' +
-    //            '<td><input type="text" name="unit_price[]" class="form-control col-md-7 col-xs-12 set_unit_price"></td>' +
-    //            '<td><input type="text" name="quantity[]" class="form-control col-md-7 col-xs-12 set_quantity"></td>' +
-    //            '<td><input type="text" name="total[]" class="form-control col-md-7 col-xs-12 set_total"></td>' +
-    //            '<td><button type="button" class="btn btn-danger btn-xs remCF"><i class="fa fa-trash-o"></i></button></td></tr>');
-    //    });
-    //    $("table").on('click','.remCF',function(){
-    //        $(this).parent().parent().remove();
-    //    });
-    //
-    //    $('.select_product').change(function () {
-    //        var id = $(this).val();
-    //        var obj = searchObjects(products,id);
-    //        console.log(obj);
-    //    });
-    //});
     function searchObjects(data,id) {
        var searchField = "id";
        for (var i=0 ; i < data.length ; i++)
@@ -306,61 +300,57 @@ if (isset($_POST['submit'])){
 
     var app = angular.module("app",[]);
     app.controller("ItemsController",function($scope,$http) {
-        $scope.items = [{newItemName:''}];
-        $scope.addItem = function (index) {
-            $scope.items.push({newItemName:''});
-        };
 
-        $scope.deleteItem = function (index) {
-            if(!index){
-                alert("\tDelete Error. \n Root Row not deletable.");
-                $scope.items.push({newItemName:''});
-            }
-            $scope.items.splice(index, 1);
-            this.getTotal();
-        };
+        $scope.order = {};
+        $scope.items = {};
 
-        $scope.selectChange = function (i) {
-            var product = i.product;
-            var obj = searchObjects(products,product);
-            i.unit_price = obj.sale_price;
+        $scope.selectChange = function () {
+            var order_no = $scope.order_no;
+            $http({
+                method: 'GET',
+                url: "ajax.php?ajax=order_info&id="+order_no
+
+            }).then(function successCallback(response) {
+
+                console.log(response.data);
+                $scope.order = response.data.order;
+                $scope.items = response.data.items;
+
+            }, function errorCallback(error) {
+
+                console.log(error);
+
+            });
         };
 
         $scope.calculate = function(i){
             var unite_price = parseFloat(i.unit_price);
-            var quantity = parseFloat(i.quantity);
+            var quantity = parseFloat(i.return_quantity);
             var total_price = unite_price*quantity;
-            i.total = total_price;
+            i.return_total = total_price;
 
-        };
-
-        $scope.getTotal = function(){
-            var total_qty = 0;
             var total_bdt = 0;
 
             for(var i = 0; i < $scope.items.length; i++){
                 var product         = $scope.items[i];
-                total_qty           += parseFloat(product.quantity);
-                total_bdt           += parseFloat(product.total);
+                if (product.return_total) {
+                    total_bdt += parseFloat(product.return_total);
+                }
             }
-            //$scope.tQty=  total_qty;
-            //$scope.tBdt =  total_bdt;
             $scope.sub_total = total_bdt;
+        };
 
+        $scope.getTotal = function(){
             var sub_total = parseFloat($scope.sub_total);
-            var discount = parseFloat($scope.discount);
-
-            var total_amount = sub_total-((sub_total*discount)/100);
-            $scope.total_amount = total_amount;
 
             var vat = parseFloat($scope.vat);
-            var vat_amount = (total_amount*vat)/100;
+            var vat_amount = (sub_total*vat)/100;
             $scope.vat_amount = vat_amount;
-            $scope.grand_total = total_amount+vat_amount;
+            $scope.grand_total = sub_total+vat_amount;
 
-            var paid = parseFloat($scope.paid);
+            var receipt_amount = parseFloat($scope.receipt_amount);
             var grand_total = parseFloat($scope.grand_total);
-            $scope.due = grand_total-paid;
+            $scope.adjust_amount = grand_total-receipt_amount;
 
         }
     });

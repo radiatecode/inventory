@@ -67,6 +67,43 @@ if (isset($_GET['ajax']) && $_GET['ajax']=='do'){
     }
 }
 
+if (isset($_GET['ajax']) && $_GET['ajax']=='dp'){
+    if (isset($_GET['id'])){
+        $purchase = new Purchase();
+        $deleted = $purchase->delete_purchase($_GET['id']);
+        if ($deleted){
+            echo 'success';
+        }else {
+            echo 'error';
+        }
+    }
+}
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='order'){
+    if (isset($_GET['id'])){
+        $purchase = new Purchase();
+        $order = $purchase->getPurchaseOrder($_GET['id']);
+        if ($order){
+            echo json_encode($order);
+        }else {
+            echo json_encode('error');
+        }
+    }
+}
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='order_info'){
+    if (isset($_GET['id'])){
+        $purchase = new Purchase();
+        $order = $purchase->viewPurchase($_GET['id']);
+        $items = $purchase->viewPurchaseItems($_GET['id']);
+        if ($order){
+            echo json_encode(['order'=>$order,'items'=>$items]);
+        }else {
+            echo json_encode('error');
+        }
+    }
+}
+
 if (isset($_GET['ajax']) && $_GET['ajax']=='add_product_quantity'){
     if (isset($_GET['id'])){
         $product = new Products();

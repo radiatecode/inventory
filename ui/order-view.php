@@ -16,6 +16,8 @@ if (isset($_GET['id'])){
     $grand_total =  ($total+$vat);
 
     $order_items = $order->viewOrderItems($_GET['id']);
+}else{
+    abort(404);
 }
 ?>
 <!DOCTYPE html>

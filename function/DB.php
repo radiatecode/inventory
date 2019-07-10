@@ -232,8 +232,9 @@ class DB
         return $this;
     }
 
-    public function groupBy($column){
-       $this->SQL .= " GROUP BY ".$column;
+    public function groupBy($column = []){
+        $columns = implode(',',$column);
+       $this->SQL .= " GROUP BY ".$columns;
        return $this;
     }
 

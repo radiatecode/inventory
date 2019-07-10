@@ -6,10 +6,18 @@ $products = $product->allProducts();
 $supplier = new Suppliers();
 $suppliers = $supplier->allSuppliers();
 $purchase = new Purchase();
-if (isset($_POST['submit'])){
-    $purchase->store($_POST);
+if (isset($_GET['id'])) {
+    if (isset($_POST['submit'])) {
+        $purchase->update($_POST,$_GET['id']);
+    }
+    $view_purchase = $purchase->viewPurchase($_GET['id']);
+    $purchase_items = $purchase->viewPurchaseItems($_GET['id']);
+    $total = ($view_purchase['sub_total']-($view_purchase['sub_total']*$view_purchase['discount'])/100);
+    $vat =  ($total*$view_purchase['vat']/100);
+    $grand_total =  ($total+$vat);
+}else{
+    abort(404);
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +41,7 @@ if (isset($_POST['submit'])){
         <div class="right_col" role="main">
             <div class="">
                 <div class="title_left">
-                    <h3>New Purchase Order</h3>
+                    <h3>View Purchase Order</h3>
                 </div>
                 <div class="clearfix"></div>
 
@@ -46,11 +54,11 @@ if (isset($_POST['submit'])){
                     <div class="col-md-12 col-sm-12 col-xs-12" ng-app="app" ng-controller="ItemsController">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>New Purchase <small>Order</small></h2>
+                                <h2>View Purchase <small>Order</small></h2>
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
-                                <form action="purchase-add.php" method="post" class="form-horizontal">
+                                <form action="purchase-view.php?id=<?= $_GET['id'] ?>" method="post" class="form-horizontal">
                                     <div class="row">
                                          <div class="col-md-4 col-lg-6 col-xs-12">
                                             <div class="form-group">
@@ -60,7 +68,7 @@ if (isset($_POST['submit'])){
                                                    <select class="form-control" name="supplier">
                                                        <option value="">-- Select Supplier --</option>
                                                        <?php foreach ($suppliers as $row){ ?>
-                                                           <option value="<?= $row['id'] ?>"><?= $row['name'] ?></option>
+                                                           <option value="<?= $row['id'] ?>" <?= $view_purchase['supplier_id']==$row['id']?'selected':'' ?>><?= $row['name'] ?></option>
                                                        <?php } ?>
                                                    </select>
                                                 </div>
@@ -69,21 +77,21 @@ if (isset($_POST['submit'])){
                                                  <label class="control-label" for="last-name">Contact <span class="required">*</span>
                                                  </label>
                                                  <div class="">
-                                                     <input type="text" id="contact" name="contact" class="form-control col-md-7 col-xs-12">
+                                                     <input type="text" id="contact" name="contact" value="<?= $view_purchase['contact'] ?>" class="form-control col-md-7 col-xs-12">
                                                  </div>
                                              </div>
                                             <div class="form-group">
                                                 <label class="control-label" for="last-name">Email
                                                 </label>
                                                 <div class="">
-                                                    <input type="email" id="email" name="email" class="form-control col-md-7 col-xs-12">
+                                                    <input type="email" id="email" name="email" value="<?= $view_purchase['email'] ?>" class="form-control col-md-7 col-xs-12">
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label" for="last-name">Billing Address <span class="required">*</span>
                                                 </label>
                                                 <div class="">
-                                                    <textarea class="form-control" name="billing_address"></textarea>
+                                                    <textarea class="form-control" name="billing_address"><?= $view_purchase['billing_address'] ?></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -92,14 +100,14 @@ if (isset($_POST['submit'])){
                                                  <label class="control-label" for="last-name">Order Date <span class="required">*</span>
                                                  </label>
                                                  <div class="">
-                                                     <input type="text" id="order_date" name="order_date" class="form-control col-md-7 col-xs-12">
+                                                     <input type="text" id="order_date" name="order_date" value="<?= $view_purchase['order_date'] ?>" class="form-control col-md-7 col-xs-12">
                                                  </div>
                                              </div>
                                              <div class="form-group">
                                                  <label class="control-label" for="last-name">Payment Date <span class="required">*</span>
                                                  </label>
                                                  <div class="">
-                                                     <input type="text" id="payment_date" name="payment_date" class="form-control col-md-7 col-xs-12">
+                                                     <input type="text" id="payment_date" name="payment_date" value="<?= $view_purchase['payment_date'] ?>" class="form-control col-md-7 col-xs-12">
                                                  </div>
                                              </div>
                                              <div class="form-group">
@@ -108,9 +116,9 @@ if (isset($_POST['submit'])){
                                                  <div class="">
                                                      <select class="form-control" name="payment_method">
                                                          <option value="">-- Select Payment Method --</option>
-                                                         <option value="bkash">Bkash</option>
-                                                         <option value="cash">Cash</option>
-                                                         <option value="bank">Bank</option>
+                                                         <option value="bkash" <?= $view_purchase['payment_method']=='bkash'?'selected':'' ?>>Bkash</option>
+                                                         <option value="cash" <?= $view_purchase['payment_method']=='cash'?'selected':'' ?>>Cash</option>
+                                                         <option value="bank" <?= $view_purchase['payment_method']=='bank'?'selected':'' ?>>Bank</option>
                                                      </select>
                                                  </div>
                                              </div>
@@ -130,6 +138,28 @@ if (isset($_POST['submit'])){
                                                        </tr>
                                                     </thead>
                                                     <tbody>
+                                                        <!-- loop from php json -->
+                                                        <tr ng-repeat="item_row in purchase_items">
+                                                            <td>
+                                                                <input type="hidden" name="purchase_items_id[]" value="{{ item_row.id }}" ng-init="item_row.id">
+                                                                <select class="form-control select_product" name="edit_product[]" ng-model="item_row.product_id" required>
+                                                                    <option value="">-- Select Product --</option>
+                                                                    <?php foreach ($products as $row){ ?>
+                                                                        <option value="<?= $row['id'] ?>"><?= $row['product_name'] ?></option>
+                                                                    <?php } ?>
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" name="edit_unit_price[]"   class="form-control col-md-7 col-xs-12" ng-model="item_row.unit_price" ng-change="calculate(item_row);getTotal();" required>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" name="edit_quantity[]" class="form-control col-md-7 col-xs-12" ng-model="item_row.quantity" ng-change="calculate(item_row);getTotal();" required>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" name="edit_total[]" class="form-control col-md-7 col-xs-12" ng-model="item_row.total"  readonly required>
+                                                            </td>
+                                                        </tr>
+                                                        <!-- /loop from php json -->
                                                        <tr ng-repeat="item in items" ng-model="newItemName" >
                                                            <td>
                                                                <select class="form-control select_product" ng-model="item.product"
@@ -164,7 +194,7 @@ if (isset($_POST['submit'])){
                                                 <label class="control-label" for="last-name">Note
                                                 </label>
                                                 <div class="">
-                                                    <textarea class="form-control" name="note"></textarea>
+                                                    <textarea class="form-control" name="note"><?= $view_purchase['note'] ?></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -270,30 +300,6 @@ if (isset($_POST['submit'])){
         autoclose: true
     });
     var products = <?php echo json_encode($products) ?>;
-    //$(function () {
-    //    var drop_down = '';
-
-    //    $.each(products,function (key,value) {
-    //        drop_down += '<option value="'+value.id+'">'+value.product_name+'</option>';
-    //    });
-    //    $('.add_product').click(function () {
-    //        $("table tbody").append('<tr><td><select class="form-control select_product" name="product[]">' +
-    //            '<option value="">-- Select Product --</option>'+drop_down+'</select></td>' +
-    //            '<td><input type="text" name="unit_price[]" class="form-control col-md-7 col-xs-12 set_unit_price"></td>' +
-    //            '<td><input type="text" name="quantity[]" class="form-control col-md-7 col-xs-12 set_quantity"></td>' +
-    //            '<td><input type="text" name="total[]" class="form-control col-md-7 col-xs-12 set_total"></td>' +
-    //            '<td><button type="button" class="btn btn-danger btn-xs remCF"><i class="fa fa-trash-o"></i></button></td></tr>');
-    //    });
-    //    $("table").on('click','.remCF',function(){
-    //        $(this).parent().parent().remove();
-    //    });
-    //
-    //    $('.select_product').change(function () {
-    //        var id = $(this).val();
-    //        var obj = searchObjects(products,id);
-    //        console.log(obj);
-    //    });
-    //});
     function searchObjects(data,id) {
        var searchField = "id";
        for (var i=0 ; i < data.length ; i++)
@@ -303,9 +309,10 @@ if (isset($_POST['submit'])){
            }
        }
     }
-
     var app = angular.module("app",[]);
     app.controller("ItemsController",function($scope,$http) {
+        view_purchase($scope);
+
         $scope.items = [{newItemName:''}];
         $scope.addItem = function (index) {
             $scope.items.push({newItemName:''});
@@ -332,21 +339,28 @@ if (isset($_POST['submit'])){
             var total_price = unite_price*quantity;
             i.total = total_price;
 
-        };
-
-        $scope.getTotal = function(){
-            var total_qty = 0;
-            var total_bdt = 0;
+            var total = 0;
+            var total_items_amount = 0;
 
             for(var i = 0; i < $scope.items.length; i++){
                 var product         = $scope.items[i];
-                total_qty           += parseFloat(product.quantity);
-                total_bdt           += parseFloat(product.total);
+                total           += parseFloat(product.total);
             }
-            //$scope.tQty=  total_qty;
-            //$scope.tBdt =  total_bdt;
-            $scope.sub_total = total_bdt;
+            for(var i = 0; i < $scope.purchase_items.length; i++){
+                var purchase_items         = $scope.purchase_items[i];
+                var qty = parseFloat(purchase_items.quantity);
+                var unit_price = parseFloat(purchase_items.unit_price);
+                total_items_amount           += unit_price*qty;
+            }
+            if (total) {
+                $scope.sub_total = total_items_amount+total;
+            }else{
+                $scope.sub_total = total_items_amount;
+            }
 
+        };
+
+        $scope.getTotal = function(){
             var sub_total = parseFloat($scope.sub_total);
             var discount = parseFloat($scope.discount);
 
@@ -361,10 +375,19 @@ if (isset($_POST['submit'])){
             var paid = parseFloat($scope.paid);
             var grand_total = parseFloat($scope.grand_total);
             $scope.due = grand_total-paid;
-
         }
     });
-
+    function view_purchase($scope) {
+        $scope.purchase_items = JSON.parse('<?= json_encode($purchase_items) ?>');
+        $scope.sub_total = '<?= $view_purchase['sub_total'] ?>';
+        $scope.discount = '<?= $view_purchase['discount'] ?>';
+        $scope.total_amount = '<?= $total ?>';
+        $scope.vat = '<?= $view_purchase['vat'] ?>';
+        $scope.vat_amount = '<?= $vat ?>';
+        $scope.grand_total = '<?= $grand_total ?>';
+        $scope.paid = '<?= $view_purchase['paid_amount'] ?>';
+        $scope.due = '<?= $view_purchase['due_amount'] ?>';
+    }
 </script>
 </body>
 </html>
