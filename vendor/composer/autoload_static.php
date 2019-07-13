@@ -20,6 +20,7 @@ class ComposerStaticInitf29a6195b0a6d553983392a199d62eca
         'ProductAttributes' => __DIR__ . '/../..' . '/classes/ProductAttributes.php',
         'Products' => __DIR__ . '/../..' . '/classes/Products.php',
         'Purchase' => __DIR__ . '/../..' . '/classes/Purchase.php',
+        'PurchaseReturn' => __DIR__ . '/../..' . '/classes/PurchaseReturn.php',
         'Session' => __DIR__ . '/../..' . '/function/Session.php',
         'Suppliers' => __DIR__ . '/../..' . '/classes/Suppliers.php',
         'Validation' => __DIR__ . '/../..' . '/function/Validation.php',

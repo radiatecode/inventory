@@ -15,6 +15,7 @@ return array(
     'ProductAttributes' => $baseDir . '/classes/ProductAttributes.php',
     'Products' => $baseDir . '/classes/Products.php',
     'Purchase' => $baseDir . '/classes/Purchase.php',
+    'PurchaseReturn' => $baseDir . '/classes/PurchaseReturn.php',
     'Session' => $baseDir . '/function/Session.php',
     'Suppliers' => $baseDir . '/classes/Suppliers.php',
     'Validation' => $baseDir . '/function/Validation.php',

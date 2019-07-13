@@ -5,9 +5,9 @@ $product = new Products();
 $products = $product->allProducts();
 $supplier = new Suppliers();
 $suppliers = $supplier->allSuppliers();
-$purchase = new Purchase();
+$purchaseReturn = new PurchaseReturn();
 if (isset($_POST['submit'])){
-    $purchase->store($_POST);
+    $purchaseReturn->store($_POST);
 }
 
 ?>
@@ -40,7 +40,7 @@ if (isset($_POST['submit'])){
                 <div class="row">
                     <?php
                     session_message();
-                    messages($purchase->getMessage())
+                    messages($purchaseReturn->getMessage())
                     ?>
                     <!-- Page Container -->
                     <div class="col-md-12 col-sm-12 col-xs-12" ng-app="app" ng-controller="ItemsController">
@@ -50,7 +50,7 @@ if (isset($_POST['submit'])){
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
-                                <form action="purchase-add.php" method="post" class="form-horizontal">
+                                <form action="purchase-return-add.php" method="post" class="form-horizontal">
                                     <div class="row">
                                         <div class="col-md-6 col-lg-3 col-xs-12">
                                             <div class="form-group">
@@ -80,7 +80,7 @@ if (isset($_POST['submit'])){
                                         </div>
                                         <div class="col-md-6 col-lg-3 col-xs-12">
                                             <div class="form-group">
-                                                <label class="control-label" for="last-name"></label>
+                                                <label class="control-label" for="last-name"><i class="fa fa-search-plus"></i></label>
                                                 <div class="">
                                                     <button class="btn btn-success btn-md"><i class="fa fa-search"></i> Find</button>
                                                 </div>
@@ -109,6 +109,7 @@ if (isset($_POST['submit'])){
                                              <div class="form-group">
                                                  <label class="control-label" >Discount Given :</label>
                                                  <label class="control-label" >{{ order.discount }}</label>
+                                                 <input type="hidden" ng-model="discount_given" ng-value="order.discount">
                                              </div>
                                         </div>
                                          <div class="col-md-4 col-lg-6 col-xs-12">
@@ -192,6 +193,20 @@ if (isset($_POST['submit'])){
                                                 <div class="">
                                                     <input type="text" id="sub_total" name="sub_total" ng-model="sub_total"
                                                            class="form-control col-md-7 col-xs-12" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label" for="last-name">Discount Given (%)
+                                                </label>
+                                                <div class="">
+                                                    <input type="text" id="discount" name="discount" ng-model="order.discount" class="form-control col-md-7 col-xs-12" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label" for="last-name">Total Amount
+                                                </label>
+                                                <div class="">
+                                                    <input type="text" id="total_amount" name="total_amount" ng-model="total_amount" class="form-control col-md-7 col-xs-12" readonly>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -309,17 +324,12 @@ if (isset($_POST['submit'])){
             $http({
                 method: 'GET',
                 url: "ajax.php?ajax=order_info&id="+order_no
-
             }).then(function successCallback(response) {
-
                 console.log(response.data);
                 $scope.order = response.data.order;
                 $scope.items = response.data.items;
-
             }, function errorCallback(error) {
-
                 console.log(error);
-
             });
         };
 
@@ -342,16 +352,19 @@ if (isset($_POST['submit'])){
 
         $scope.getTotal = function(){
             var sub_total = parseFloat($scope.sub_total);
+            var discount = parseFloat($scope.order.discount);
+
+            var total_amount = sub_total-((sub_total*discount)/100);
+            $scope.total_amount = total_amount;
 
             var vat = parseFloat($scope.vat);
-            var vat_amount = (sub_total*vat)/100;
+            var vat_amount = (total_amount*vat)/100;
             $scope.vat_amount = vat_amount;
-            $scope.grand_total = sub_total+vat_amount;
+            $scope.grand_total = total_amount+vat_amount;
 
             var receipt_amount = parseFloat($scope.receipt_amount);
             var grand_total = parseFloat($scope.grand_total);
             $scope.adjust_amount = grand_total-receipt_amount;
-
         }
     });
 

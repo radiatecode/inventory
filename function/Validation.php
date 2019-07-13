@@ -28,6 +28,12 @@ class Validation
                     }
                 }
             }
+            if (self::is_ArrayRules($rule_break)){
+                $element = $post[$key];
+                if (!is_array($element)){
+                    self::$errors[] = ucwords($key)." Field Is Not An Array";
+                }
+            }
             if (self::numberRules($rule_break)){
                 if (!empty($post[$key]) && !is_numeric($post[$key]) ){
                     self::$errors[] = ucwords($key)." Field Value Must Be Numeric";
@@ -56,6 +62,22 @@ class Validation
                     }
                 }
             }
+            if (self::minimum($rule_break)){
+                $minimum = self::minimum($rule_break);
+                $key_elm = $post[$key];
+                if (count($key_elm)>=$minimum){
+                    foreach ($key_elm as $i=>$val){
+                        if (empty($key_elm[$i])){
+                            self::$errors[] = ucwords($key)." Field Is Empty";
+                        }
+                    }
+                }else{
+                    self::$errors[] = ucwords($key)." Field Must Have ".$minimum." Value";
+                }
+
+            }
+
+
 
         }
         return self::$errors;
@@ -69,6 +91,10 @@ class Validation
         return in_array('array',$rules);
     }
 
+    private static function is_ArrayRules($rules){
+        return in_array('is_array',$rules);
+    }
+
     private static function numberRules($rules){
         return in_array('number',$rules);
     }
@@ -79,6 +105,17 @@ class Validation
                 $break = explode(':',$rule);
                 $field = $break[1];
                 return $field;
+            }else{
+                return false;
+            }
+        }
+    }
+    private static function minimum($rules){
+        foreach ($rules as $rule){
+            if (strpos($rule, 'minimum') !== false) {
+                $break = explode(':',$rule);
+                $minimum = $break[1];
+                return $minimum;
             }else{
                 return false;
             }
