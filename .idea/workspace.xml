@@ -3,10 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="a146932b-e264-44db-9c65-b750364a926d" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/PurchaseReturn.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/PurchaseReturn.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/function/Validation.php" beforeDir="false" afterPath="$PROJECT_DIR$/function/Validation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inventory.sql" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ui/purchase-return-add.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/purchase-return-add.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/composer/autoload_classmap.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/autoload_classmap.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor/composer/autoload_static.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/autoload_static.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -20,29 +20,50 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="purchase-return-add.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ui/purchase-return-add.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="168" column="98" selection-start-line="168" selection-start-column="98" selection-end-line="168" selection-end-column="98" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="PurchaseReturn.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/classes/PurchaseReturn.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="30" column="41" selection-start-line="30" selection-start-column="34" selection-end-line="30" selection-end-column="41" />
+            <state relative-caret-position="423">
+              <caret line="98" lean-forward="true" selection-start-line="98" selection-end-line="98" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Validation.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="purchase-return.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ui/purchase-return.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="378">
+              <caret line="68" column="56" lean-forward="true" selection-start-line="68" selection-start-column="56" selection-end-line="68" selection-end-column="56" />
+              <folding>
+                <element signature="n#style#0;n#i#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="purchase-return-view.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ui/purchase-return-view.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="245">
+              <caret line="57" column="63" lean-forward="true" selection-start-line="57" selection-start-column="63" selection-end-line="57" selection-end-column="63" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Purchase.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/classes/Purchase.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="504">
+              <caret line="189" column="5" lean-forward="true" selection-start-line="174" selection-start-column="4" selection-end-line="189" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Validation.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/function/Validation.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="353">
-              <caret line="118" column="18" lean-forward="true" selection-start-line="118" selection-start-column="18" selection-end-line="118" selection-end-column="18" />
+            <state>
+              <caret line="52" column="28" lean-forward="true" selection-start-line="52" selection-start-column="28" selection-end-line="52" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -93,9 +114,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/classes/DB.php" />
-        <option value="$PROJECT_DIR$/composer.json.js" />
-        <option value="$PROJECT_DIR$/config/db_config.php" />
         <option value="$PROJECT_DIR$/db/DB.php" />
         <option value="$PROJECT_DIR$/login.php" />
         <option value="$PROJECT_DIR$/include/_head.php" />
@@ -144,6 +162,9 @@
         <option value="$PROJECT_DIR$/function/Validation.php" />
         <option value="$PROJECT_DIR$/ui/purchase-return-add.php" />
         <option value="$PROJECT_DIR$/classes/PurchaseReturn.php" />
+        <option value="$PROJECT_DIR$/ui/purchase_return.php" />
+        <option value="$PROJECT_DIR$/ui/purchase-return.php" />
+        <option value="$PROJECT_DIR$/ui/purchase-return-view.php" />
       </list>
     </option>
   </component>
@@ -199,6 +220,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -209,37 +231,31 @@
             <path>
               <item name="inventory" type="b2602c69:ProjectViewProjectNode" />
               <item name="inventory" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="classes" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="inventory" type="b2602c69:ProjectViewProjectNode" />
-              <item name="inventory" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="ui" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../in3" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="php.override.implement.member.chooser.php.doc" value="NONE" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\xampp\htdocs\inventory\function" />
-      <recent name="C:\xampp\htdocs\inventory\ui" />
-      <recent name="C:\xampp\htdocs\inventory\db" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\inventory\ui" />
       <recent name="C:\xampp\htdocs\inventory" />
       <recent name="C:\xampp\htdocs\inventory\include" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\inventory\function" />
+      <recent name="C:\xampp\htdocs\inventory\ui" />
+      <recent name="C:\xampp\htdocs\inventory\db" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -283,17 +299,18 @@
       <workItem from="1562645056951" duration="21400000" />
       <workItem from="1562733243003" duration="12889000" />
       <workItem from="1562991753164" duration="14903000" />
+      <workItem from="1563080354744" duration="5466000" />
+      <workItem from="1563091206881" duration="13056000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="326012000" />
+    <option name="totallyTimeSpent" value="344534000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19391891" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15135135" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" weight="0.32886904" />
@@ -321,20 +338,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/classes/Auth.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="17" column="11" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/classes/Brand.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="837">
-          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/include/_head.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="192">
@@ -452,13 +455,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-270">
           <caret line="24" column="26" selection-start-line="24" selection-start-column="19" selection-end-line="24" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ui/products-view.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="28" column="15" lean-forward="true" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="15" />
         </state>
       </provider>
     </entry>
@@ -585,9 +581,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-177">
           <caret line="187" column="21" lean-forward="true" selection-start-line="187" selection-start-column="21" selection-end-line="187" selection-end-column="21" />
-          <folding>
-            <element signature="n#store#0;n#Order#0;n#!!top" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -633,40 +626,55 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/classes/Purchase.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="90" column="5" lean-forward="true" selection-start-line="20" selection-start-column="4" selection-end-line="90" selection-end-column="5" />
-          <folding>
-            <element signature="n#store#0;n#Purchase#0;n#!!top" />
-            <element signature="n#update#0;n#Purchase#0;n#!!top" />
-            <element signature="n#allPurchased#0;n#Purchase#0;n#!!top" />
-            <element signature="n#viewPurchase#0;n#Purchase#0;n#!!top" />
-            <element signature="n#viewPurchaseItems#0;n#Purchase#0;n#!!top" />
-            <element signature="n#getPurchaseOrder#0;n#Purchase#0;n#!!top" />
-            <element signature="n#delete_purchase#0;n#Purchase#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ui/purchase-return-add.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="168" column="98" selection-start-line="168" selection-start-column="98" selection-end-line="168" selection-end-column="98" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/classes/PurchaseReturn.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="30" column="41" selection-start-line="30" selection-start-column="34" selection-end-line="30" selection-end-column="41" />
+        <state relative-caret-position="189">
+          <caret line="201" column="99" selection-start-line="201" selection-start-column="91" selection-end-line="201" selection-end-column="99" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/function/Validation.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="118" column="18" lean-forward="true" selection-start-line="118" selection-start-column="18" selection-end-line="118" selection-end-column="18" />
+        <state>
+          <caret line="52" column="28" lean-forward="true" selection-start-line="52" selection-start-column="28" selection-end-line="52" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/classes/Purchase.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="504">
+          <caret line="189" column="5" lean-forward="true" selection-start-line="174" selection-start-column="4" selection-end-line="189" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/classes/PurchaseReturn.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="423">
+          <caret line="98" lean-forward="true" selection-start-line="98" selection-end-line="98" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ui/products-view.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="513">
+          <caret line="28" column="15" lean-forward="true" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ui/purchase-return.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="68" column="56" lean-forward="true" selection-start-line="68" selection-start-column="56" selection-end-line="68" selection-end-column="56" />
+          <folding>
+            <element signature="n#style#0;n#i#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ui/purchase-return-view.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="57" column="63" lean-forward="true" selection-start-line="57" selection-start-column="63" selection-end-line="57" selection-end-column="63" />
         </state>
       </provider>
     </entry>

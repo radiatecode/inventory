@@ -62,19 +62,15 @@ class Validation
                     }
                 }
             }
+
             if (self::minimum($rule_break)){
                 $minimum = self::minimum($rule_break);
-                $key_elm = $post[$key];
+                $key_elm = array_filter($post[$key]);
                 if (count($key_elm)>=$minimum){
-                    foreach ($key_elm as $i=>$val){
-                        if (empty($key_elm[$i])){
-                            self::$errors[] = ucwords($key)." Field Is Empty";
-                        }
-                    }
-                }else{
-                    self::$errors[] = ucwords($key)." Field Must Have ".$minimum." Value";
-                }
 
+                }else{
+                    self::$errors[] = ucwords($key)." Field Must Have Minimum ".$minimum." Value";
+                }
             }
 
 
@@ -105,21 +101,19 @@ class Validation
                 $break = explode(':',$rule);
                 $field = $break[1];
                 return $field;
-            }else{
-                return false;
             }
         }
+        return false;
     }
     private static function minimum($rules){
         foreach ($rules as $rule){
-            if (strpos($rule, 'minimum') !== false) {
+            if (strpos($rule, 'minimum') !== false){
                 $break = explode(':',$rule);
-                $minimum = $break[1];
-                return $minimum;
-            }else{
-                return false;
+                $min = (int)$break[1];
+                return $min;
             }
         }
+        return false;
     }
 
 

@@ -6,10 +6,13 @@ $products = $product->allProducts();
 $supplier = new Suppliers();
 $suppliers = $supplier->allSuppliers();
 $purchaseReturn = new PurchaseReturn();
-if (isset($_POST['submit'])){
-    $purchaseReturn->store($_POST);
+if (isset($_GET['id'])) {
+    if (isset($_POST['submit'])) {
+        $purchaseReturn->store($_POST);
+    }
+}else{
+    abort(404);
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +36,7 @@ if (isset($_POST['submit'])){
         <div class="right_col" role="main">
             <div class="">
                 <div class="title_left">
-                    <h3>Purchase Return</h3>
+                    <h3>View Purchase Return</h3>
                 </div>
                 <div class="clearfix"></div>
 
@@ -46,49 +49,17 @@ if (isset($_POST['submit'])){
                     <div class="col-md-12 col-sm-12 col-xs-12" ng-app="app" ng-controller="ItemsController">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>Purchase <small>Return</small></h2>
+                                <h2>View Purchase <small>Return</small></h2>
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
                                 <form action="purchase-return-add.php" method="post" class="form-horizontal">
                                     <div class="row">
-                                        <div class="col-md-6 col-lg-3 col-xs-12">
-                                            <div class="form-group">
-                                                <label class="control-label" for="last-name">Supplier <span class="required">*</span>
-                                                </label>
-                                                <div class="">
-                                                    <select class="form-control" name="supplier" id="supplier">
-                                                        <option value="">-- Select Supplier --</option>
-                                                        <?php foreach ($suppliers as $row){ ?>
-                                                            <option value="<?= $row['id'] ?>"><?= $row['name'] ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-lg-3 col-xs-12">
-                                            <div class="form-group">
-                                                <label class="control-label" for="last-name">Order No <span class="required">*</span>
-                                                </label>
-                                                <div class="">
-                                                    <select class="form-control" name="order_no" id="order_no" ng-model="order_no" ng-change="selectChange()">
-                                                        <option value="">-- Select Order No --</option>
-
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-lg-3 col-xs-12">
-                                            <div class="form-group">
-                                                <label class="control-label" for="last-name"><i class="fa fa-search-plus"></i></label>
-                                                <div class="">
-                                                    <button class="btn btn-success btn-md"><i class="fa fa-search"></i> Find</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
                                          <div class="col-md-4 col-lg-6 col-xs-12">
+                                             <div class="form-group">
+                                                 <label class="control-label" >Supplier :</label>
+                                                 <label class="control-label" >{{ order.contact }}</label>
+                                             </div>
                                              <div class="form-group">
                                                  <label class="control-label" >Contact :</label>
                                                  <label class="control-label" >{{ order.contact }}</label>
@@ -113,6 +84,13 @@ if (isset($_POST['submit'])){
                                              </div>
                                         </div>
                                          <div class="col-md-4 col-lg-6 col-xs-12">
+                                             <div class="form-group">
+                                                 <label class="control-label" for="last-name">Ref. Order No
+                                                 </label>
+                                                 <div class="">
+                                                     <input type="text" id="ref_order" name="ref_order" class="form-control col-md-7 col-xs-12" readonly>
+                                                 </div>
+                                             </div>
                                              <div class="form-group">
                                                  <label class="control-label" for="last-name">Return Date <span class="required">*</span>
                                                  </label>
