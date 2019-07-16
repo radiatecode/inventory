@@ -79,6 +79,18 @@ if (isset($_GET['ajax']) && $_GET['ajax']=='dp'){
     }
 }
 
+if (isset($_GET['ajax']) && $_GET['ajax']=='dpr'){
+    if (isset($_GET['id'])){
+        $purchaseReturn = new PurchaseReturn();
+        $deleted = $purchaseReturn->delete_return($_GET['id']);
+        if ($deleted){
+            echo 'success';
+        }else {
+            echo 'error';
+        }
+    }
+}
+
 if (isset($_GET['ajax']) && $_GET['ajax']=='order'){
     if (isset($_GET['id'])){
         $purchase = new Purchase();
@@ -98,6 +110,19 @@ if (isset($_GET['ajax']) && $_GET['ajax']=='order_info'){
         $items = $purchase->viewPurchaseItems($_GET['id']);
         if ($order){
             echo json_encode(['order'=>$order,'items'=>$items]);
+        }else {
+            echo json_encode('error');
+        }
+    }
+}
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='sales_order'){
+    if (isset($_GET['id'])){
+        $order = new Order();
+        $orders = $order->viewOrder($_GET['id']);
+        $order_items = $order->viewOrderItems($_GET['id']);
+        if ($orders){
+            echo json_encode(['order'=>$orders,'items'=>$order_items]);
         }else {
             echo json_encode('error');
         }

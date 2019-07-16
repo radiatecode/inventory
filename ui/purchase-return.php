@@ -67,7 +67,7 @@ $purchaseReturn = new PurchaseReturn();
                                                     <a href="purchase-return-view.php?id=<?= $row['return_id'] ?>" class="btn btn-info btn-xs edit">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
-                                                    <button type="button" id="<?= $row['return_id'] ?>" class="btn btn-danger btn-xs delete_purchase"><i class="fa fa-trash-o"></i></button>
+                                                    <button type="button" id="<?= $row['return_id'] ?>" class="btn btn-danger btn-xs delete_purchase_return"><i class="fa fa-trash-o"></i></button>
                                                 </td>
                                             </tr>
                                         <?php } ?>
@@ -94,7 +94,7 @@ $purchaseReturn = new PurchaseReturn();
 </div>
 <?php include('../include/_script.php') ?>
 <script>
-    $('.delete_purchase').click(function () {
+    $('.delete_purchase_return').click(function () {
         var id = $(this).attr('id');
         Swal.fire({
             title: 'Are you sure?',
@@ -106,7 +106,7 @@ $purchaseReturn = new PurchaseReturn();
             confirmButtonText: 'Yes, Delete it!'
         }).then(function(result) {
             if (result.value) {
-                var url = "ajax.php?ajax=dp&id="+id;
+                var url = "ajax.php?ajax=dpr&id="+id;
                 $.ajax({
                     url:url,
                     type:'GET',

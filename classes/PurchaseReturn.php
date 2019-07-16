@@ -85,6 +85,63 @@ class PurchaseReturn
             }
         }
     }
+    public function update($post,$id){
+        $validation = Validation::PostValidate($post,[
+            'payment_method'=>'required',
+            'return_date'=>'required',
+            'unit_price'=>'required|array',
+            'quantity'=>'is_array|minimum:1',
+            'total'=>'required_if:quantity|is_array',
+            'sub_total'=>'required|number',
+            'vat'=>'required|number',
+            'vat_amount'=>'required|number',
+            'grand_total'=>'required|number',
+            'receipt_amount'=>'required|number'
+        ]);
+        if ($validation){
+            $this->messages = $validation;
+        }else{
+            $pri_update=null;
+            $insert = $this->_db->update('purchase_return',[
+                'return_date'=>$this->_db->escapeString($post['return_date']),
+                'note'=>$this->_db->escapeString($post['note']),
+            ])->where('id','=',$id)->get();
+
+            if (!empty($post['purchase_return_items'])){
+                $return_items_id = $post['purchase_return_items'];
+                $unit_price = $post['unit_price'];
+                $quantity = $post['quantity'];
+                $total = $post['total'];
+                for ($i=0;$i<count($return_items_id);$i++){
+                    if (!empty($quantity[$i])) {
+                        $pri_update = $this->_db->update('purchase_return_items', [
+                            'quantity' => $this->_db->escapeString($quantity[$i]),
+                            'unit_price' => $this->_db->escapeString($unit_price[$i]),
+                            'total' => $this->_db->escapeString($total[$i]),
+                        ])->where('id','=',$return_items_id[$i])->get();
+                    }else{
+                        $delete = $this->_db->delete('purchase_return_items')
+                            ->where('id','=',$return_items_id[$i])->get();
+                    }
+                }
+            }
+
+            $payments = $this->_db->update('purchase_return_payment',[
+                'payment_method'=>$this->_db->escapeString($post['payment_method']),
+                'sub_total'=>$this->_db->escapeString($post['sub_total']),
+                'discount_given'=>$this->_db->escapeString($post['discount']),
+                'vat'=>$this->_db->escapeString($post['vat']),
+                'receipt_amount'=>$this->_db->escapeString($post['receipt_amount']),
+                'adjust_amount'=>$this->_db->escapeString($post['adjust_amount']),
+            ])->where('return_id','=',$id)->get();
+
+            if (!$insert || !$pri_update || !$payments) {
+                Session::flush('failed', 'Data Insertion Error! ' . $this->_db->sql_error());
+            }else{
+                Session::flush('success','Successfully Data Inserted');
+            }
+        }
+    }
 
     public function allPurchaseReturn(){
         $purchaseReturns = $this->_db->select(['purchase_return.id as return_id','purchase_order_no','return_date',
@@ -101,5 +158,33 @@ class PurchaseReturn
             return $purchaseReturns;
         }
         Session::flush('failed','Query Error!' .$this->_db->sql_error());
+    }
+
+    public function viewPurchaseReturn($id){
+        $order = $this->_db->select(['purchase_return.*','purchase.*','name','purchase_return_payment.*'])
+            ->table('purchase_return')
+            ->join('purchase','purchase.id','purchase_return.purchase_id')
+            ->join('suppliers','suppliers.id','purchase.supplier_id')
+            ->join('purchase_return_payment','purchase_return.id','purchase_return_payment.return_id')
+            ->where('purchase_return.id','=',$id)
+            ->get();
+        return $this->_db->fetchAssoc($order);
+    }
+
+    public function viewPurchaseReturnItems($id){
+        $items = $this->_db->select(['purchase_return_items.*'])
+            ->table('purchase_return_items')
+            ->where('return_id','=',$id)
+            ->get();
+        return $this->_db->fetchAll($items);
+    }
+
+    public function delete_return($id){
+        $delete = $this->_db->delete('purchase_return')
+            ->where('id','=',$id)->get();
+        if (!$delete){
+            return false;
+        }
+        return true;
     }
 }

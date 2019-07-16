@@ -43,6 +43,7 @@ class Order
             $oi_insert=null;$order_id=0;
             $created_at = date('Y-m-d h:i:s');
             $insert = $this->_db->insert('orders',[
+                'sales_order'=>'SO-'.date('ydis'),
                 'customer_id'=>$this->_db->escapeString($post['customer']),
                 'contact'=>$this->_db->escapeString($post['contact']),
                 'email'=>$this->_db->escapeString($post['email']),
@@ -192,9 +193,10 @@ class Order
     }
 
     public function viewOrder($id){
-       $order = $this->_db->select(['orders.*','order_payment.*'])
+       $order = $this->_db->select(['orders.*','name','order_payment.*'])
            ->table('orders')
            ->join('order_payment','orders.id','order_payment.order_id')
+           ->join('customers','customers.id','orders.customer_id')
            ->where('orders.id','=',$id)
            ->get();
        return $this->_db->fetchAssoc($order);

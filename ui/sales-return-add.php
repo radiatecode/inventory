@@ -3,21 +3,12 @@ error_reporting(E_ALL & ~E_NOTICE);
 require_once '../vendor/autoload.php';
 $product = new Products();
 $products = $product->allProducts();
-$supplier = new Suppliers();
-$suppliers = $supplier->allSuppliers();
-$purchaseReturn = new PurchaseReturn();
-if (isset($_GET['id'])) {
-    if (isset($_POST['submit'])) {
-        $purchaseReturn->update($_POST,$_GET['id']);
-    }
-    $viewReturn = $purchaseReturn->viewPurchaseReturn($_GET['id']);
-    $viewReturnItems = $purchaseReturn->viewPurchaseReturnItems($_GET['id']);
-    $total = ($viewReturn['sub_total']-($viewReturn['sub_total']*$viewReturn['discount_given'])/100);
-    $vat =  ($total*$viewReturn['vat']/100);
-    $grand_total =  ($total+$vat);
-}else{
-    abort(404);
+$salesReturn = new SalesReturn();
+$orders = $salesReturn->salesOrders();
+if (isset($_POST['submit'])){
+
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,65 +32,83 @@ if (isset($_GET['id'])) {
         <div class="right_col" role="main">
             <div class="">
                 <div class="title_left">
-                    <h3>View Purchase Return</h3>
+                    <h3>Sales Order Return</h3>
                 </div>
                 <div class="clearfix"></div>
 
                 <div class="row">
                     <?php
                     session_message();
-                    messages($purchaseReturn->getMessage())
+                    messages($salesReturn->getMessage())
                     ?>
                     <!-- Page Container -->
                     <div class="col-md-12 col-sm-12 col-xs-12" ng-app="app" ng-controller="ItemsController">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>View Purchase <small>Return</small></h2>
+                                <h2>Sales Order <small>Return</small></h2>
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
-                                <form action="purchase-return-view.php?id=<?= $_GET['id'] ?>" method="post" class="form-horizontal">
+                                <form action="purchase-return-add.php" method="post" class="form-horizontal">
+                                    <div class="row">
+                                        <div class="col-md-6 col-lg-3 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="control-label" for="last-name">Order No <span class="required">*</span>
+                                                </label>
+                                                <div class="">
+                                                    <select class="form-control" name="order_no" id="order_no" ng-model="order_no" ng-change="selectChange()">
+                                                        <option value="">-- Select Order No --</option>
+                                                        <?php foreach ($orders as $order){ ?>
+                                                            <option value="<?= $order['id'] ?>"><?= $order['sales_order'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-3 col-xs-12">
+                                            <div class="form-group">
+                                                <label class="control-label" for="last-name"><i class="fa fa-search-plus"></i></label>
+                                                <div class="">
+                                                    <button class="btn btn-success btn-md"><i class="fa fa-search"></i> Find</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                          <div class="col-md-4 col-lg-6 col-xs-12">
                                              <div class="form-group">
-                                                 <label class="control-label" >Supplier :</label>
-                                                 <label class="control-label" ><?= $viewReturn['name'] ?></label>
-                                             </div>
-                                             <div class="form-group">
-                                                 <label class="control-label" >Contact :</label>
-                                                 <label class="control-label" ><?= $viewReturn['contact'] ?></label>
+                                                 <label class="control-label" >Customer :</label>
+                                                 <label class="control-label" >{{ order.name }}</label>
                                              </div>
                                              <div class="form-group">
                                                  <label class="control-label" >Email :
                                                  </label>
-                                                 <label class="control-label" ><?= $viewReturn['email'] ?></label>
+                                                 <label class="control-label" >{{ order.email }}</label>
                                              </div>
                                              <div class="form-group">
                                                  <label class="control-label" >Billing Address :</label>
-                                                 <label class="control-label" ><?= $viewReturn['billing_address'] ?></label>
+                                                 <label class="control-label" >{{ order.billing_address }}</label>
                                              </div>
                                              <div class="form-group">
                                                  <label class="control-label" >Order Date :</label>
-                                                 <label class="control-label" ><?= $viewReturn['order_date'] ?></label>
+                                                 <label class="control-label" >{{ order.order_date }}</label>
+                                             </div>
+                                             <div class="form-group">
+                                                 <label class="control-label" >Delivery Date :</label>
+                                                 <label class="control-label" >{{ order.delivery_date }}</label>
                                              </div>
                                              <div class="form-group">
                                                  <label class="control-label" >Discount Given :</label>
-                                                 <label class="control-label" ><?= $viewReturn['discount_given'] ?></label>
+                                                 <label class="control-label" >{{ order.discount }}</label>
+                                                 <input type="hidden" ng-model="discount_given" ng-value="order.discount">
                                              </div>
                                         </div>
                                          <div class="col-md-4 col-lg-6 col-xs-12">
                                              <div class="form-group">
-                                                 <label class="control-label" for="last-name">Ref. Order No
-                                                 </label>
-                                                 <div class="">
-                                                     <input type="text" id="ref_order" name="ref_order" value="<?= $viewReturn['purchase_order_no'] ?>" class="form-control col-md-7 col-xs-12" readonly>
-                                                 </div>
-                                             </div>
-                                             <div class="form-group">
                                                  <label class="control-label" for="last-name">Return Date <span class="required">*</span>
                                                  </label>
                                                  <div class="">
-                                                     <input type="text" id="return_date" name="return_date" value="<?= $viewReturn['return_date'] ?>" class="form-control col-md-7 col-xs-12">
+                                                     <input type="text" id="return_date" name="return_date" class="form-control col-md-7 col-xs-12">
                                                  </div>
                                              </div>
                                              <div class="form-group">
@@ -108,9 +117,9 @@ if (isset($_GET['id'])) {
                                                  <div class="">
                                                      <select class="form-control" name="payment_method">
                                                          <option value="">-- Select Payment Method --</option>
-                                                         <option value="bkash" <?= $viewReturn['payment_method']=='bkash'?'selected':'' ?>>Bkash</option>
-                                                         <option value="cash" <?= $viewReturn['payment_method']=='cash'?'selected':'' ?>>Cash</option>
-                                                         <option value="bank" <?= $viewReturn['payment_method']=='bank'?'selected':'' ?>>Bank</option>
+                                                         <option value="bkash">Bkash</option>
+                                                         <option value="cash">Cash</option>
+                                                         <option value="bank">Bank</option>
                                                      </select>
                                                  </div>
                                              </div>
@@ -121,16 +130,20 @@ if (isset($_GET['id'])) {
                                                 <table class="table table-bordered">
                                                     <thead>
                                                        <tr>
+                                                           <th>#</th>
                                                            <th>Product</th>
+                                                           <th>Sales Quantity</th>
                                                            <th>Unit Price</th>
-                                                           <th>Returned Quantity</th>
+                                                           <th>Return Quantity</th>
                                                            <th>Total</th>
                                                        </tr>
                                                     </thead>
                                                     <tbody>
                                                        <tr ng-repeat="item in items">
                                                            <td>
-                                                               <input type="hidden" name="purchase_return_items[]" value="{{item.id}}">
+                                                               <input type="checkbox" name="purchase_return_items[]" ng-model="item.id">
+                                                           </td>
+                                                           <td>
                                                                <select class="form-control select_product" name="product[]" ng-model="item.product_id">
                                                                    <?php foreach ($products as $row){ ?>
                                                                        <option value="<?= $row['id'] ?>"><?= $row['product_name'] ?></option>
@@ -138,13 +151,16 @@ if (isset($_GET['id'])) {
                                                                </select>
                                                            </td>
                                                            <td>
+                                                               <input type="text" class="form-control col-md-7 col-xs-12" ng-model="item.quantity" readonly>
+                                                           </td>
+                                                           <td>
                                                                <input type="text" name="unit_price[]" class="form-control col-md-7 col-xs-12" ng-model="item.unit_price" >
                                                            </td>
                                                            <td>
-                                                               <input type="text" name="quantity[]" class="form-control col-md-7 col-xs-12" ng-model="item.quantity" ng-change="calculate(item);getTotal();">
+                                                               <input type="text" name="quantity[]" class="form-control col-md-7 col-xs-12" ng-model="item.return_quantity" ng-change="calculate(item);getTotal();">
                                                            </td>
                                                            <td>
-                                                               <input type="text" name="total[]" class="form-control col-md-7 col-xs-12" ng-model="item.total" readonly>
+                                                               <input type="text" name="total[]" class="form-control col-md-7 col-xs-12" ng-model="item.return_total" readonly>
                                                            </td>
                                                        </tr>
                                                     </tbody>
@@ -157,7 +173,7 @@ if (isset($_GET['id'])) {
                                                 <label class="control-label" for="last-name">Note
                                                 </label>
                                                 <div class="">
-                                                    <textarea class="form-control" name="note"><?= $viewReturn['note'] ?></textarea>
+                                                    <textarea class="form-control" name="note"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -174,7 +190,7 @@ if (isset($_GET['id'])) {
                                                 <label class="control-label" for="last-name">Discount Given (%)
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="discount" name="discount" ng-model="discount" class="form-control col-md-7 col-xs-12" readonly>
+                                                    <input type="text" id="discount" name="discount" ng-model="order.discount" class="form-control col-md-7 col-xs-12" readonly>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -206,10 +222,10 @@ if (isset($_GET['id'])) {
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="control-label" for="last-name">Receipt Amount <span class="required">*</span>
+                                                <label class="control-label" for="last-name">Cash Return <span class="required">*</span>
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="receipt_amount" name="receipt_amount"  ng-model="receipt_amount" ng-change="getTotal();" class="form-control col-md-7 col-xs-12" >
+                                                    <input type="text" id="receipt_amount" name="cash_return"  ng-model="cash_return" ng-change="getTotal();" class="form-control col-md-7 col-xs-12" >
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -256,27 +272,39 @@ if (isset($_GET['id'])) {
         todayHighlight: true,
         autoclose: true
     });
-    var viewReturnItems = <?php echo json_encode($viewReturnItems) ?>;
 
     var app = angular.module("app",[]);
     app.controller("ItemsController",function($scope,$http) {
 
         $scope.order = {};
-        $scope.items = viewReturnItems;
-        view_return($scope);
+        $scope.items = {};
+
+        $scope.selectChange = function () {
+            var order_no = $scope.order_no;
+            $http({
+                method: 'GET',
+                url: "ajax.php?ajax=sales_order&id="+order_no
+            }).then(function successCallback(response) {
+                console.log(response.data);
+                $scope.order = response.data.order;
+                $scope.items = response.data.items;
+            }, function errorCallback(error) {
+                console.log(error);
+            });
+        };
 
         $scope.calculate = function(i){
             var unite_price = parseFloat(i.unit_price);
-            var quantity = parseFloat(i.quantity);
+            var quantity = parseFloat(i.return_quantity);
             var total_price = unite_price*quantity;
-            i.total = total_price;
+            i.return_total = total_price;
 
             var total_bdt = 0;
 
             for(var i = 0; i < $scope.items.length; i++){
                 var product         = $scope.items[i];
-                if (product.total) {
-                    total_bdt += parseFloat(product.total);
+                if (product.return_total) {
+                    total_bdt += parseFloat(product.return_total);
                 }
             }
             $scope.sub_total = total_bdt;
@@ -284,7 +312,7 @@ if (isset($_GET['id'])) {
 
         $scope.getTotal = function(){
             var sub_total = parseFloat($scope.sub_total);
-            var discount = parseFloat($scope.discount);
+            var discount = parseFloat($scope.order.discount);
 
             var total_amount = sub_total-((sub_total*discount)/100);
             $scope.total_amount = total_amount;
@@ -300,16 +328,6 @@ if (isset($_GET['id'])) {
         }
     });
 
-    function view_return($scope) {
-        $scope.sub_total = '<?= $viewReturn['sub_total'] ?>';
-        $scope.discount = '<?= $viewReturn['discount_given'] ?>';
-        $scope.total_amount = '<?= $total ?>';
-        $scope.vat = '<?= $viewReturn['vat'] ?>';
-        $scope.vat_amount = '<?= $vat ?>';
-        $scope.grand_total = '<?= $grand_total ?>';
-        $scope.receipt_amount = '<?= $viewReturn['receipt_amount'] ?>';
-        $scope.adjust_amount = '<?= $viewReturn['adjust_amount'] ?>';
-    }
 </script>
 </body>
 </html>
