@@ -4,9 +4,14 @@ require_once '../vendor/autoload.php';
 $product = new Products();
 $products = $product->allProducts();
 $salesReturn = new SalesReturn();
-$orders = $salesReturn->salesOrders();
-if (isset($_POST['submit'])){
-    $salesReturn->store($_POST);
+if (isset($_GET['id'])) {
+    if (isset($_POST['submit'])) {
+        $salesReturn->store($_POST);
+    }
+    $viewReturn = $salesReturn->viewSalesReturn($_GET['id']);
+    $viewReturnItems = $salesReturn->viewSalesReturnItems($_GET['id']);
+}else{
+    abort(404);
 }
 
 ?>
@@ -51,34 +56,10 @@ if (isset($_POST['submit'])){
                             <div class="x_content">
                                 <form action="sales-return-add.php" method="post" class="form-horizontal">
                                     <div class="row">
-                                        <div class="col-md-6 col-lg-3 col-xs-12">
-                                            <div class="form-group">
-                                                <label class="control-label" for="last-name">Order No <span class="required">*</span>
-                                                </label>
-                                                <div class="">
-                                                    <select class="form-control" name="order_no" id="order_no" ng-model="order_no" ng-change="selectChange()">
-                                                        <option value="">-- Select Order No --</option>
-                                                        <?php foreach ($orders as $order){ ?>
-                                                            <option value="<?= $order['id'] ?>"><?= $order['sales_order'] ?></option>
-                                                        <?php } ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 col-lg-3 col-xs-12">
-                                            <div class="form-group">
-                                                <label class="control-label" for="last-name"><i class="fa fa-search-plus"></i></label>
-                                                <div class="">
-                                                    <button class="btn btn-success btn-md"><i class="fa fa-search"></i> Find</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
                                          <div class="col-md-4 col-lg-6 col-xs-12">
                                              <div class="form-group">
                                                  <label class="control-label" >Customer :</label>
-                                                 <label class="control-label" >{{ order.name }}</label>
+                                                 <label class="control-label" ><?= $viewReturn['name'] ?></label>
                                              </div>
                                              <div class="form-group">
                                                  <label class="control-label" >Email :
@@ -99,12 +80,7 @@ if (isset($_POST['submit'])){
                                              </div>
                                              <div class="form-group">
                                                  <label class="control-label" >Discount Given :</label>
-                                                 <label class="control-label" >{{ order.discount }}</label>
-                                                 <input type="hidden" ng-model="discount_given" ng-value="order.discount">
-                                             </div>
-                                             <div class="form-group">
-                                                 <label class="control-label" >Due Amount :</label>
-                                                 <label class="control-label" >{{ order.due_amount }}</label>
+                                                 <label class="control-label" >{{ order.discount_given }}</label>
                                                  <input type="hidden" ng-model="discount_given" ng-value="order.discount">
                                              </div>
                                         </div>
@@ -277,26 +253,15 @@ if (isset($_POST['submit'])){
         todayHighlight: true,
         autoclose: true
     });
+    var order_items = <?php echo json_encode($viewReturnItems) ?>;
+    var order_info = <?php echo json_encode($viewReturn) ?>;
 
     var app = angular.module("app",[]);
     app.controller("ItemsController",function($scope,$http) {
 
-        $scope.order = {};
-        $scope.items = {};
-
-        $scope.selectChange = function () {
-            var order_no = $scope.order_no;
-            $http({
-                method: 'GET',
-                url: "ajax.php?ajax=sales_order&id="+order_no
-            }).then(function successCallback(response) {
-                $scope.order = response.data.order;
-                $scope.items = response.data.items;
-            }, function errorCallback(error) {
-                console.log(error);
-            });
-        };
-
+        $scope.order = order_info;
+        $scope.items = order_items;
+        console.log(order_info);
         $scope.return_validate = function (i) {
             var return_qty = parseFloat(i.return_quantity);
             var qty = parseFloat(i.quantity);
