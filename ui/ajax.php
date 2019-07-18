@@ -91,6 +91,18 @@ if (isset($_GET['ajax']) && $_GET['ajax']=='dpr'){
     }
 }
 
+if (isset($_GET['ajax']) && $_GET['ajax']=='dsr'){
+    if (isset($_GET['id'])){
+        $salesReturn = new SalesReturn();
+        $deleted = $salesReturn->delete_return($_GET['id']);
+        if ($deleted){
+            echo 'success';
+        }else {
+            echo 'error';
+        }
+    }
+}
+
 if (isset($_GET['ajax']) && $_GET['ajax']=='order'){
     if (isset($_GET['id'])){
         $purchase = new Purchase();

@@ -136,9 +136,9 @@ class PurchaseReturn
             ])->where('return_id','=',$id)->get();
 
             if (!$insert || !$pri_update || !$payments) {
-                Session::flush('failed', 'Data Insertion Error! ' . $this->_db->sql_error());
+                Session::flush('failed', 'Data Update Error! ' . $this->_db->sql_error());
             }else{
-                Session::flush('success','Successfully Data Inserted');
+                Session::flush('success','Successfully Data Updated');
             }
         }
     }
