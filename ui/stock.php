@@ -48,14 +48,12 @@ $product = new Products();
                                             <th>Brand</th>
                                             <th>Enable</th>
                                             <th>Price</th>
-                                            <th>Purchase Qty</th>
-                                            <th>Sale Qty</th>
                                             <th>Available Qty</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <?php $sl=1; foreach ($product->stock() as $row){
-                                            $available = ($row['purchase_quantity']-$row['sale_quantity'])
+                                            $available = ($row['purchase_quantity']-($row['sale_quantity']+$row['purchase_return_quantity']));
                                             ?>
                                             <tr style="<?= $available<=$row['repurchase_qty'] ? 'background-color: #cd494c; color: white':'' ?>">
                                                 <td><?= $sl ?></td>
@@ -76,8 +74,6 @@ $product = new Products();
                                                     <?php } ?>
                                                 </td>
                                                 <td><?= $row['mrp'] ?></td>
-                                                <td><?= $row['purchase_quantity'] ?></td>
-                                                <td><?= $row['sale_quantity'] ?></td>
                                                 <td><?= $available ?></td>
                                             </tr>
                                         <?php $sl++; } ?>

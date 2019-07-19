@@ -194,6 +194,7 @@ class Products
     public function stock(){
         $products = $this->_db->select(['products.*','brands.brand_name',
             'categories.name','repurchase_qty',
+            'sum(purchase_return_items.quantity) AS purchase_return_quantity',
             'sum(purchase_items.quantity) AS purchase_quantity',
             'sum(order_items.quantity) AS sale_quantity'])
             ->table('products')
@@ -201,7 +202,8 @@ class Products
             ->join('categories','categories.id','products.category_id')
             ->leftJoin('purchase_items','purchase_items.product_id','products.id')
             ->leftJoin('order_items','order_items.product_id','products.id')
-            ->groupBy(['purchase_items.product_id','order_items.product_id'])
+            ->leftJoin('purchase_return_items','purchase_return_items.product_id','products.id')
+            ->groupBy(['purchase_items.product_id','order_items.product_id','purchase_return_items.product_id'])
             ->orderBy('products.id','DESC')
             ->get();
         if (!$products){

@@ -211,24 +211,22 @@ class DB
 
     public function where($column,$operation,$value){
         if ($this->whereCount>0){
-            $this->WHERE_SQL .= " AND ".$column." ".$operation." '".$value."'";
+            $this->SQL .= " AND ".$column." ".$operation." '".$value."'";
         }else{
-            $this->WHERE_SQL .= " WHERE ".$column." ".$operation." '".$value."'";
+            $this->SQL .= " WHERE ".$column." ".$operation." '".$value."'";
         }
         $this->whereCount++;
-        $this->SQL .= $this->WHERE_SQL;
         return $this;
     }
 
     public function whereNotIn($column,$values){
         $not_in_values = implode(',',$values);
         if ($this->whereCount>0){
-            $this->WHERE_SQL .= " AND ".$column." NOT IN (".$not_in_values.")";
+            $this->SQL .= " AND ".$column." NOT IN (".$not_in_values.")";
         }else{
-            $this->WHERE_SQL .= " WHERE ".$column." NOT IN (".$not_in_values.")";
+            $this->SQL .= " WHERE ".$column." NOT IN (".$not_in_values.")";
         }
         $this->whereCount++;
-        $this->SQL .= $this->WHERE_SQL;
         return $this;
     }
 
@@ -249,6 +247,9 @@ class DB
             return false;
         }
         return $result;
+    }
+    public function seeGenerateSQLString(){
+        return $this->SQL." || ".$this->whereCount;
     }
     /* Ending to Try to like laravel*/
 

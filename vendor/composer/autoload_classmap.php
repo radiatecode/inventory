@@ -11,6 +11,7 @@ return array(
     'Category' => $baseDir . '/classes/Category.php',
     'Customers' => $baseDir . '/classes/Customers.php',
     'DB' => $baseDir . '/function/DB.php',
+    'Dashboard' => $baseDir . '/classes/Dashboard.php',
     'Order' => $baseDir . '/classes/Order.php',
     'ProductAttributes' => $baseDir . '/classes/ProductAttributes.php',
     'Products' => $baseDir . '/classes/Products.php',

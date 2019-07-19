@@ -8,5 +8,3 @@
 <!-- Custom Theme Scripts -->
 <script src="../assets/js/custom.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.10.0/dist/sweetalert2.js"></script>
-
-@yield('script')
