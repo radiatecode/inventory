@@ -273,6 +273,18 @@ class Products
         return 'success';
     }
 
+
+    public function delete_product($id){
+        $result = $this->_db->delete('products')
+            ->where('id','=',$id)
+            ->get();
+        if (!$result){
+            return false;
+        }
+        return true;
+    }
+
+
     public function __destruct()
     {
         $this->_db->close();

@@ -39,6 +39,12 @@ $product = new Products();
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-danger btn-md" id="delete_selected_item"><i class="fa fa-trash-o"></i> Delete</button>
+                                    <button class="btn btn-success btn-md"><i class="fa fa-trash-o"></i> Enable?</button>
+                                    <button class="btn btn-warning btn-md"><i class="fa fa-trash-o"></i> Disable?</button>
+                                </div>
+                                <hr>
                                 <div class="table-responsive">
                                     <table id="question_table" class="table table-bordered">
                                         <thead>
@@ -58,7 +64,7 @@ $product = new Products();
                                         <tbody>
                                         <?php foreach ($product->allProducts() as $row){ ?>
                                             <tr>
-                                                <td><input type="checkbox" name="ids" id="ids" value="<?= $row['id'] ?>"></td>
+                                                <td><input type="checkbox" name="ids[]" id="ids" value="<?= $row['id'] ?>"></td>
                                                 <td><?= $row['name'] ?></td>
                                                 <td>
                                                     <?php if (!empty($row['thumb'])){ ?>
@@ -89,7 +95,7 @@ $product = new Products();
                                                     <a href="products-view.php?id=<?= $row['id'] ?>" class="btn btn-info btn-xs edit">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
-                                                    <button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>
+                                                    <button type="button" id="<?= $row['id'] ?>" class="btn btn-danger btn-xs delete_product"><i class="fa fa-trash-o"></i></button>
                                                 </td>
                                             </tr>
                                         <?php } ?>
@@ -164,7 +170,113 @@ $product = new Products();
                 });
             }
         });
-    })
+    });
+    $('.delete_product').click(function () {
+        var id = $(this).attr('id');
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to delete?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Delete it!'
+        }).then(function(result) {
+            if (result.value) {
+                var url = "ajax.php?ajax=d_product&id="+id;
+                $.ajax({
+                    url:url,
+                    type:'GET',
+                    contentType:false,
+                    processData:false,
+                    beforeSend:function () {
+                        Swal.fire({
+                            title: 'Deleting Data.......',
+                            showConfirmButton: false,
+                            html: '<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>',
+                            allowOutsideClick: false
+                        });
+                    },
+                    success:function (response) {
+                        Swal.close();
+                        console.log(response);
+                        if (response==="success"){
+                            Swal.fire({
+                                title: 'Successfully Deleted',
+                                type: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok'
+                            }).then(function(result) {
+                                if (result.value) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    },
+                    error:function (error) {
+                        Swal.close();
+                        console.log(error);
+                    }
+                })
+            }
+        });
+    });
+    $('#delete_selected_item').click(function () {
+        var selected_ids = [];
+        $("input:checkbox[name='ids[]']:checked").each(function(){
+            selected_ids.push($(this).val());
+        });
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to delete?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Delete it!'
+        }).then(function(result) {
+            if (result.value) {
+                var url = "ajax.php?ajax=d_selected_product";
+                $.ajax({
+                    url:url,
+                    type:'POST',
+                    data:{
+                        'selected_ids':selected_ids
+                    },
+                    beforeSend:function () {
+                        Swal.fire({
+                            title: 'Deleting Data.......',
+                            showConfirmButton: false,
+                            html: '<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>',
+                            allowOutsideClick: false
+                        });
+                    },
+                    success:function (response) {
+                        Swal.close();
+                        console.log(JSON.parse(response));
+                        if (response==="success"){
+                            Swal.fire({
+                                title: 'Successfully Deleted',
+                                type: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok',
+                                allowOutsideClick: false
+                            }).then(function(result) {
+                                if (result.value) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+
+                    },
+                    error:function (error) {
+                        Swal.close();
+                        console.log(error);
+                    }
+                })
+            }
+        });
+    });
 </script>
 </body>
 </html>

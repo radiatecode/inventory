@@ -148,3 +148,28 @@ if (isset($_GET['ajax']) && $_GET['ajax']=='add_product_quantity'){
         echo 'success';
     }
 }
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='d_product'){
+    if (isset($_GET['id'])){
+        $product = new Products();
+        $deleted = $product->delete_product($_GET['id']);
+        if ($deleted){
+            echo 'success';
+        }else {
+            echo 'error';
+        }
+    }
+}
+if (isset($_GET['ajax']) && $_GET['ajax']=='d_selected_product'){
+    if (isset($_POST['selected_ids'])){
+        $selected_ids = $_POST['selected_ids'];
+        $product = new Products();
+        foreach ($selected_ids as $id) {
+            $deleted = $product->delete_product($id);
+            if (!$deleted) {
+                echo json_encode('error');
+            }
+        }
+        echo json_encode('success');
+    }
+}
