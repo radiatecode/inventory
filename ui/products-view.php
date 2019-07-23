@@ -133,7 +133,7 @@ if (isset($_GET['id'])){
                                                     <div class="col-md-12 col-lg-12 col-xs-12">
                                                         <br>
                                                         <div>
-                                                            <button type="submit" name="update_basic" id="submit" class="btn btn-success btn-md"><i class="fa fa-save"></i> Update Basic</button>
+                                                            <button type="submit" name="update_basic" id="update_basic" class="btn btn-success btn-md"><i class="fa fa-save"></i> Update Basic</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -224,7 +224,7 @@ if (isset($_GET['id'])){
                                                     </div>
                                                     <div class="col-md-12 col-lg-12 col-xs-12">
                                                         <div>
-                                                            <button type="submit" name="update_attributes" id="submit" class="btn btn-success btn-md"><i class="fa fa-save"></i> Update Attributes</button>
+                                                            <button type="submit" name="update_attributes" id="update_attributes" class="btn btn-success btn-md"><i class="fa fa-save"></i> Update Attributes</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -270,13 +270,13 @@ if (isset($_GET['id'])){
                                                         <label class="control-label" for="last-name">MRP <span class="required">*</span>
                                                         </label>
                                                         <div class="">
-                                                            <input type="text" id="mrp" name="mrp" value="<?= $view_product['mrp'] ?>" class="form-control col-md-7 col-xs-12">
+                                                            <input type="text" id="mrp" name="mrp" value="<?= $view_product['mrp'] ?>" class="form-control col-md-7 col-xs-12" readonly>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12 col-lg-12 col-xs-12">
                                                         <div>
                                                             <br>
-                                                            <button type="submit" name="update_data" id="submit" class="btn btn-success btn-md"><i class="fa fa-save"></i> Update Data</button>
+                                                            <button type="submit" name="update_data" id="update_data" class="btn btn-success btn-md"><i class="fa fa-save"></i> Update Data</button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -422,7 +422,22 @@ if (isset($_GET['id'])){
         var price = parseFloat($('#sale_price').val());
         var discount =  parseFloat($(this).val());
         var mrp = (price * discount)/100;
-        $('#mrp').val(mrp);
+        $('#mrp').val(price+mrp);
+    });
+    $("#update_basic").click(function (event) {
+        if( !confirm('Are you sure that you want to update basic info') ){
+            event.preventDefault();
+        }
+    });
+    $("#update_attributes").click(function (event) {
+        if( !confirm('Are you sure that you want to update products attributes') ){
+            event.preventDefault();
+        }
+    });
+    $("#update_data").click(function (event) {
+        if( !confirm('Are you sure that you want to update product price') ){
+            event.preventDefault();
+        }
     });
 </script>
 </body>

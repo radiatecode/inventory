@@ -81,10 +81,9 @@ class Products
     public function update_basic($post,$id){
         $validation = Validation::PostValidate($post,[
             'brand'=>'required',
-            'supplier'=>'required',
             'product_name'=>'required',
             'description'=>'required',
-            'product_price'=>'required|number'
+            'model'=>'required'
         ]);
         if ($validation){
             $this->messages = $validation;
@@ -103,10 +102,9 @@ class Products
             }
             $update = $this->_db->update('products',[
                 'brand_id'=>$this->_db->escapeString($post['brand']),
-                'supplier_id'=>$this->_db->escapeString($post['supplier']),
                 'product_name'=>$this->_db->escapeString($post['product_name']),
                 'product_details'=>$this->_db->escapeString($post['description']),
-                'product_price'=>$this->_db->escapeString($post['product_price'])
+                'model'=>$this->_db->escapeString($post['model'])
             ])->where('id','=',$id)
             ->get();
 

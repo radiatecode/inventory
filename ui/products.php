@@ -41,8 +41,8 @@ $product = new Products();
                             <div class="x_content">
                                 <div class="pull-right">
                                     <button type="button" class="btn btn-danger btn-md" id="delete_selected_item"><i class="fa fa-trash-o"></i> Delete</button>
-                                    <button class="btn btn-success btn-md"><i class="fa fa-trash-o"></i> Enable?</button>
-                                    <button class="btn btn-warning btn-md"><i class="fa fa-trash-o"></i> Disable?</button>
+                                    <button type="button" class="btn btn-success btn-md" id="enable_selected_item"><i class="fa fa-trash-o"></i> Enable?</button>
+                                    <button type="button" class="btn btn-warning btn-md" id="disable_selected_item"><i class="fa fa-trash-o"></i> Disable?</button>
                                 </div>
                                 <hr>
                                 <div class="table-responsive">
@@ -88,7 +88,7 @@ $product = new Products();
                                                 <td>
                                                     <button type="button" id="<?= $row['id'] ?>"
                                                             data-products='<?= json_encode([ $row['purchase_price'],$row['purchase_discount'],
-                                                                $row['qty'], $row['sale_price'], $row['sale_discount'] ] )?>'
+                                                                $row['repurchase_qty'], $row['sale_price'], $row['sale_discount'] ] )?>'
                                                             class="btn btn-success btn-xs purchase">
                                                         <i class="fa fa-cart-arrow-down"></i>
                                                     </button>
@@ -124,7 +124,9 @@ $product = new Products();
 <script>
     $('.purchase').click(function () {
         var products = JSON.parse($(this).attr('data-products'));
+
         var id = $(this).attr('id');
+        console.log(id);
         Swal.fire({
             title: "Add Product Quantity",
             text: "Add Quantity for the product ",
@@ -135,8 +137,8 @@ $product = new Products();
             '<input type="number" id="purchase_price" value="'+products[0]+'" class="form-control" placeholder="Purchase Price">' +
             '<label>Purchase Discount</label>'+
             '<input type="number" id="purchase_discount" value="'+products[1]+'" class="form-control" placeholder="Purchase Discount">' +
-            '<label>Product Quantity</label>'+
-            '<input type="number" id="qty" class="form-control" value="'+products[2]+'" placeholder="Purchase Qty">' +
+            '<label>Repurchase Quantity</label>'+
+            '<input type="number" id="qty" class="form-control" value="'+products[2]+'" placeholder="Repurchase Qty">' +
             '<label>Sales Price</label>'+
             '<input type="number" id="sale_price" class="form-control" value="'+products[3]+'" placeholder="Sales Price">' +
             '<label>Sales Discount</label>'+
@@ -154,10 +156,10 @@ $product = new Products();
                     data: {
                         'purchase_price':purchase_price,
                         'purchase_discount':purchase_discount,
-                        'qty':qty,
+                        'repurchase_qty':qty,
                         'sale_price':sale_price,
                         'sale_discount':sale_discount,
-                        'mrp':mrp
+                        'mrp':(sale_price+mrp)
                     },
                     success:function (response) {
                         if (response==='success') {
@@ -221,14 +223,15 @@ $product = new Products();
             }
         });
     });
-    $('#delete_selected_item').click(function () {
+    $('#enable_selected_item').click(function () {
         var selected_ids = [];
+        var type = $(this).attr('data-action-type');
         $("input:checkbox[name='ids[]']:checked").each(function(){
             selected_ids.push($(this).val());
         });
         Swal.fire({
             title: 'Are you sure?',
-            text: "You want to delete?",
+            text: "You want to enable?",
             type: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -253,8 +256,7 @@ $product = new Products();
                     },
                     success:function (response) {
                         Swal.close();
-                        console.log(JSON.parse(response));
-                        if (response==="success"){
+                        if (JSON.parse(response)==="success"){
                             Swal.fire({
                                 title: 'Successfully Deleted',
                                 type: 'success',
@@ -267,7 +269,60 @@ $product = new Products();
                                 }
                             });
                         }
-
+                    },
+                    error:function (error) {
+                        Swal.close();
+                        console.log(error);
+                    }
+                })
+            }
+        });
+    });
+    $('#disable_selected_item').click(function () {
+        var selected_ids = [];
+        $("input:checkbox[name='ids[]']:checked").each(function(){
+            selected_ids.push($(this).val());
+        });
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to enable?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Delete it!'
+        }).then(function(result) {
+            if (result.value) {
+                var url = "ajax.php?ajax=d_selected_product";
+                $.ajax({
+                    url:url,
+                    type:'POST',
+                    data:{
+                        'selected_ids':selected_ids
+                    },
+                    beforeSend:function () {
+                        Swal.fire({
+                            title: 'Deleting Data.......',
+                            showConfirmButton: false,
+                            html: '<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>',
+                            allowOutsideClick: false
+                        });
+                    },
+                    success:function (response) {
+                        Swal.close();
+                        if (JSON.parse(response)==="success"){
+                            Swal.fire({
+                                title: 'Successfully Deleted',
+                                type: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok',
+                                allowOutsideClick: false
+                            }).then(function(result) {
+                                if (result.value) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
                     },
                     error:function (error) {
                         Swal.close();

@@ -47,7 +47,7 @@ if (isset($_POST['submit'])){
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
-                                <form action="products-add.php" method="post" class="form-horizontal" enctype="multipart/form-data">
+                                <form id="product_form" action="products-add.php" method="post" class="form-horizontal" enctype="multipart/form-data">
                                     <div class="" role="tabpanel" data-example-id="togglable-tabs">
                                         <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
                                             <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Basic</a>
@@ -124,7 +124,6 @@ if (isset($_POST['submit'])){
                                                         </select>
                                                     </div>
                                                 </div>
-
                                                 <div class="form-group">
                                                     <label class="control-label" for="last-name">Attributes
                                                         <span >
@@ -273,6 +272,11 @@ if (isset($_POST['submit'])){
     });
     $("table").on('click','.remCF',function(){
         $(this).parent().parent().remove();
+    });
+    $("#submit").click(function (event) {
+        if( !confirm('Are you sure that you want to submit the form') ){
+            event.preventDefault();
+        }
     });
 
 </script>
