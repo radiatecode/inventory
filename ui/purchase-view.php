@@ -379,6 +379,7 @@ if (isset($_GET['id'])) {
     });
     function view_purchase($scope) {
         $scope.purchase_items = JSON.parse('<?= json_encode($purchase_items) ?>');
+        console.log($scope.purchase_items);
         $scope.sub_total = '<?= $view_purchase['sub_total'] ?>';
         $scope.discount = '<?= $view_purchase['discount'] ?>';
         $scope.total_amount = '<?= $total ?>';

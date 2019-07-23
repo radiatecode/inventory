@@ -217,13 +217,20 @@ class Products
             ->groupBy(['purchase_items.product_id'])
             ->orderBy('id','DESC')
             ->get();
+        $purchase_return = $this->_db->select(['SUM(quantity) AS purchase_return_qty'])
+            ->table('purchase_return_items')
+            ->where('product_id','=',$product_id)
+            ->groupBy(['purchase_return_items.product_id'])
+            ->orderBy('id','DESC')
+            ->get();
         $sale = $this->_db->select(['SUM(quantity) AS sale_qty'])
             ->table('order_items')
             ->where('product_id','=',$product_id)
             ->groupBy(['order_items.product_id'])
             ->orderBy('id','DESC')
             ->get();
-        $available = ($purchase-$sale);
+
+        $available = ($purchase-($sale+$purchase_return));
         return $available;
     }
 
@@ -276,6 +283,23 @@ class Products
         $result = $this->_db->delete('products')
             ->where('id','=',$id)
             ->get();
+        if (!$result){
+            return false;
+        }
+        return true;
+    }
+
+    public function enable_disable($id,$type){
+        $result='';
+        if ($type=='enable') {
+            $result = $this->_db->update('products', [
+                'enable' =>1
+            ])->where('id', '=', $id)->get();
+        }else{
+            $result = $this->_db->update('products', [
+                'enable' =>0
+            ])->where('id', '=', $id)->get();
+        }
         if (!$result){
             return false;
         }

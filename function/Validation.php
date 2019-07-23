@@ -14,8 +14,17 @@ class Validation
         foreach ($rules as $key=>$rule){
             $rule_break = explode('|',$rule);
             if (self::requiredRules($rule_break)){
-                if (empty($post[$key])){
-                    self::$errors[] = ucwords($key)." Filed Is Required";
+                $element = $post[$key];
+                if (is_array($element)){
+                    foreach ($element as $i=>$val){
+                        if (empty($element[$i])){
+                            self::$errors[] = "All Of The ".ucwords($key)." Filed Is Required";
+                        }
+                    }
+                }else{
+                    if (empty($element)){
+                        self::$errors[] = ucwords($key)." Filed Is Required";
+                    }
                 }
             }
             if (self::arrayRules($rule_break)){
@@ -35,8 +44,17 @@ class Validation
                 }
             }
             if (self::numberRules($rule_break)){
-                if (!empty($post[$key]) && !is_numeric($post[$key]) ){
-                    self::$errors[] = ucwords($key)." Field Value Must Be Numeric";
+                $element = $post[$key];
+                if (is_array($element)){
+                    foreach ($element as $i=>$val){
+                        if (!empty($element[$i]) && !is_numeric($element[$i])){
+                            self::$errors[] = "All Of The ".ucwords($key)." Field Value Must Be Numeric";
+                        }
+                    }
+                }else{
+                    if (!empty($element) && !is_numeric($element)){
+                        self::$errors[] = ucwords($key)." Field Value Must Be Numeric";
+                    }
                 }
             }
 

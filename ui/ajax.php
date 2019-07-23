@@ -173,3 +173,17 @@ if (isset($_GET['ajax']) && $_GET['ajax']=='d_selected_product'){
         echo json_encode('success');
     }
 }
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='enable_disable'){
+    if (isset($_POST['selected_ids'])){
+        $selected_ids = $_POST['selected_ids'];
+        $product = new Products();
+        foreach ($selected_ids as $id) {
+            $res = $product->enable_disable($id,$_GET['type']);
+            if (!$res) {
+                echo json_encode('error');
+            }
+        }
+        echo json_encode('success');
+    }
+}

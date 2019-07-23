@@ -25,15 +25,15 @@ class Purchase
             'payment_method'=>'required',
             'billing_address'=>'required',
             'order_date'=>'required',
-            'product'=>'required|array',
-            'unit_price'=>'required|array',
-            'quantity'=>'required|array',
-            'total'=>'required|array',
+            'product'=>'required|is_array',
+            'unit_price'=>'required|is_array|number',
+            'quantity'=>'is_array|minimum:1|number',
+            'total'=>'required|is_array|number',
             'sub_total'=>'required|number',
-            'discount'=>'required|number',
+            'discount'=>'number',
             'total_amount'=>'required|number',
-            'vat'=>'required|number',
-            'vat_amount'=>'required|number',
+            'vat'=>'number',
+            'vat_amount'=>'number',
             'grand_total'=>'required|number',
             'paid'=>'required|number',
             'due'=>'required|number',
@@ -127,13 +127,18 @@ class Purchase
                 $edit_quantity = $post['edit_quantity'];
                 $edit_total = $post['edit_total'];
                 for ($i=0;$i<count($purchase_items_id);$i++){
-                    $pi_update = $this->_db->update('purchase_items',[
-                        'purchase_id'=>$purchase_id,
-                        'product_id'=>$this->_db->escapeString($edit_product[$i]),
-                        'quantity'=>$this->_db->escapeString($edit_quantity[$i]),
-                        'unit_price'=>$this->_db->escapeString($edit_unit_price[$i]),
-                        'total'=>$this->_db->escapeString($edit_total[$i]),
-                    ])->where('id','=',$purchase_items_id[$i])->get();
+                    if (!empty($edit_quantity[$i])) {
+                        $pi_update = $this->_db->update('purchase_items', [
+                            'purchase_id' => $purchase_id,
+                            'product_id' => $this->_db->escapeString($edit_product[$i]),
+                            'quantity' => $this->_db->escapeString($edit_quantity[$i]),
+                            'unit_price' => $this->_db->escapeString($edit_unit_price[$i]),
+                            'total' => $this->_db->escapeString($edit_total[$i]),
+                        ])->where('id', '=', $purchase_items_id[$i])->get();
+                    }else{
+                        $delete = $this->_db->delete('purchase_items')
+                            ->where('id','=',$purchase_items_id[$i])->get();
+                    }
                 }
             }
 
@@ -203,6 +208,7 @@ class Purchase
             ->table('purchase_items')
             ->where('purchase_id','=',$id)
             ->get();
+
         return $this->_db->fetchAll($items);
     }
 

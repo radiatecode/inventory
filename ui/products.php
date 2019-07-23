@@ -7,6 +7,7 @@ $product = new Products();
 <html lang="en">
 <head>
     <?php include('../include/_head.php') ?>
+    <link href="../assets/js/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">v
 </head>
 
 <body class="nav-md">
@@ -41,12 +42,12 @@ $product = new Products();
                             <div class="x_content">
                                 <div class="pull-right">
                                     <button type="button" class="btn btn-danger btn-md" id="delete_selected_item"><i class="fa fa-trash-o"></i> Delete</button>
-                                    <button type="button" class="btn btn-success btn-md" id="enable_selected_item"><i class="fa fa-trash-o"></i> Enable?</button>
-                                    <button type="button" class="btn btn-warning btn-md" id="disable_selected_item"><i class="fa fa-trash-o"></i> Disable?</button>
+                                    <button type="button" class="btn btn-success btn-md enable_disable" data-action-type="enable"><i class="fa fa-trash-o"></i> Enable?</button>
+                                    <button type="button" class="btn btn-warning btn-md enable_disable" data-action-type="disable"><i class="fa fa-trash-o"></i> Disable?</button>
                                 </div>
                                 <hr>
                                 <div class="table-responsive">
-                                    <table id="question_table" class="table table-bordered">
+                                    <table id="datatable-responsive" class="table table-bordered">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -121,6 +122,8 @@ $product = new Products();
     </div>
 </div>
 <?php include('../include/_script.php') ?>
+<script src="../assets/js/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="../assets/js/datatables.net-bs/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 <script>
     $('.purchase').click(function () {
         var products = JSON.parse($(this).attr('data-products'));
@@ -223,7 +226,7 @@ $product = new Products();
             }
         });
     });
-    $('#enable_selected_item').click(function () {
+    $('.enable_disable').click(function () {
         var selected_ids = [];
         var type = $(this).attr('data-action-type');
         $("input:checkbox[name='ids[]']:checked").each(function(){
@@ -231,15 +234,15 @@ $product = new Products();
         });
         Swal.fire({
             title: 'Are you sure?',
-            text: "You want to enable?",
+            text: "You want to "+type+"?",
             type: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, Delete it!'
+            confirmButtonText: 'Yes, '+type+' it!'
         }).then(function(result) {
             if (result.value) {
-                var url = "ajax.php?ajax=d_selected_product";
+                var url = "ajax.php?ajax=enable_disable&type="+type;
                 $.ajax({
                     url:url,
                     type:'POST',
@@ -248,7 +251,7 @@ $product = new Products();
                     },
                     beforeSend:function () {
                         Swal.fire({
-                            title: 'Deleting Data.......',
+                            title: 'Loading.......',
                             showConfirmButton: false,
                             html: '<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>',
                             allowOutsideClick: false
@@ -258,61 +261,7 @@ $product = new Products();
                         Swal.close();
                         if (JSON.parse(response)==="success"){
                             Swal.fire({
-                                title: 'Successfully Deleted',
-                                type: 'success',
-                                confirmButtonColor: '#3085d6',
-                                confirmButtonText: 'Ok',
-                                allowOutsideClick: false
-                            }).then(function(result) {
-                                if (result.value) {
-                                    window.location.reload();
-                                }
-                            });
-                        }
-                    },
-                    error:function (error) {
-                        Swal.close();
-                        console.log(error);
-                    }
-                })
-            }
-        });
-    });
-    $('#disable_selected_item').click(function () {
-        var selected_ids = [];
-        $("input:checkbox[name='ids[]']:checked").each(function(){
-            selected_ids.push($(this).val());
-        });
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You want to enable?",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, Delete it!'
-        }).then(function(result) {
-            if (result.value) {
-                var url = "ajax.php?ajax=d_selected_product";
-                $.ajax({
-                    url:url,
-                    type:'POST',
-                    data:{
-                        'selected_ids':selected_ids
-                    },
-                    beforeSend:function () {
-                        Swal.fire({
-                            title: 'Deleting Data.......',
-                            showConfirmButton: false,
-                            html: '<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>',
-                            allowOutsideClick: false
-                        });
-                    },
-                    success:function (response) {
-                        Swal.close();
-                        if (JSON.parse(response)==="success"){
-                            Swal.fire({
-                                title: 'Successfully Deleted',
+                                title: 'Successfully '+type,
                                 type: 'success',
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'Ok',
