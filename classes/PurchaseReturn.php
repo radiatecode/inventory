@@ -28,11 +28,11 @@ class PurchaseReturn
             'payment_method'=>'required',
             'return_date'=>'required',
             'unit_price'=>'required|array',
-            'quantity'=>'is_array|minimum:2',
+            'quantity'=>'is_array|minimum:1',
             'total'=>'required_if:quantity|is_array',
             'sub_total'=>'required|number',
-            'vat'=>'required|number',
-            'vat_amount'=>'required|number',
+            'vat'=>'number',
+            'vat_amount'=>'number',
             'grand_total'=>'required|number',
             'receipt_amount'=>'required|number'
         ]);
@@ -102,6 +102,7 @@ class PurchaseReturn
             $this->messages = $validation;
         }else{
             $pri_update=null;
+            var_dump($post['note']);
             $insert = $this->_db->update('purchase_return',[
                 'return_date'=>$this->_db->escapeString($post['return_date']),
                 'note'=>$this->_db->escapeString($post['note']),
@@ -172,12 +173,31 @@ class PurchaseReturn
     }
 
     public function viewPurchaseReturnItems($id){
-        $items = $this->_db->select(['purchase_return_items.*'])
-            ->table('purchase_return_items')
+        $items = $this->_db->select(['purchase_id','purchase_return_items.*'])
+            ->table('purchase_return')
+            ->join('purchase_return_items','purchase_return.id','purchase_return_items.return_id')
             ->where('return_id','=',$id)
             ->get();
-        return $this->_db->fetchAll($items);
+        $custom=[];
+        foreach ($items as $item){
+            $purchased = $this->_db->select(['quantity'])
+                ->table('purchase_items')
+                ->where('purchase_id','=',$item['purchase_id'])
+                ->where('product_id','=',$item['product_id'])
+                ->get();
+            $purchased_qty = $this->_db->fetchAssoc($purchased);
+            $custom[] =[
+                 'id'=>$item['id'],
+                 'product_id'=>$item['product_id'],
+                 'purchase_qty'=>$purchased_qty['quantity'],
+                 'unit_price'=>$item['unit_price'],
+                 'quantity'=>$item['quantity'],
+                 'total'=>$item['total'],
+            ];
+        }
+        return $custom;
     }
+
 
     public function delete_return($id){
         $delete = $this->_db->delete('purchase_return')

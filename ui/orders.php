@@ -7,6 +7,7 @@ $orders = new Order();
 <html lang="en">
 <head>
     <?php include('../include/_head.php') ?>
+    <link href="../assets/js/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body class="nav-md">
@@ -38,8 +39,12 @@ $orders = new Order();
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-danger btn-md" id="delete_selected_item"><i class="fa fa-trash-o"></i> Delete</button>
+                                </div>
+                                <hr>
                                 <div class="table-responsive">
-                                    <table id="question_table" class="table table-bordered">
+                                    <table id="datatable-responsive" class="table table-bordered">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -58,10 +63,10 @@ $orders = new Order();
                                         <tbody>
                                         <?php foreach ($orders->allOrders() as $row){ ?>
                                             <tr>
-                                                <td><input type="checkbox" name="ids" id="ids" value="<?= $row['order_id'] ?>"></td>
+                                                <td><input type="checkbox" name="ids[]" id="ids" value="<?= $row['order_id'] ?>"></td>
                                                 <td><?= $row['name'] ?></td>
                                                 <td>
-                                                    #ODI <?= $row['order_id'] ?>
+                                                     <?= $row['sales_order'] ?>
                                                 </td>
                                                 <td><?= $row['order_date'] ?></td>
                                                 <td>
@@ -104,6 +109,8 @@ $orders = new Order();
     </div>
 </div>
 <?php include('../include/_script.php') ?>
+<script src="../assets/js/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="../assets/js/datatables.net-bs/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 <script>
     $('.delete_order').click(function () {
         var id = $(this).attr('id');
@@ -140,6 +147,61 @@ $orders = new Order();
                                 type: 'success',
                                 confirmButtonColor: '#3085d6',
                                 confirmButtonText: 'Ok'
+                            }).then(function(result) {
+                                if (result.value) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    },
+                    error:function (error) {
+                        Swal.close();
+                        console.log(error);
+                    }
+                })
+            }
+        });
+    });
+    $('#delete_selected_item').click(function () {
+        var selected_ids = [];
+        $("input:checkbox[name='ids[]']:checked").each(function(){
+            selected_ids.push($(this).val());
+        });
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to delete?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Delete it!'
+        }).then(function(result) {
+            if (result.value) {
+                var url = "ajax.php?ajax=d_selected_sales";
+                $.ajax({
+                    url:url,
+                    type:'POST',
+                    data:{
+                        'selected_ids':selected_ids
+                    },
+                    beforeSend:function () {
+                        Swal.fire({
+                            title: 'Deleting Data.......',
+                            showConfirmButton: false,
+                            html: '<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>',
+                            allowOutsideClick: false
+                        });
+                    },
+                    success:function (response) {
+                        Swal.close();
+                        console.log(response);
+                        if (JSON.parse(response)==="success"){
+                            Swal.fire({
+                                title: 'Successfully Deleted',
+                                type: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok',
+                                allowOutsideClick: false
                             }).then(function(result) {
                                 if (result.value) {
                                     window.location.reload();

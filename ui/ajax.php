@@ -174,6 +174,48 @@ if (isset($_GET['ajax']) && $_GET['ajax']=='d_selected_product'){
     }
 }
 
+if (isset($_GET['ajax']) && $_GET['ajax']=='d_selected_purchase'){
+    if (isset($_POST['selected_ids'])){
+        $selected_ids = $_POST['selected_ids'];
+        $purchase = new Purchase();
+        foreach ($selected_ids as $id) {
+            $deleted = $purchase->delete_purchase($id);
+            if (!$deleted) {
+                echo json_encode('error');
+            }
+        }
+        echo json_encode('success');
+    }
+}
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='d_selected_purchase_return'){
+    if (isset($_POST['selected_ids'])){
+        $selected_ids = $_POST['selected_ids'];
+        $purchaseReturn = new PurchaseReturn();
+        foreach ($selected_ids as $id) {
+            $deleted = $purchaseReturn->delete_return($id);
+            if (!$deleted) {
+                echo json_encode('error');
+            }
+        }
+        echo json_encode('success');
+    }
+}
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='d_selected_sales'){
+    if (isset($_POST['selected_ids'])){
+        $selected_ids = $_POST['selected_ids'];
+        $order = new Order();
+        foreach ($selected_ids as $id) {
+            $deleted = $order->delete_order($id);
+            if (!$deleted) {
+                echo json_encode('error');
+            }
+        }
+        echo json_encode('success');
+    }
+}
+
 if (isset($_GET['ajax']) && $_GET['ajax']=='enable_disable'){
     if (isset($_POST['selected_ids'])){
         $selected_ids = $_POST['selected_ids'];

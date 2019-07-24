@@ -122,6 +122,7 @@ if (isset($_GET['id'])) {
                                                     <thead>
                                                        <tr>
                                                            <th>Product</th>
+                                                           <th>Purchased Qty</th>
                                                            <th>Unit Price</th>
                                                            <th>Returned Quantity</th>
                                                            <th>Total</th>
@@ -136,6 +137,9 @@ if (isset($_GET['id'])) {
                                                                        <option value="<?= $row['id'] ?>"><?= $row['product_name'] ?></option>
                                                                    <?php } ?>
                                                                </select>
+                                                           </td>
+                                                           <td>
+                                                               <input type="text" class="form-control col-md-7 col-xs-12" ng-model="item.purchase_qty" readonly>
                                                            </td>
                                                            <td>
                                                                <input type="text" name="unit_price[]" class="form-control col-md-7 col-xs-12" ng-model="item.unit_price" >
@@ -257,7 +261,6 @@ if (isset($_GET['id'])) {
         autoclose: true
     });
     var viewReturnItems = <?php echo json_encode($viewReturnItems) ?>;
-
     var app = angular.module("app",[]);
     app.controller("ItemsController",function($scope,$http) {
 

@@ -139,7 +139,6 @@ if (isset($_POST['submit'])){
                                                 <table class="table table-bordered">
                                                     <thead>
                                                        <tr>
-                                                           <th>#</th>
                                                            <th>Product</th>
                                                            <th>Purchased Quantity</th>
                                                            <th>Unit Price</th>
@@ -149,9 +148,6 @@ if (isset($_POST['submit'])){
                                                     </thead>
                                                     <tbody>
                                                        <tr ng-repeat="item in items">
-                                                           <td>
-                                                               <input type="checkbox" name="purchase_return_items[]" ng-model="item.id">
-                                                           </td>
                                                            <td>
                                                                <select class="form-control select_product" name="product[]" ng-model="item.product_id">
                                                                    <?php foreach ($products as $row){ ?>
@@ -166,7 +162,7 @@ if (isset($_POST['submit'])){
                                                                <input type="text" name="unit_price[]" class="form-control col-md-7 col-xs-12" ng-model="item.unit_price" >
                                                            </td>
                                                            <td>
-                                                               <input type="text" name="quantity[]" class="form-control col-md-7 col-xs-12" ng-model="item.return_quantity" ng-change="calculate(item);getTotal();">
+                                                               <input type="text" name="quantity[]" class="form-control col-md-7 col-xs-12" ng-model="item.return_quantity" ng-change="return_validate(item);calculate(item);getTotal();">
                                                            </td>
                                                            <td>
                                                                <input type="text" name="total[]" class="form-control col-md-7 col-xs-12" ng-model="item.return_total" readonly>
@@ -331,6 +327,15 @@ if (isset($_POST['submit'])){
             }, function errorCallback(error) {
                 console.log(error);
             });
+        };
+
+        $scope.return_validate = function (i) {
+            var return_qty = parseFloat(i.return_quantity);
+            var qty = parseFloat(i.quantity);
+            if (return_qty <= qty) {
+            }else {
+                i.return_quantity = '';
+            }
         };
 
         $scope.calculate = function(i){

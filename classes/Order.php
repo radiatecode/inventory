@@ -25,17 +25,18 @@ class Order
             'billing_address'=>'required',
             'order_date'=>'required',
             'delivery_date'=>'required',
-            'unit_price'=>'required|array',
-            'quantity'=>'required|array',
-            'total'=>'required|array',
+            'product'=>'required|is_array|minimum:1',
+            'unit_price'=>'required|is_array',
+            'quantity'=>'required|is_array',
+            'total'=>'required|is_array',
             'sub_total'=>'required|number',
-            'discount'=>'required|number',
+            'discount'=>'number',
             'total_amount'=>'required|number',
-            'vat'=>'required|number',
-            'vat_amount'=>'required|number',
+            'vat'=>'number',
+            'vat_amount'=>'number',
             'grand_total'=>'required|number',
             'paid'=>'required|number',
-            'due'=>'required|number',
+            'due'=>'number',
         ]);
         if ($validation){
             $this->messages = $validation;
@@ -100,13 +101,13 @@ class Order
             'delivery_date'=>'required',
             'total'=>'required_if:product',
             'sub_total'=>'required|number',
-            'discount'=>'required|number',
+            'discount'=>'number',
             'total_amount'=>'required|number',
-            'vat'=>'required|number',
-            'vat_amount'=>'required|number',
+            'vat'=>'number',
+            'vat_amount'=>'number',
             'grand_total'=>'required|number',
             'paid'=>'required|number',
-            'due'=>'required|number'
+            'due'=>'number'
         ]);
         if ($validation){
             $this->messages = $validation;
@@ -177,7 +178,7 @@ class Order
     }
 
     public function allOrders(){
-        $orders = $this->_db->select(['orders.id as order_id','name','order_date',
+        $orders = $this->_db->select(['orders.id as order_id','sales_order','name','order_date',
             'order_status','sum(quantity) as total_qty','order_payment.*'])
             ->table('orders')
             ->join('customers','orders.customer_id','customers.id')
