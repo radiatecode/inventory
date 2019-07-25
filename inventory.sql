@@ -11,7 +11,7 @@
  Target Server Version : 100138
  File Encoding         : 65001
 
- Date: 16/07/2019 18:37:49
+ Date: 25/07/2019 18:04:13
 */
 
 SET NAMES utf8mb4;
@@ -139,15 +139,12 @@ CREATE TABLE `order_items`  (
   INDEX `product_id`(`product_id`) USING BTREE,
   CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of order_items
 -- ----------------------------
-INSERT INTO `order_items` VALUES (3, 2, 18, 7.00, 2500.00, 17500.00, '2019-07-03 12:50:42');
-INSERT INTO `order_items` VALUES (4, 2, 17, 11.00, 2000.00, 22000.00, '2019-07-03 12:50:42');
-INSERT INTO `order_items` VALUES (5, 3, 19, 3.00, 2500.00, 7500.00, '2019-07-16 02:01:06');
-INSERT INTO `order_items` VALUES (6, 3, 17, 2.00, 2000.00, 4000.00, '2019-07-16 02:01:06');
+INSERT INTO `order_items` VALUES (1, 4, 23, 8.00, 2530.00, 20240.00, '2019-07-24 01:37:32');
 
 -- ----------------------------
 -- Table structure for order_payment
@@ -166,13 +163,80 @@ CREATE TABLE `order_payment`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `order_id`(`order_id`) USING BTREE,
   CONSTRAINT `order_payment_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of order_payment
 -- ----------------------------
-INSERT INTO `order_payment` VALUES (1, 2, 'cash', 39500.00, 2.00, 5.00, 500.00, 40145.50, '2019-07-03 12:50:42');
-INSERT INTO `order_payment` VALUES (2, 3, 'bkash', 11500.00, 5.00, 7.00, 689.00, 11000.75, '2019-07-16 02:01:06');
+INSERT INTO `order_payment` VALUES (3, 4, 'bkash', 20240.00, 0.00, 0.00, 650.00, 19590.00, '2019-07-24 01:37:32');
+
+-- ----------------------------
+-- Table structure for order_return
+-- ----------------------------
+DROP TABLE IF EXISTS `order_return`;
+CREATE TABLE `order_return`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `order_id` int(10) NOT NULL,
+  `return_date` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `note` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+  `created_at` datetime(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `order_id`(`order_id`) USING BTREE,
+  CONSTRAINT `order_return_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of order_return
+-- ----------------------------
+INSERT INTO `order_return` VALUES (1, 4, '2019-07-25', 'fhg fghf fsg dfsf fsd fs f', '2019-07-25 07:43:51');
+
+-- ----------------------------
+-- Table structure for order_return_items
+-- ----------------------------
+DROP TABLE IF EXISTS `order_return_items`;
+CREATE TABLE `order_return_items`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `return_id` int(10) NOT NULL,
+  `product_id` int(10) NULL DEFAULT NULL,
+  `quantity` decimal(10, 2) NULL DEFAULT NULL,
+  `unit_price` decimal(10, 2) NULL DEFAULT NULL,
+  `total` decimal(10, 2) NULL DEFAULT NULL,
+  `created_at` datetime(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `product_id`(`product_id`) USING BTREE,
+  INDEX `purchase_id`(`return_id`) USING BTREE,
+  CONSTRAINT `order_return_items_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `order_return_items_ibfk_2` FOREIGN KEY (`return_id`) REFERENCES `order_return` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of order_return_items
+-- ----------------------------
+INSERT INTO `order_return_items` VALUES (1, 1, 23, 5.00, 2530.00, 12650.00, '2019-07-25 07:43:51');
+
+-- ----------------------------
+-- Table structure for order_return_payment
+-- ----------------------------
+DROP TABLE IF EXISTS `order_return_payment`;
+CREATE TABLE `order_return_payment`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `return_id` int(10) NOT NULL,
+  `payment_method` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `sub_total` decimal(10, 2) NOT NULL,
+  `discount_given` decimal(10, 2) NOT NULL,
+  `vat` decimal(10, 2) NOT NULL,
+  `cash_return` decimal(10, 2) NOT NULL,
+  `adjust_amount` decimal(10, 2) NULL DEFAULT NULL,
+  `created_at` datetime(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `order_id`(`return_id`) USING BTREE,
+  CONSTRAINT `order_return_payment_ibfk_1` FOREIGN KEY (`return_id`) REFERENCES `order_return` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of order_return_payment
+-- ----------------------------
+INSERT INTO `order_return_payment` VALUES (1, 1, 'cash', 12650.00, 0.00, 0.00, 5060.00, 7590.00, '2019-07-25 07:43:51');
 
 -- ----------------------------
 -- Table structure for orders
@@ -194,13 +258,12 @@ CREATE TABLE `orders`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `customer_id`(`customer_id`) USING BTREE,
   CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of orders
 -- ----------------------------
-INSERT INTO `orders` VALUES (2, 'SO-190120', 3, '01683644067', 'rahul.haque@gmail.com', '2019-07-08', '2019-07-09', 'ds fsdf sd fsdf s', 'dczc', '1', 'pending', '2019-07-03 12:50:42');
-INSERT INTO `orders` VALUES (3, 'SO-19160106', 3, '01683644067', 'rahul.haque@gmail.com', '2019-07-17', '2019-07-18', 'kkjkbj', '', '1', 'pending', '2019-07-16 02:01:06');
+INSERT INTO `orders` VALUES (4, 'SO-19243732', 3, '01683644067', 'radiate@gmail.com', '2019-07-24', '2019-07-26', 'dgsdgs gs gs', 'fhg fghf fsg', '1', 'pending', '2019-07-24 01:37:32');
 
 -- ----------------------------
 -- Table structure for products
@@ -227,16 +290,12 @@ CREATE TABLE `products`  (
   INDEX `category_id`(`category_id`) USING BTREE,
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`brand_id`) REFERENCES `brands` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `products_ibfk_3` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of products
 -- ----------------------------
-INSERT INTO `products` VALUES (15, 5, 1, 17, 1, 'acer laptop', NULL, '1561279427.jpg', NULL, 0, NULL, 0, NULL, '<p>acer laptop 201</p>\r\n', '2019-06-23 10:43:47');
-INSERT INTO `products` VALUES (16, 1, 2, 18, 1, 'canon e505 m-052', NULL, '', NULL, 0, NULL, 0, NULL, '<p>canon e5 rabel camera dfvsd</p>\r\n\r\n<p>jjk dgd dfg</p>\r\n', '2019-06-23 10:44:37');
-INSERT INTO `products` VALUES (17, 4, 1, 25, 1, 'imac 01', NULL, '1561454937.jpg', 1800.00, 0, 2000.00, 5, 100.00, '<p>res gresrg rg rewggrewg</p>\r\n', '2019-06-25 11:28:57');
-INSERT INTO `products` VALUES (18, 2, 1, 20, 1, 'Hp Laptop45', 'HP-45', '1561549702.jpg', 2200.00, 0, 2500.00, 0, 0.00, '<p>dr rd r treert egreg e ert er ert r</p>\r\n', '2019-06-26 01:48:22');
-INSERT INTO `products` VALUES (19, 6, 2, 5, 1, 'canon e505', 'e5050', '1562574953.PNG', 2000.00, 0, 2500.00, 0, 2500.00, '<p>reaf rae re erera&nbsp;</p>\r\n', '2019-07-08 10:35:53');
+INSERT INTO `products` VALUES (23, 3, 2, 5, 1, 'bcv5656', 'bf345656', '1563862065.PNG', 2500.00, 0, 2530.00, 0, 2530.00, '<p>esfs rdgd</p>\r\n', '2019-07-23 08:07:45');
 
 -- ----------------------------
 -- Table structure for products_attributes
@@ -252,18 +311,13 @@ CREATE TABLE `products_attributes`  (
   INDEX `attribute_id`(`attribute_id`) USING BTREE,
   CONSTRAINT `products_attributes_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `products_attributes_ibfk_2` FOREIGN KEY (`attribute_id`) REFERENCES `attributes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of products_attributes
 -- ----------------------------
-INSERT INTO `products_attributes` VALUES (10, 15, 3, '1 kg');
-INSERT INTO `products_attributes` VALUES (15, 16, 2, '25');
-INSERT INTO `products_attributes` VALUES (16, 16, 1, 'red');
-INSERT INTO `products_attributes` VALUES (17, 17, 3, '1.5 kg');
-INSERT INTO `products_attributes` VALUES (18, 18, 3, '17 kg');
-INSERT INTO `products_attributes` VALUES (19, 19, 2, '25');
-INSERT INTO `products_attributes` VALUES (20, 19, 1, 'red');
+INSERT INTO `products_attributes` VALUES (25, 23, 1, 'red black');
+INSERT INTO `products_attributes` VALUES (26, 23, 2, '255656');
 
 -- ----------------------------
 -- Table structure for purchase
@@ -283,13 +337,12 @@ CREATE TABLE `purchase`  (
   UNIQUE INDEX `unique_purchase_order`(`purchase_order_no`) USING BTREE,
   INDEX `customer_id`(`supplier_id`) USING BTREE,
   CONSTRAINT `purchase_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of purchase
 -- ----------------------------
-INSERT INTO `purchase` VALUES (8, 'PO-19094622', 2, '01683644067', 'jhon@gmail.com', '2019-07-24', 'fgh hf fh hh ghg gh', '', '2019-07-08 01:46:29');
-INSERT INTO `purchase` VALUES (15, 'PO-19094620', 1, '01683644067', 'rahul.haque@gmail.com', '2019-07-18', 'gf', '', '2019-07-09 01:46:20');
+INSERT INTO `purchase` VALUES (16, 'PO-19241840', 2, '01683644067', 'rahul.haque@gmail.com', '2019-07-24', 'safa', '', '2019-07-24 07:18:40');
 
 -- ----------------------------
 -- Table structure for purchase_items
@@ -308,15 +361,13 @@ CREATE TABLE `purchase_items`  (
   INDEX `purchase_id`(`purchase_id`) USING BTREE,
   CONSTRAINT `purchase_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `purchase_items_ibfk_3` FOREIGN KEY (`purchase_id`) REFERENCES `purchase` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 76 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of purchase_items
 -- ----------------------------
-INSERT INTO `purchase_items` VALUES (63, 8, 19, 5.00, 2500.00, 12500.00, '2019-07-08 01:46:29');
-INSERT INTO `purchase_items` VALUES (64, 8, 18, 10.00, 2500.00, 25000.00, '2019-07-08 01:46:29');
-INSERT INTO `purchase_items` VALUES (68, 8, 19, 2.00, 2500.00, 5000.00, '2019-07-09 09:36:41');
-INSERT INTO `purchase_items` VALUES (75, 15, 18, 5.00, 2500.00, 12500.00, '2019-07-09 01:46:20');
+INSERT INTO `purchase_items` VALUES (1, 16, 23, 2.00, 2530.00, 5060.00, '2019-07-24 07:18:40');
+INSERT INTO `purchase_items` VALUES (2, 16, 23, 5.00, 2530.00, 12650.00, '2019-07-24 07:18:40');
 
 -- ----------------------------
 -- Table structure for purchase_payment
@@ -336,13 +387,12 @@ CREATE TABLE `purchase_payment`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `order_id`(`purchase_id`) USING BTREE,
   CONSTRAINT `purchase_payment_ibfk_1` FOREIGN KEY (`purchase_id`) REFERENCES `purchase` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of purchase_payment
 -- ----------------------------
-INSERT INTO `purchase_payment` VALUES (6, 8, 'bank', 42500.00, 2.00, 5.00, 2000.00, 41732.50, '2019-07-30', '2019-07-08 01:46:29');
-INSERT INTO `purchase_payment` VALUES (13, 15, 'cash', 12500.00, 5.00, 5.00, 555.00, 11913.75, '2019-07-27', '2019-07-09 01:46:20');
+INSERT INTO `purchase_payment` VALUES (14, 16, 'bkash', 22710.00, 0.00, 5.00, 219.50, 23626.00, '2019-07-25', '2019-07-24 07:18:40');
 
 -- ----------------------------
 -- Table structure for purchase_return
@@ -357,13 +407,12 @@ CREATE TABLE `purchase_return`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `purchase_id`(`purchase_id`) USING BTREE,
   CONSTRAINT `purchase_return_ibfk_1` FOREIGN KEY (`purchase_id`) REFERENCES `purchase` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of purchase_return
 -- ----------------------------
-INSERT INTO `purchase_return` VALUES (11, 8, '2019-07-14', '', '2019-07-14 01:36:10');
-INSERT INTO `purchase_return` VALUES (13, 8, '2019-07-24', '', '2019-07-14 01:40:23');
+INSERT INTO `purchase_return` VALUES (15, 16, '2019-07-25', '', '2019-07-24 12:58:36');
 
 -- ----------------------------
 -- Table structure for purchase_return_items
@@ -382,14 +431,12 @@ CREATE TABLE `purchase_return_items`  (
   INDEX `purchase_id`(`return_id`) USING BTREE,
   CONSTRAINT `purchase_return_items_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `purchase_return_items_ibfk_2` FOREIGN KEY (`return_id`) REFERENCES `purchase_return` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of purchase_return_items
 -- ----------------------------
-INSERT INTO `purchase_return_items` VALUES (18, 11, 19, 2.00, 2500.00, 5000.00, '2019-07-14 01:36:10');
-INSERT INTO `purchase_return_items` VALUES (19, 11, 18, 2.00, 2500.00, 5000.00, '2019-07-14 01:36:10');
-INSERT INTO `purchase_return_items` VALUES (22, 13, 19, 5.00, 2500.00, 12500.00, '2019-07-14 01:40:23');
+INSERT INTO `purchase_return_items` VALUES (3, 15, 23, 2.00, 2530.00, 5060.00, '2019-07-24 12:58:36');
 
 -- ----------------------------
 -- Table structure for purchase_return_payment
@@ -408,13 +455,12 @@ CREATE TABLE `purchase_return_payment`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `order_id`(`return_id`) USING BTREE,
   CONSTRAINT `purchase_return_payment_ibfk_1` FOREIGN KEY (`return_id`) REFERENCES `purchase_return` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of purchase_return_payment
 -- ----------------------------
-INSERT INTO `purchase_return_payment` VALUES (10, 11, 'cash', 10000.00, 2.00, 5.00, 290.00, 10000.00, '2019-07-14 01:36:10');
-INSERT INTO `purchase_return_payment` VALUES (12, 13, 'cash', 12500.00, 2.00, 5.00, 500.00, 12362.50, '2019-07-14 01:40:23');
+INSERT INTO `purchase_return_payment` VALUES (14, 15, 'cash', 5060.00, 0.00, 5.00, 500.00, 4813.00, '2019-07-24 12:58:36');
 
 -- ----------------------------
 -- Table structure for stocks

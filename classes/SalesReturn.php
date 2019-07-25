@@ -181,11 +181,30 @@ class SalesReturn
     }
 
     public function viewSalesReturnItems($id){
-        $items = $this->_db->select(['order_return_items.*'])
-            ->table('order_return_items')
+        $items = $this->_db->select(['order_id','order_return_items.*'])
+            ->table('order_return')
+            ->join('order_return_items','order_return.id','order_return_items.return_id')
             ->where('return_id','=',$id)
             ->get();
-        return $this->_db->fetchAll($items);
+        $custom = [];
+        foreach ($items as $item){
+            $sales = $this->_db->select(['quantity'])
+                ->table('order_items')
+                ->where('order_id','=',$item['order_id'])
+                ->where('product_id','=',$item['product_id'])
+                ->get();
+            $sales_qty = $this->_db->fetchAssoc($sales);
+            $custom[] =[
+                'id'=>$item['id'],
+                'product_id'=>$item['product_id'],
+                'sales_qty'=>$sales_qty['quantity'],
+                'unit_price'=>$item['unit_price'],
+                'quantity'=>$item['quantity'],
+                'total'=>$item['total'],
+            ];
+        }
+
+        return $custom;
     }
 
     public function delete_return($id){

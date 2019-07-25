@@ -135,7 +135,6 @@ if (isset($_POST['submit'])){
                                                 <table class="table table-bordered">
                                                     <thead>
                                                        <tr>
-                                                           <th>#</th>
                                                            <th>Product</th>
                                                            <th>Sales Quantity</th>
                                                            <th>Unit Price</th>
@@ -145,9 +144,6 @@ if (isset($_POST['submit'])){
                                                     </thead>
                                                     <tbody>
                                                        <tr ng-repeat="item in items">
-                                                           <td>
-                                                               <input type="checkbox" name="purchase_return_items[]" ng-model="item.id">
-                                                           </td>
                                                            <td>
                                                                <select class="form-control select_product" name="product[]" ng-model="item.product_id">
                                                                    <?php foreach ($products as $row){ ?>
@@ -340,7 +336,11 @@ if (isset($_POST['submit'])){
             $scope.adjust_amount = grand_total-cash_return;
         }
     });
-
+    $("#submit").click(function (event) {
+        if( !confirm('Are you sure that you want to submit the form') ){
+            event.preventDefault();
+        }
+    });
 </script>
 </body>
 </html>

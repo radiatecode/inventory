@@ -7,6 +7,8 @@ if (isset($_GET['cat_id'])){
     echo json_encode($data);
 }
 
+
+
 if (isset($_GET['ajax']) && $_GET['ajax']=='purchase'){
    if (isset($_GET['id']) && isset($_GET['qty'])){
        $product = new Products();
@@ -202,6 +204,20 @@ if (isset($_GET['ajax']) && $_GET['ajax']=='d_selected_purchase_return'){
     }
 }
 
+if (isset($_GET['ajax']) && $_GET['ajax']=='d_selected_sales_return'){
+    if (isset($_POST['selected_ids'])){
+        $selected_ids = $_POST['selected_ids'];
+        $salesReturn = new SalesReturn();
+        foreach ($selected_ids as $id) {
+            $deleted = $salesReturn->delete_return($id);
+            if (!$deleted) {
+                echo json_encode('error');
+            }
+        }
+        echo json_encode('success');
+    }
+}
+
 if (isset($_GET['ajax']) && $_GET['ajax']=='d_selected_sales'){
     if (isset($_POST['selected_ids'])){
         $selected_ids = $_POST['selected_ids'];
@@ -228,4 +244,13 @@ if (isset($_GET['ajax']) && $_GET['ajax']=='enable_disable'){
         }
         echo json_encode('success');
     }
+}
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='d_brand'){
+    $brand = new Brand();
+    $deleted = $brand->delete_brand($_GET['id']);
+    if (!$deleted) {
+        echo 'error';
+    }
+    echo 'success';
 }

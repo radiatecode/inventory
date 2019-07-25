@@ -76,4 +76,14 @@ class Brand
         return $brands;
     }
 
+    public function delete_brand($id){
+        $result = $this->_db->delete('brands')
+            ->where('id','=',$id)
+            ->get();
+        if (!$result){
+            return false;
+        }
+        return true;
+    }
+
 }

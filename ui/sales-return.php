@@ -30,13 +30,17 @@ $salesReturn = new SalesReturn();
                     <?php session_message() ?>
                     <!-- Page Container -->
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                        <a class="btn btn-success btn-md" href="purchase-return-add.php"><i class="fa fa-plus-circle"></i> Add</a>
+                        <a class="btn btn-success btn-md" href="sales-return-add.php"><i class="fa fa-plus-circle"></i> Add</a>
                         <div class="x_panel">
                             <div class="x_title">
                                 <h2>Sales Order Return<small>List</small></h2>
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-danger btn-md" id="delete_selected_item"><i class="fa fa-trash-o"></i> Delete</button>
+                                </div>
+                                <hr>
                                 <div class="table-responsive">
                                     <table id="question_table" class="table table-bordered">
                                         <thead>
@@ -55,7 +59,7 @@ $salesReturn = new SalesReturn();
                                         <tbody>
                                         <?php foreach ($salesReturn->allSalesReturn() as $row){ ?>
                                             <tr>
-                                                <td><input type="checkbox" name="ids" id="ids" value="<?= $row['return_id'] ?>"></td>
+                                                <td><input type="checkbox" name="ids[]" id="ids" value="<?= $row['return_id'] ?>"></td>
                                                 <td><?= $row['sales_order'] ?></td>
                                                 <td><?= $row['return_date'] ?></td>
                                                 <td><?= $row['total_qty'] ?></td>
@@ -143,6 +147,65 @@ $salesReturn = new SalesReturn();
                 })
             }
         });
+    });
+    $('#delete_selected_item').click(function () {
+        var selected_ids = [];
+        $("input:checkbox[name='ids[]']:checked").each(function(){
+            selected_ids.push($(this).val());
+        });
+        if (selected_ids.length>0) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to delete?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Delete it!'
+            }).then(function (result) {
+                if (result.value) {
+                    var url = "ajax.php?ajax=d_selected_sales_return";
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: {
+                            'selected_ids': selected_ids
+                        },
+                        beforeSend: function () {
+                            Swal.fire({
+                                title: 'Deleting Data.......',
+                                showConfirmButton: false,
+                                html: '<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>',
+                                allowOutsideClick: false
+                            });
+                        },
+                        success: function (response) {
+                            Swal.close();
+                            console.log(response);
+                            if (JSON.parse(response) === "success") {
+                                Swal.fire({
+                                    title: 'Successfully Deleted',
+                                    type: 'success',
+                                    confirmButtonColor: '#3085d6',
+                                    confirmButtonText: 'Ok',
+                                    allowOutsideClick: false
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        window.location.reload();
+                                    }
+                                });
+                            }
+                        },
+                        error: function (error) {
+                            Swal.close();
+                            console.log(error);
+                        }
+                    })
+                }
+            });
+        }else{
+            Swal.fire('Warning!','Select Items First','warning');
+        }
     });
 </script>
 </body>

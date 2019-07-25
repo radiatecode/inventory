@@ -167,55 +167,59 @@ $orders = new Order();
         $("input:checkbox[name='ids[]']:checked").each(function(){
             selected_ids.push($(this).val());
         });
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You want to delete?",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, Delete it!'
-        }).then(function(result) {
-            if (result.value) {
-                var url = "ajax.php?ajax=d_selected_sales";
-                $.ajax({
-                    url:url,
-                    type:'POST',
-                    data:{
-                        'selected_ids':selected_ids
-                    },
-                    beforeSend:function () {
-                        Swal.fire({
-                            title: 'Deleting Data.......',
-                            showConfirmButton: false,
-                            html: '<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>',
-                            allowOutsideClick: false
-                        });
-                    },
-                    success:function (response) {
-                        Swal.close();
-                        console.log(response);
-                        if (JSON.parse(response)==="success"){
+        if (selected_ids.length>0) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to delete?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Delete it!'
+            }).then(function (result) {
+                if (result.value) {
+                    var url = "ajax.php?ajax=d_selected_sales";
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: {
+                            'selected_ids': selected_ids
+                        },
+                        beforeSend: function () {
                             Swal.fire({
-                                title: 'Successfully Deleted',
-                                type: 'success',
-                                confirmButtonColor: '#3085d6',
-                                confirmButtonText: 'Ok',
+                                title: 'Deleting Data.......',
+                                showConfirmButton: false,
+                                html: '<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>',
                                 allowOutsideClick: false
-                            }).then(function(result) {
-                                if (result.value) {
-                                    window.location.reload();
-                                }
                             });
+                        },
+                        success: function (response) {
+                            Swal.close();
+                            console.log(response);
+                            if (JSON.parse(response) === "success") {
+                                Swal.fire({
+                                    title: 'Successfully Deleted',
+                                    type: 'success',
+                                    confirmButtonColor: '#3085d6',
+                                    confirmButtonText: 'Ok',
+                                    allowOutsideClick: false
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        window.location.reload();
+                                    }
+                                });
+                            }
+                        },
+                        error: function (error) {
+                            Swal.close();
+                            console.log(error);
                         }
-                    },
-                    error:function (error) {
-                        Swal.close();
-                        console.log(error);
-                    }
-                })
-            }
-        });
+                    })
+                }
+            });
+        }else{
+            Swal.fire('Warning!','Select Items First','warning');
+        }
     });
 </script>
 </body>

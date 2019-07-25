@@ -372,7 +372,11 @@ if (isset($_POST['submit'])){
             $scope.adjust_amount = grand_total-receipt_amount;
         }
     });
-
+    $("#submit").click(function (event) {
+        if( !confirm('Are you sure that you want to submit the form') ){
+            event.preventDefault();
+        }
+    });
 </script>
 </body>
 </html>

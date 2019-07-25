@@ -115,6 +115,7 @@ if (isset($_GET['id'])) {
                                                     <thead>
                                                        <tr>
                                                            <th>Product</th>
+                                                           <th>Sales Qty</th>
                                                            <th>Unit Price</th>
                                                            <th>Return Quantity</th>
                                                            <th>Total</th>
@@ -131,10 +132,13 @@ if (isset($_GET['id'])) {
                                                                </select>
                                                            </td>
                                                            <td>
+                                                               <input type="text" class="form-control col-md-7 col-xs-12" ng-model="item.sales_qty" readonly>
+                                                           </td>
+                                                           <td>
                                                                <input type="text" name="unit_price[]" class="form-control col-md-7 col-xs-12" ng-model="item.unit_price" >
                                                            </td>
                                                            <td>
-                                                               <input type="text" name="quantity[]" class="form-control col-md-7 col-xs-12" ng-model="item.quantity" ng-change="calculate(item);getTotal();">
+                                                               <input type="text" name="quantity[]" class="form-control col-md-7 col-xs-12" ng-model="item.quantity" ng-change="return_validate(item);calculate(item);getTotal();">
                                                            </td>
                                                            <td>
                                                                <input type="text" name="total[]" class="form-control col-md-7 col-xs-12" ng-model="item.total" readonly>
@@ -259,6 +263,15 @@ if (isset($_GET['id'])) {
         $scope.items = order_items;
         view_payment($scope);
 
+        $scope.return_validate = function (i) {
+            var sales_qty = parseFloat(i.sales_qty);
+            var qty = parseFloat(i.quantity);
+            if (qty <= sales_qty) {
+            }else {
+                i.quantity = '';
+            }
+        };
+
         $scope.calculate = function(i){
             var unite_price = parseFloat(i.unit_price);
             var quantity = parseFloat(i.quantity);
@@ -304,7 +317,11 @@ if (isset($_GET['id'])) {
         $scope.cash_return = '<?= $viewReturn['cash_return'] ?>';
         $scope.adjust_amount = '<?= $viewReturn['adjust_amount'] ?>';
     }
-
+    $("#submit").click(function (event) {
+        if( !confirm('Are you sure that you want to submit the form') ){
+            event.preventDefault();
+        }
+    });
 </script>
 </body>
 </html>
