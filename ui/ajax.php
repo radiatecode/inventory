@@ -254,3 +254,69 @@ if (isset($_GET['ajax']) && $_GET['ajax']=='d_brand'){
     }
     echo 'success';
 }
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='d_selected_brand'){
+    if (isset($_POST['selected_ids'])){
+        $selected_ids = $_POST['selected_ids'];
+        $brand = new Brand();
+        foreach ($selected_ids as $id) {
+            $deleted = $brand->delete_brand($id);
+            if (!$deleted) {
+                echo json_encode('error');
+            }
+        }
+        echo json_encode('success');
+    }
+}
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='enable_disable_brand'){
+    if (isset($_POST['selected_ids'])){
+        $selected_ids = $_POST['selected_ids'];
+        $brand = new Brand();
+        foreach ($selected_ids as $id) {
+            $res = $brand->enable_disable($id,$_GET['type']);
+            if (!$res) {
+                echo json_encode('error');
+            }
+        }
+        echo json_encode('success');
+    }
+}
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='d_category'){
+    $category = new Category();
+    $deleted = $category->delete_category($_GET['id']);
+    if (!$deleted) {
+        echo 'error';
+    }
+    echo 'success';
+}
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='d_selected_category'){
+    if (isset($_POST['selected_ids'])){
+        $selected_ids = $_POST['selected_ids'];
+        $category = new Category();
+        foreach ($selected_ids as $id) {
+            $deleted = $category->delete_category($_GET['id']);
+            if (!$deleted) {
+                echo json_encode('error');
+            }
+        }
+        echo json_encode('success');
+    }
+}
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='enable_disable_category'){
+    if (isset($_POST['selected_ids'])){
+        $selected_ids = $_POST['selected_ids'];
+        $category = new Category();
+        foreach ($selected_ids as $id) {
+            $res = $category->enable_disable($id,$_GET['type']);
+            if (!$res) {
+                echo json_encode('error');
+            }
+        }
+        echo json_encode('success');
+    }
+}
+

@@ -53,4 +53,31 @@ class Category
         $cat = $this->_db->all('categories');
         return $cat;
     }
+
+    public function delete_category($id){
+        $result = $this->_db->delete('categories')
+            ->where('id','=',$id)
+            ->get();
+        if (!$result){
+            return false;
+        }
+        return true;
+    }
+
+    public function enable_disable($id,$type){
+        $result='';
+        if ($type=='enable') {
+            $result = $this->_db->update('categories', [
+                'display' =>1
+            ])->where('id', '=', $id)->get();
+        }else{
+            $result = $this->_db->update('categories', [
+                'display' =>0
+            ])->where('id', '=', $id)->get();
+        }
+        if (!$result){
+            return false;
+        }
+        return true;
+    }
 }

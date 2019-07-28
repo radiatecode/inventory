@@ -86,4 +86,21 @@ class Brand
         return true;
     }
 
+    public function enable_disable($id,$type){
+        $result='';
+        if ($type=='enable') {
+            $result = $this->_db->update('brands', [
+                'enable' =>1
+            ])->where('id', '=', $id)->get();
+        }else{
+            $result = $this->_db->update('brands', [
+                'enable' =>0
+            ])->where('id', '=', $id)->get();
+        }
+        if (!$result){
+            return false;
+        }
+        return true;
+    }
+
 }

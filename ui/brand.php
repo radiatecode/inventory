@@ -250,7 +250,7 @@ if (isset($_POST['add_brand'])) {
                 confirmButtonText: 'Yes, Delete it!'
             }).then(function (result) {
                 if (result.value) {
-                    var url = "ajax.php?ajax=d_selected_product";
+                    var url = "ajax.php?ajax=d_selected_brand";
                     $.ajax({
                         url: url,
                         type: 'POST',
@@ -310,7 +310,7 @@ if (isset($_POST['add_brand'])) {
                 confirmButtonText: 'Yes, ' + type + ' it!'
             }).then(function (result) {
                 if (result.value) {
-                    var url = "ajax.php?ajax=enable_disable&type=" + type;
+                    var url = "ajax.php?ajax=enable_disable_brand&type=" + type;
                     $.ajax({
                         url: url,
                         type: 'POST',
