@@ -27,7 +27,7 @@
                 <h3>General</h3>
                 <ul class="nav side-menu">
                     <li><a href="index.php"><i class="fa fa-home"></i> Dashboard</a></li>
-                    <li><a href="stock.php"><i class="fa fa-home"></i> Stock</a></li>
+                    <li><a href="stock.php"><i class="fa fa-line-chart"></i> Stock</a></li>
                     <li><a><i class="fa fa-home"></i> Products <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="products-add.php">New</a></li>
@@ -72,6 +72,14 @@
                             <li><a href="customers.php">List</a></li>
                         </ul>
                     </li>
+                    <li><a><i class="fa fa-bar-chart"></i> Reports <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu">
+                            <li><a href="customer-add.php">Monthly Stock</a></li>
+                            <li><a href="customers.php">Monthly Sales</a></li>
+                            <li><a href="customers.php">Monthly Purchase</a></li>
+                            <li><a href="customers.php">Top Sales</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -88,7 +96,7 @@
             <a data-toggle="tooltip" data-placement="top" title="Lock">
                 <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
             </a>
-            <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+            <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.php">
                 <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
             </a>
         </div>

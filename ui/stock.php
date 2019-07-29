@@ -7,6 +7,8 @@ $product = new Products();
 <html lang="en">
 <head>
     <?php include('../include/_head.php') ?>
+    <link href="../assets/js/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+
 </head>
 
 <body class="nav-md">
@@ -39,7 +41,7 @@ $product = new Products();
                             </div>
                             <div class="x_content">
                                 <div class="table-responsive">
-                                    <table id="question_table" class="table table-bordered">
+                                    <table id="datatable-responsive" class="table table-bordered">
                                         <thead>
                                         <tr>
                                             <th>SL</th>
@@ -99,6 +101,9 @@ $product = new Products();
     </div>
 </div>
 <?php include('../include/_script.php') ?>
+<script src="../assets/js/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="../assets/js/datatables.net-bs/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
+
 <script>
 
 </script>

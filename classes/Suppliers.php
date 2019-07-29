@@ -65,4 +65,14 @@ class Suppliers
         return $suppliers;
     }
 
+    public function delete_supplier($id){
+        $result = $this->_db->delete('suppliers')
+            ->where('id','=',$id)
+            ->get();
+        if (!$result){
+            return false;
+        }
+        return true;
+    }
+
 }

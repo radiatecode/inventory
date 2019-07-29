@@ -13,6 +13,7 @@ if (isset($_POST['add_supplier'])) {
 <html lang="en">
 <head>
     <?php include('../include/_head.php') ?>
+    <link href="../assets/js/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body class="nav-md">
@@ -45,8 +46,12 @@ if (isset($_POST['add_supplier'])) {
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
+                                <div class="pull-right">
+                                    <button type="button" class="btn btn-danger btn-md" id="delete_selected_item"><i class="fa fa-trash-o"></i> Delete</button>
+                                </div>
+                                <hr>
                                 <div class="table-responsive">
-                                    <table id="question_table" class="table table-bordered">
+                                    <table id="datatable-responsive" class="table table-bordered">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -61,7 +66,7 @@ if (isset($_POST['add_supplier'])) {
                                         <tbody>
                                         <?php foreach ($supplier->allSuppliers() as $row){ ?>
                                             <tr>
-                                                <td><input type="checkbox" name="ids" id="ids" value="<?= $row['id'] ?>"></td>
+                                                <td><input type="checkbox" name="ids[]" id="ids" value="<?= $row['id'] ?>"></td>
                                                 <td><?= $row['name'] ?></td>
                                                 <td><?= $row['address'] ?></td>
                                                 <td><?= $row['email'] ?></td>
@@ -74,7 +79,7 @@ if (isset($_POST['add_supplier'])) {
                                                             data-target=".add_modal" data-toggle="modal">
                                                         <i class="fa fa-eye"></i>
                                                     </button>
-                                                    <button type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>
+                                                    <button type="button" id="<?= $row['id'] ?>" class="btn btn-danger btn-xs delete_item"><i class="fa fa-trash-o"></i></button>
                                                 </td>
                                             </tr>
                                         <?php } ?>
@@ -149,6 +154,8 @@ if (isset($_POST['add_supplier'])) {
     </div>
 </div>
 <?php include('../include/_script.php') ?>
+<script src="../assets/js/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="../assets/js/datatables.net-bs/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 <script>
     function readURL(input) {
         if (input.files && input.files[0]) {
@@ -175,6 +182,115 @@ if (isset($_POST['add_supplier'])) {
         $('#address').val(supplier.address);
         $('#email').val(supplier.email);
         $('#phone').val(supplier.phone);
+    });
+    $('.delete_item').click(function () {
+        var id = $(this).attr('id');
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You want to delete?",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Delete it!'
+        }).then(function(result) {
+            if (result.value) {
+                var url = "ajax.php?ajax=d_supplier&id="+id;
+                $.ajax({
+                    url:url,
+                    type:'GET',
+                    contentType:false,
+                    processData:false,
+                    beforeSend:function () {
+                        Swal.fire({
+                            title: 'Deleting Data.......',
+                            showConfirmButton: false,
+                            html: '<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>',
+                            allowOutsideClick: false
+                        });
+                    },
+                    success:function (response) {
+                        Swal.close();
+                        console.log(response);
+                        if (response==="success"){
+                            Swal.fire({
+                                title: 'Successfully Deleted',
+                                type: 'success',
+                                confirmButtonColor: '#3085d6',
+                                confirmButtonText: 'Ok'
+                            }).then(function(result) {
+                                if (result.value) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    },
+                    error:function (error) {
+                        Swal.close();
+                        console.log(error);
+                    }
+                })
+            }
+        });
+    });
+    $('#delete_selected_item').click(function () {
+        var selected_ids = [];
+        $("input:checkbox[name='ids[]']:checked").each(function(){
+            selected_ids.push($(this).val());
+        });
+        if(selected_ids.length>0) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You want to delete?",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Delete it!'
+            }).then(function (result) {
+                if (result.value) {
+                    var url = "ajax.php?ajax=d_selected_supplier";
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: {
+                            'selected_ids': selected_ids
+                        },
+                        beforeSend: function () {
+                            Swal.fire({
+                                title: 'Deleting Data.......',
+                                showConfirmButton: false,
+                                html: '<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>',
+                                allowOutsideClick: false
+                            });
+                        },
+                        success: function (response) {
+                            Swal.close();
+                            console.log(response);
+                            if (JSON.parse(response) === "success") {
+                                Swal.fire({
+                                    title: 'Successfully Deleted',
+                                    type: 'success',
+                                    confirmButtonColor: '#3085d6',
+                                    confirmButtonText: 'Ok',
+                                    allowOutsideClick: false
+                                }).then(function (result) {
+                                    if (result.value) {
+                                        window.location.reload();
+                                    }
+                                });
+                            }
+                        },
+                        error: function (error) {
+                            Swal.close();
+                            console.log(error);
+                        }
+                    })
+                }
+            });
+        }else{
+            Swal.fire('Warning!','Select Items First','warning');
+        }
     });
 </script>
 </body>

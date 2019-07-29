@@ -7,6 +7,8 @@ $customer = new Customers();
 <html lang="en">
 <head>
     <?php include('../include/_head.php') ?>
+    <link href="../assets/js/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+
 </head>
 
 <body class="nav-md">
@@ -40,10 +42,9 @@ $customer = new Customers();
                             </div>
                             <div class="x_content">
                                 <div class="table-responsive">
-                                    <table id="question_table" class="table table-bordered">
+                                    <table id="datatable-responsive" class="table table-bordered">
                                         <thead>
                                         <tr>
-                                            <th>#</th>
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Phone</th>
@@ -55,7 +56,6 @@ $customer = new Customers();
                                         <tbody>
                                         <?php foreach ($customer->allCustomers() as $row){ ?>
                                             <tr>
-                                                <td><input type="checkbox" name="ids" id="ids" value="<?= $row['id'] ?>"></td>
                                                 <td>
                                                     <?php if (!empty($row['photo'])){ ?>
                                                         <img src="../assets/images/<?= $row['photo'] ?>" class="image"
@@ -97,6 +97,8 @@ $customer = new Customers();
     </div>
 </div>
 <?php include('../include/_script.php') ?>
+<script src="../assets/js/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
+<script src="../assets/js/datatables.net-bs/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 <script>
    $('.delete_customer').click(function () {
        var id = $(this).attr('id');

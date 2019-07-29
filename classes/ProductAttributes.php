@@ -93,5 +93,32 @@ class ProductAttributes
         $this->_db->close();
     }
 
+    public function delete_attribute($id){
+        $result = $this->_db->delete('attributes')
+            ->where('id','=',$id)
+            ->get();
+        if (!$result){
+            return false;
+        }
+        return true;
+    }
+
+    public function enable_disable($id,$type){
+        $result='';
+        if ($type=='enable') {
+            $result = $this->_db->update('attributes', [
+                'enable' =>1
+            ])->where('id', '=', $id)->get();
+        }else{
+            $result = $this->_db->update('attributes', [
+                'enable' =>0
+            ])->where('id', '=', $id)->get();
+        }
+        if (!$result){
+            return false;
+        }
+        return true;
+    }
+
 
 }

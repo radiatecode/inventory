@@ -297,7 +297,7 @@ if (isset($_GET['ajax']) && $_GET['ajax']=='d_selected_category'){
         $selected_ids = $_POST['selected_ids'];
         $category = new Category();
         foreach ($selected_ids as $id) {
-            $deleted = $category->delete_category($_GET['id']);
+            $deleted = $category->delete_category($id);
             if (!$deleted) {
                 echo json_encode('error');
             }
@@ -312,6 +312,66 @@ if (isset($_GET['ajax']) && $_GET['ajax']=='enable_disable_category'){
         $category = new Category();
         foreach ($selected_ids as $id) {
             $res = $category->enable_disable($id,$_GET['type']);
+            if (!$res) {
+                echo json_encode('error');
+            }
+        }
+        echo json_encode('success');
+    }
+}
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='d_supplier'){
+    $supplier = new Suppliers();
+    $deleted = $supplier->delete_supplier($_GET['id']);
+    if (!$deleted) {
+        echo 'error';
+    }
+    echo 'success';
+}
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='d_selected_supplier'){
+    if (isset($_POST['selected_ids'])){
+        $selected_ids = $_POST['selected_ids'];
+        $supplier = new Suppliers();
+        foreach ($selected_ids as $id) {
+            $deleted = $supplier->delete_supplier($id);
+            if (!$deleted) {
+                echo json_encode('error');
+            }
+        }
+        echo json_encode('success');
+    }
+}
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='d_attribute'){
+    $attribute = new ProductAttributes();
+    $deleted = $attribute->delete_attribute($_GET['id']);
+    if (!$deleted) {
+        echo 'error';
+    }
+    echo 'success';
+}
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='d_selected_attribute'){
+    if (isset($_POST['selected_ids'])){
+        $selected_ids = $_POST['selected_ids'];
+        $attribute = new ProductAttributes();
+        foreach ($selected_ids as $id) {
+            $deleted = $attribute->delete_attribute($id);
+            if (!$deleted) {
+                echo json_encode('error');
+            }
+        }
+        echo json_encode('success');
+    }
+}
+
+if (isset($_GET['ajax']) && $_GET['ajax']=='enable_disable_attribute'){
+    if (isset($_POST['selected_ids'])){
+        $selected_ids = $_POST['selected_ids'];
+        $attribute = new ProductAttributes();
+        foreach ($selected_ids as $id) {
+            $res = $attribute->enable_disable($id,$_GET['type']);
             if (!$res) {
                 echo json_encode('error');
             }
