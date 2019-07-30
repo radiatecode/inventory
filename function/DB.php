@@ -249,7 +249,7 @@ class DB
         return $result;
     }
     public function seeGenerateSQLString(){
-        return $this->SQL." || ".$this->whereCount;
+        return $this->SQL;
     }
     /* Ending to Try to like laravel*/
 

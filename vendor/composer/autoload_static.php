@@ -22,6 +22,7 @@ class ComposerStaticInitf29a6195b0a6d553983392a199d62eca
         'Products' => __DIR__ . '/../..' . '/classes/Products.php',
         'Purchase' => __DIR__ . '/../..' . '/classes/Purchase.php',
         'PurchaseReturn' => __DIR__ . '/../..' . '/classes/PurchaseReturn.php',
+        'Report' => __DIR__ . '/../..' . '/classes/Report.php',
         'SalesReturn' => __DIR__ . '/../..' . '/classes/SalesReturn.php',
         'Session' => __DIR__ . '/../..' . '/function/Session.php',
         'Suppliers' => __DIR__ . '/../..' . '/classes/Suppliers.php',

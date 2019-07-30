@@ -17,6 +17,7 @@ return array(
     'Products' => $baseDir . '/classes/Products.php',
     'Purchase' => $baseDir . '/classes/Purchase.php',
     'PurchaseReturn' => $baseDir . '/classes/PurchaseReturn.php',
+    'Report' => $baseDir . '/classes/Report.php',
     'SalesReturn' => $baseDir . '/classes/SalesReturn.php',
     'Session' => $baseDir . '/function/Session.php',
     'Suppliers' => $baseDir . '/classes/Suppliers.php',
