@@ -1,54 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a146932b-e264-44db-9c65-b750364a926d" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/assets/js/datatables.net/buttons.flash.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/js/datatables.net/buttons.html5.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/js/datatables.net/buttons.html5.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/js/datatables.net/buttons.print.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/js/datatables.net/dataTables.buttons.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/js/datatables.net/jszip.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/js/datatables.net/pdfmake.min.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/js/datatables.net/vfs_fonts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/Brand.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/Brand.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/Category.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/Category.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/Dashboard.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/Dashboard.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/ProductAttributes.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/ProductAttributes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/Products.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/Products.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/Purchase.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/Purchase.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/Report.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/Report.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/_head.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/_head.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/_side-nav.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/_side-nav.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/_top-nav.php" beforeDir="false" afterPath="$PROJECT_DIR$/include/_top-nav.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/attributes.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/attributes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/brand.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/brand.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/category.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/category.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/customer-add.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/customer-add.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/customer-view.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/customer-view.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/customers.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/customers.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/invoice.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/invoice.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/login.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/monthly-stock.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/monthly-stock.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/order-add.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/order-add.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/order-view.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/order-view.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/orders.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/orders.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/products-add.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/products-add.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/products-view.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/products-view.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/products.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/products.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/purchase-add.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/purchase-add.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/purchase-return-add.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/purchase-return-add.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/purchase-return-view.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/purchase-return-view.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/purchase-return.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/purchase-return.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/purchase-view.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/purchase-view.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/purchase.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/purchase.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/sales-return-add.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/sales-return-add.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/sales-return-view.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/sales-return-view.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/sales-return.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/sales-return.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/stock.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/stock.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/suppliers.php" beforeDir="false" afterPath="$PROJECT_DIR$/ui/suppliers.php" afterDir="false" />
-    </list>
+    <list default="true" id="a146932b-e264-44db-9c65-b750364a926d" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -61,20 +14,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="index.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ui/index.php">
+      <file leaf-file-name="index.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/index.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="9" column="15" lean-forward="true" selection-start-line="9" selection-start-column="15" selection-end-line="9" selection-end-column="15" />
+            <state relative-caret-position="200">
+              <caret line="8" column="1" lean-forward="true" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="_top-nav.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/include/_top-nav.php">
+      <file leaf-file-name="helpers.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/function/helpers.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="20" column="16" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
+            <state relative-caret-position="400">
+              <caret line="40" column="41" selection-start-line="40" selection-start-column="12" selection-end-line="40" selection-end-column="41" />
             </state>
           </provider>
         </entry>
@@ -128,7 +81,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/ui/error.php" />
         <option value="$PROJECT_DIR$/classes/Customers.php" />
         <option value="$PROJECT_DIR$/classes/Auth.php" />
         <option value="$PROJECT_DIR$/ui/purchase_return.php" />
@@ -179,6 +131,7 @@
         <option value="$PROJECT_DIR$/ui/index.php" />
         <option value="$PROJECT_DIR$/classes/Dashboard.php" />
         <option value="$PROJECT_DIR$/include/_top-nav.php" />
+        <option value="$PROJECT_DIR$/index.php" />
       </list>
     </option>
   </component>
@@ -222,7 +175,7 @@
       <path value="$PROJECT_DIR$/vendor/composer" />
     </include_path>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-65" />
     <option name="y" value="10" />
     <option name="width" value="1385" />
@@ -244,7 +197,7 @@
             <path>
               <item name="inventory" type="b2602c69:ProjectViewProjectNode" />
               <item name="inventory" type="462c0819:PsiDirectoryNode" />
-              <item name="include" type="462c0819:PsiDirectoryNode" />
+              <item name="function" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -333,12 +286,12 @@
       <workItem from="1564373209685" duration="8014000" />
       <workItem from="1564460587507" duration="4900000" />
       <workItem from="1564550412387" duration="11087000" />
-      <workItem from="1564589073953" duration="12088000" />
+      <workItem from="1564589073953" duration="12919000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="516091000" />
+    <option name="totallyTimeSpent" value="516922000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -372,27 +325,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/function/Validation.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-810">
-          <caret line="8" column="6" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/classes/PurchaseReturn.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="195" column="14" lean-forward="true" selection-start-line="188" selection-start-column="12" selection-end-line="195" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/classes/SalesReturn.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="214" column="9" lean-forward="true" selection-start-line="214" selection-start-column="9" selection-end-line="214" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/classes/Order.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
@@ -739,6 +671,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/include/_top-nav.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="16" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ui/index.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
@@ -746,10 +685,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/_top-nav.php">
+    <entry file="file://$PROJECT_DIR$/register.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/function/helpers.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="16" selection-start-line="20" selection-start-column="16" selection-end-line="20" selection-end-column="16" />
+        <state relative-caret-position="400">
+          <caret line="40" column="41" selection-start-line="40" selection-start-column="12" selection-end-line="40" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="8" column="1" lean-forward="true" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
         </state>
       </provider>
     </entry>
