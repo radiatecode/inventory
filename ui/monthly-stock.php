@@ -3,6 +3,14 @@ error_reporting(E_ALL & ~E_NOTICE);
 require_once '../vendor/autoload.php';
 $report = new Report();
 $search_option = $report->search_options();
+
+if (isset($_POST['search'])){
+    $data = $report->search($_POST);
+    foreach ($data as $row){
+        echo "hello <br>";
+        var_dump($row);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,16 +40,19 @@ $search_option = $report->search_options();
                 <div class="clearfix"></div>
 
                 <div class="row">
-                    <?php session_message() ?>
+                    <?php
+                        session_message();
+                        messages($report->getMessage())
+                    ?>
                     <!-- Page Container -->
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>Products <small> Stock</small></h2>
+                                <h2>Monthly Products <small> Stock</small></h2>
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
-                                <form class="form-horizontal">
+                                <form class="form-horizontal" action="monthly-stock.php" method="post">
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label" for="last-name">Start Date <span class="required">*</span>
@@ -65,7 +76,7 @@ $search_option = $report->search_options();
                                             <label class="control-label" for="last-name">Product (optional)
                                             </label>
                                             <div class="">
-                                                <select class="form-control" name="payment_method">
+                                                <select class="form-control" name="products">
                                                     <option value="">-- Select Product --</option>
                                                     <?php foreach ($search_option['products'] as $product){ ?>
                                                        <option value="<?= $product['id'] ?>"><?= $product['product_name'] ?></option>
@@ -79,7 +90,7 @@ $search_option = $report->search_options();
                                             <label class="control-label" for="last-name">Category (optional)
                                             </label>
                                             <div class="">
-                                                <select class="form-control" name="payment_method">
+                                                <select class="form-control" name="categories">
                                                     <option value="">-- Select Category --</option>
                                                     <?php foreach ($search_option['categories'] as $category){ ?>
                                                         <option value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
@@ -93,7 +104,12 @@ $search_option = $report->search_options();
                                             <label class="control-label" for="last-name">Brand (optional)
                                             </label>
                                             <div class="">
-                                                <input type="text" id="contact" name="contact" class="form-control col-md-7 col-xs-12">
+                                                <select class="form-control" name="brands">
+                                                    <option value="">-- Select Brand --</option>
+                                                    <?php foreach ($search_option['brands'] as $brand){ ?>
+                                                        <option value="<?= $brand['id'] ?>"><?= $brand['brand_name'] ?></option>
+                                                    <?php } ?>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -101,7 +117,7 @@ $search_option = $report->search_options();
                                         <div class="form-group">
                                             <label class="control-label" for="last-name"><i class="fa fa-search-plus"></i></label>
                                             <div class="">
-                                                <button class="btn btn-success btn-md"><i class="fa fa-search"></i> Search</button>
+                                                <button type="submit" name="search" class="btn btn-success btn-md"><i class="fa fa-search"></i> Search</button>
                                             </div>
                                         </div>
                                     </div>
