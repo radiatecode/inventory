@@ -70,6 +70,7 @@ class ProductAttributes
         $result = $this->_db->select(['id','attribute_name'])
             ->table('attributes')
             ->where('category_id','=',$cat_id)
+            ->where('enable','=',1)
             ->orderBy('attributes.id','DESC')
             ->get();
         if (!$result){

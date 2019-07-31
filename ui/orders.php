@@ -55,7 +55,6 @@ $orders = new Order();
                                                 <th>Grand Total</th>
                                                 <th>Paid</th>
                                                 <th>Due</th>
-                                                <th>Order Status</th>
                                                 <th>Created At</th>
                                                 <th>Action</th>
                                             </tr>
@@ -77,7 +76,6 @@ $orders = new Order();
                                                 </td>
                                                 <td><?= $row['paid_amount'] ?></td>
                                                 <td><?= $row['due_amount'] ?></td>
-                                                <td><?= $row['order_status'] ?></td>
                                                 <td><?= $row['created_at'] ?></td>
                                                 <td>
                                                     <a href="order-view.php?id=<?= $row['order_id'] ?>" class="btn btn-info btn-xs edit">
@@ -99,12 +97,7 @@ $orders = new Order();
         <!-- /page content -->
 
         <!-- footer content -->
-        <footer>
-            <div class="pull-right">
-                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-            </div>
-            <div class="clearfix"></div>
-        </footer>
+        <?php require_once '../include/_footer.php'?>
         <!-- /footer content -->
     </div>
 </div>

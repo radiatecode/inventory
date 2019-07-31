@@ -49,6 +49,15 @@ class Category
         }
     }
 
+    public function displayCategory(){
+        $cat = $this->_db->select(['categories.*'])
+            ->table('categories')
+            ->where('display','=',1)
+            ->orderBy('id','DESC')
+            ->get();
+        return $cat;
+    }
+
     public function allCategories(){
         $cat = $this->_db->all('categories');
         return $cat;

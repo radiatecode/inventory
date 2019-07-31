@@ -2,7 +2,7 @@
 error_reporting(E_ALL & ~E_NOTICE);
 require_once '../vendor/autoload.php';
 $product = new Products();
-$products = $product->allProducts();
+$products = $product->enableProducts();
 $salesReturn = new SalesReturn();
 $orders = $salesReturn->salesOrders();
 if (isset($_POST['submit'])){
@@ -254,12 +254,7 @@ if (isset($_POST['submit'])){
         <!-- /page content -->
 
         <!-- footer content -->
-        <footer>
-            <div class="pull-right">
-                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-            </div>
-            <div class="clearfix"></div>
-        </footer>
+        <?php require_once '../include/_footer.php'?>
         <!-- /footer content -->
     </div>
 </div>

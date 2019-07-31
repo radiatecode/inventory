@@ -11,7 +11,7 @@ $view_stock = [];
 $category_attributes = [];
 
 if (isset($_GET['id']) && isset($_POST['update_basic'])){
-    $product->update_basic($_POST,$_GET['id']);
+    $product->update_basic($_POST,$_FILES,$_GET['id']);
 }elseif (isset($_GET['id']) && isset($_POST['update_attributes'])){
     $product->update_attributes($_POST,$_GET['id']);
 }elseif (isset($_GET['id']) && isset($_POST['update_data'])){
@@ -86,7 +86,7 @@ if (isset($_GET['id'])){
                                                         <div class="">
                                                            <select name="brand" id="brand" class="form-control">
                                                                <option value="">-- Select Brand --</option>
-                                                               <?php foreach ($brand->allBrands() as $row){ ?>
+                                                               <?php foreach ($brand->enableBrands() as $row){ ?>
                                                                   <option value="<?= $row['id'] ?>" <?= $view_product['brand_id']==$row['id']?'selected':'' ?>><?= $row['brand_name'] ?></option>
                                                                <?php } ?>
                                                            </select>
@@ -146,7 +146,7 @@ if (isset($_GET['id'])){
                                                         <div class="">
                                                             <select name="category" id="category" class="form-control">
                                                                 <option value="">-- Select Category --</option>
-                                                                <?php foreach ($category->allCategories() as $row){ ?>
+                                                                <?php foreach ($category->displayCategory() as $row){ ?>
                                                                     <option value="<?= $row['id'] ?>" <?= $view_product['category_id']==$row['id']?'selected':'' ?>><?= $row['name'] ?></option>
                                                                 <?php } ?>
                                                             </select>
@@ -292,12 +292,7 @@ if (isset($_GET['id'])){
         <!-- /page content -->
 
         <!-- footer content -->
-        <footer>
-            <div class="pull-right">
-                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-            </div>
-            <div class="clearfix"></div>
-        </footer>
+        <?php require_once '../include/_footer.php'?>
         <!-- /footer content -->
     </div>
 </div>

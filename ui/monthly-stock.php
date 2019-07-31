@@ -3,13 +3,10 @@ error_reporting(E_ALL & ~E_NOTICE);
 require_once '../vendor/autoload.php';
 $report = new Report();
 $search_option = $report->search_options();
-
+$data = [];$data_result=[];
 if (isset($_POST['search'])){
-    $data = $report->search($_POST);
-    foreach ($data as $row){
-        echo "hello <br>";
-        var_dump($row);
-    }
+    $data_result = $report->search($_POST);
+    $data = $data_result['data_result'];
 }
 ?>
 <!DOCTYPE html>
@@ -18,6 +15,7 @@ if (isset($_POST['search'])){
     <?php include('../include/_head.php') ?>
     <link href="../assets/js/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/js/bootstrap-datepicker/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css"/>
 </head>
 
 <body class="nav-md">
@@ -58,7 +56,8 @@ if (isset($_POST['search'])){
                                             <label class="control-label" for="last-name">Start Date <span class="required">*</span>
                                             </label>
                                             <div class="">
-                                                <input type="text" id="start_date" name="start_date" class="form-control col-md-7 col-xs-12">
+                                                <input type="text" id="start_date" name="start_date" class="form-control col-md-7 col-xs-12"
+                                                       value="<?= $data_result?$data_result['search']['start_date']:'' ?>" required>
                                             </div>
                                         </div>
                                     </div>
@@ -67,7 +66,8 @@ if (isset($_POST['search'])){
                                             <label class="control-label" for="last-name">End Date <span class="required">*</span>
                                             </label>
                                             <div class="">
-                                                <input type="text" id="end_date" name="end_date" class="form-control col-md-7 col-xs-12">
+                                                <input type="text" id="end_date" name="end_date" class="form-control col-md-7 col-xs-12"
+                                                       value="<?= $data_result?$data_result['search']['end_date']:'' ?>" required>
                                             </div>
                                         </div>
                                     </div>
@@ -79,7 +79,7 @@ if (isset($_POST['search'])){
                                                 <select class="form-control" name="products">
                                                     <option value="">-- Select Product --</option>
                                                     <?php foreach ($search_option['products'] as $product){ ?>
-                                                       <option value="<?= $product['id'] ?>"><?= $product['product_name'] ?></option>
+                                                       <option value="<?= $product['id'] ?>" <?= $data_result?$data_result['search']['products']==$product['id']?'selected':'':'' ?>><?= $product['product_name'] ?></option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
@@ -93,7 +93,7 @@ if (isset($_POST['search'])){
                                                 <select class="form-control" name="categories">
                                                     <option value="">-- Select Category --</option>
                                                     <?php foreach ($search_option['categories'] as $category){ ?>
-                                                        <option value="<?= $category['id'] ?>"><?= $category['name'] ?></option>
+                                                        <option value="<?= $category['id'] ?>" <?= $data_result?$data_result['search']['categories']==$category['id']?'selected':'':'' ?>><?= $category['name'] ?></option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
@@ -107,7 +107,7 @@ if (isset($_POST['search'])){
                                                 <select class="form-control" name="brands">
                                                     <option value="">-- Select Brand --</option>
                                                     <?php foreach ($search_option['brands'] as $brand){ ?>
-                                                        <option value="<?= $brand['id'] ?>"><?= $brand['brand_name'] ?></option>
+                                                        <option value="<?= $brand['id'] ?>" <?= $data_result?$data_result['search']['brands']==$brand['id']?'selected':'':'' ?>><?= $brand['brand_name'] ?></option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
@@ -122,20 +122,36 @@ if (isset($_POST['search'])){
                                         </div>
                                     </div>
                                 </form>
+                                <hr>
+                                <br>
                                 <div class="table-responsive">
-                                    <table id="datatable-responsive" class="table table-bordered">
+                                    <table id="monthly_report" class="table table-bordered">
                                         <thead>
                                         <tr>
                                             <th>SL</th>
                                             <th>Category</th>
-                                            <th>Product Name</th>
+                                            <th style="background-color: #8ad6cf; color: black">Product Name</th>
                                             <th>Brand</th>
-                                            <th>Price</th>
-                                            <th>Available Qty</th>
+                                            <th style="background-color: #1dd685; color: white">Purchase Qty</th>
+                                            <th>Purchase Return Qty</th>
+                                            <th style="background-color: #d63e41; color: white">Sales Qty</th>
+                                            <th style="background-color: #8ad6cf; color: black">Available Qty</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-
+                                         <?php if (count($data)>0){
+                                             $sl=1; foreach ($data as $item) { ?>
+                                             <tr>
+                                                 <td><?= $sl ?></td>
+                                                 <td><?= $item['category_name'] ?></td>
+                                                 <td style="background-color: #8ad6cf; color: black"><?= $item['product_name'] ?></td>
+                                                 <td><?= $item['brand_name'] ?></td>
+                                                 <td style="background-color: #1dd685; color: white"><?= $item['purchase_qty'] ?></td>
+                                                 <td><?= $item['purchase_return_qty'] ?></td>
+                                                 <td  style="background-color: #d63e41; color: white"><?= $item['sales_qty'] ?></td>
+                                                 <td style="background-color: #8ad6cf; color: black"><?= $item['available'] ?></td>
+                                             </tr>
+                                         <?php $sl++; } } ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -148,12 +164,7 @@ if (isset($_POST['search'])){
         <!-- /page content -->
 
         <!-- footer content -->
-        <footer>
-            <div class="pull-right">
-                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-            </div>
-            <div class="clearfix"></div>
-        </footer>
+        <?php require_once '../include/_footer.php'?>
         <!-- /footer content -->
     </div>
 </div>
@@ -161,20 +172,41 @@ if (isset($_POST['search'])){
 <script src="../assets/js/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 <script src="../assets/js/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="../assets/js/datatables.net-bs/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
-
+<script type="text/javascript" src="../assets/js/datatables.net/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="../assets/js/datatables.net/buttons.flash.min.js"></script>
+<script type="text/javascript" src="../assets/js/datatables.net/jszip.min.js"></script>
+<script type="text/javascript" src="../assets/js/datatables.net/pdfmake.min.js"></script>
+<script type="text/javascript" src="../assets/js/datatables.net/vfs_fonts.js"></script>
+<script type="text/javascript" src="../assets/js/datatables.net/buttons.html5.min.js"></script>
+<script type="text/javascript" src="../assets/js/datatables.net/buttons.print.min.js"></script>
 <script>
     $('#start_date').datepicker({
         format: 'yyyy-mm-dd',
-        startDate: "now()",
+        endDate: "",
         todayHighlight: true,
         autoclose: true
     });
     $('#end_date').datepicker({
         format: 'yyyy-mm-dd',
-        startDate: "now()",
+        endDate: "",
         todayHighlight: true,
         autoclose: true
     });
+    $('#monthly_report').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: "excel",
+                className: "btn-sm"
+            },
+            {
+                extend: "pdfHtml5",
+                className: "btn-sm",
+                title: 'Stock Summery ( Monthly Report )'
+            },
+
+        ]
+    } );
 </script>
 </body>
 </html>

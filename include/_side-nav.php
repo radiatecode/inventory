@@ -1,7 +1,7 @@
 <div class="col-md-3 left_col">
     <div class="left_col scroll-view">
         <div class="navbar nav_title" style="border: 0;">
-            <a href="index.php" class="site_title"><i class="fa fa-paw"></i> <span>User Panel</span></a>
+            <a href="index.php" class="site_title"><i class="fa fa-paw"></i> <span>IMS</span></a>
         </div>
 
         <div class="clearfix"></div>
@@ -74,10 +74,10 @@
                     </li>
                     <li><a><i class="fa fa-bar-chart"></i> Reports <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                            <li><a href="customer-add.php">Monthly Stock</a></li>
-                            <li><a href="customers.php">Monthly Sales</a></li>
-                            <li><a href="customers.php">Monthly Purchase</a></li>
-                            <li><a href="customers.php">Top Sales</a></li>
+                            <li><a href="monthly-stock.php">Monthly Stock</a></li>
+                            <li><a href="#">Monthly Sales</a></li>
+                            <li><a href="#">Monthly Purchase</a></li>
+                            <li><a href="#">Top Sales</a></li>
                         </ul>
                     </li>
                 </ul>

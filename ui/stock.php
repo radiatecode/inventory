@@ -48,7 +48,6 @@ $product = new Products();
                                             <th>Category</th>
                                             <th>Product Name</th>
                                             <th>Brand</th>
-                                            <th>Enable</th>
                                             <th>Price</th>
                                             <th>Available Qty</th>
                                         </tr>
@@ -68,13 +67,6 @@ $product = new Products();
                                                     <?= $row['product_name'] ?>
                                                 </td>
                                                 <td><?= $row['brand_name'] ?></td>
-                                                <td>
-                                                    <?php if ($row['enable']==1){ ?>
-                                                        <i class="fa fa-check-circle"></i>
-                                                    <?php }else{ ?>
-                                                        <i class="fa fa-close"></i>
-                                                    <?php } ?>
-                                                </td>
                                                 <td><?= $row['mrp'] ?></td>
                                                 <td><?= $available ?></td>
                                             </tr>
@@ -91,12 +83,7 @@ $product = new Products();
         <!-- /page content -->
 
         <!-- footer content -->
-        <footer>
-            <div class="pull-right">
-                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-            </div>
-            <div class="clearfix"></div>
-        </footer>
+        <?php require_once '../include/_footer.php'?>
         <!-- /footer content -->
     </div>
 </div>

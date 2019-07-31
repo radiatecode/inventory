@@ -78,7 +78,7 @@ class Products
          }
     }
 
-    public function update_basic($post,$id){
+    public function update_basic($post,$files,$id){
         $validation = Validation::PostValidate($post,[
             'brand'=>'required',
             'product_name'=>'required',
@@ -173,6 +173,21 @@ class Products
 
     public function getMessage(){
         return count($this->messages)>0?$this->messages:[];
+    }
+
+    public function enableProducts(){
+        $products = $this->_db->select(['products.*','brands.brand_name',
+            'categories.name'])
+            ->table('products')
+            ->join('brands','brands.id','products.brand_id')
+            ->join('categories','categories.id','products.category_id')
+            ->where('products.enable','=',1)
+            ->orderBy('products.id','DESC')
+            ->get();
+        if (!$products){
+            Session::flush('failed','Query Error! '.$this->_db->sql_error());
+        }
+        return $this->_db->fetchAll($products);
     }
 
     public function allProducts(){

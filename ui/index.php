@@ -114,12 +114,7 @@ $sales_chart = $dashboard->sales_chart();
         <!-- /page content -->
 
         <!-- footer content -->
-        <footer>
-            <div class="pull-right">
-                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-            </div>
-            <div class="clearfix"></div>
-        </footer>
+        <?php require_once '../include/_footer.php'?>
         <!-- /footer content -->
     </div>
 </div>
@@ -128,7 +123,7 @@ $sales_chart = $dashboard->sales_chart();
 <script>
     if ($('#purchase_chart').length ){
         var chart_data = JSON.parse('<?php echo json_encode($purchase_chart) ?>');
-
+        console.log(chart_data);
         var ctx = document.getElementById("purchase_chart");
         var purchase_chart = new Chart(ctx, {
             type: 'line',

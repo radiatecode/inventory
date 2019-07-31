@@ -19,7 +19,7 @@ $auth->credentials($_POST['email'],$_POST['password']);
             <section class="login_content">
                 <?php messages($auth->getMessage()) ?>
                 <form action="login.php" method="post">
-                    <h1>User Login</h1>
+                    <h1>IMS User Login</h1>
                     <div>
                         <input type="text" class="form-control" placeholder="Email" name="email" value="" required="" />
                     </div>
@@ -41,7 +41,7 @@ $auth->credentials($_POST['email'],$_POST['password']);
                         <br />
 
                         <div>
-                            <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
+                            <p>©2016 All Rights Reserved.</p>
                         </div>
                     </div>
                 </form>

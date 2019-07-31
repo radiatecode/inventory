@@ -2,7 +2,7 @@
 error_reporting(E_ALL & ~E_NOTICE);
 require_once '../vendor/autoload.php';
 $product = new Products();
-$products = $product->allProducts();
+$products = $product->enableProducts();
 $supplier = new Suppliers();
 $suppliers = $supplier->allSuppliers();
 $purchase = new Purchase();
@@ -274,12 +274,7 @@ if (isset($_GET['id'])) {
         <!-- /page content -->
 
         <!-- footer content -->
-        <footer>
-            <div class="pull-right">
-                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-            </div>
-            <div class="clearfix"></div>
-        </footer>
+        <?php require_once '../include/_footer.php'?>
         <!-- /footer content -->
     </div>
 </div>
@@ -330,7 +325,7 @@ if (isset($_GET['id'])) {
         $scope.selectChange = function (i) {
             var product = i.product;
             var obj = searchObjects(products,product);
-            i.unit_price = obj.sale_price;
+            i.unit_price = obj.purchase_price;
         };
 
         $scope.calculate = function(i){

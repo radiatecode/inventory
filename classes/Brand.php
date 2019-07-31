@@ -71,6 +71,15 @@ class Brand
         }
     }
 
+    public function enableBrands(){
+        $brands = $this->_db->select(['brands.*'])
+            ->table('brands')
+            ->where('enable','=',1)
+            ->orderBy('id','DESC')
+            ->get();
+        return $brands;
+    }
+
     public function allBrands(){
         $brands = $this->_db->all('brands');
         return $brands;

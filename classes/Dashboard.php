@@ -55,14 +55,15 @@ class Dashboard
             'August','September','October','November','December'];
         $monthly_chart = [];
         foreach ($months as $month){
-            $start = date('Y-m-01',strtotime($month));
-            $end = date('Y-m-t',strtotime($month));
+            $start = date('Y-m-01',strtotime($month." ".date('Y')));
+            $end = date('Y-m-t',strtotime($month." ".date('Y')));
+
             $purchase = $this->_db->select(['sum(purchase_items.quantity) AS purchase_quantity'])
-                ->table('purchase')
-                ->join('purchase_items','purchase_items.purchase_id','purchase.id')
-                ->where('order_date','>=',$start)
-                ->where('order_date','<=',$end)
-                ->orderBy('purchase.id','DESC')
+                ->table('purchase_items')
+                ->join('purchase','purchase.id','purchase_items.purchase_id')
+                ->where('purchase.order_date','>=',$start)
+                ->where('purchase.order_date','<=',$end)
+                ->groupBy(['purchase_items.product_id'])
                 ->get();
             $data = $this->_db->fetchAssoc($purchase);
             $monthly_chart[$month] = $data['purchase_quantity']==null?0:$data['purchase_quantity'];
@@ -75,8 +76,9 @@ class Dashboard
             'August','September','October','November','December'];
         $monthly_chart = [];
         foreach ($months as $month){
-            $start = date('Y-m-01',strtotime($month));
-            $end = date('Y-m-t',strtotime($month));
+            $start = date('Y-m-01',strtotime($month." ".date('Y')));
+            $end = date('Y-m-t',strtotime($month." ".date('Y')));
+
             $orders = $this->_db->select(['sum(order_items.quantity) AS sales_quantity'])
                 ->table('orders')
                 ->join('order_items','order_items.order_id','orders.id')

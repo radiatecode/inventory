@@ -66,7 +66,7 @@ if (isset($_POST['submit'])){
                                                         <div class="">
                                                            <select name="brand" id="brand" class="form-control">
                                                                <option value="">-- Select Brand --</option>
-                                                               <?php foreach ($brand->allBrands() as $row){ ?>
+                                                               <?php foreach ($brand->enableBrands() as $row){ ?>
                                                                   <option value="<?= $row['id'] ?>"><?= $row['brand_name'] ?></option>
                                                                <?php } ?>
                                                            </select>
@@ -118,7 +118,7 @@ if (isset($_POST['submit'])){
                                                     <div class="">
                                                         <select name="category" id="category" class="form-control">
                                                             <option value="">-- Select Category --</option>
-                                                            <?php foreach ($category->allCategories() as $row){ ?>
+                                                            <?php foreach ($category->displayCategory() as $row){ ?>
                                                                 <option value="<?= $row['id'] ?>"><?= $row['name'] ?></option>
                                                             <?php } ?>
                                                         </select>
@@ -220,12 +220,7 @@ if (isset($_POST['submit'])){
         <!-- /page content -->
 
         <!-- footer content -->
-        <footer>
-            <div class="pull-right">
-                Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-            </div>
-            <div class="clearfix"></div>
-        </footer>
+        <?php require_once '../include/_footer.php'?>
         <!-- /footer content -->
     </div>
 </div>

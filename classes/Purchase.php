@@ -36,7 +36,7 @@ class Purchase
             'vat_amount'=>'number',
             'grand_total'=>'required|number',
             'paid'=>'required|number',
-            'due'=>'required|number',
+            'due'=>'number',
         ]);
         if ($validation){
             $this->messages = $validation;
@@ -104,7 +104,7 @@ class Purchase
             'vat_amount'=>'required|number',
             'grand_total'=>'required|number',
             'paid'=>'required|number',
-            'due'=>'required|number',
+            'due'=>'number',
         ]);
         if ($validation){
             $this->messages = $validation;
