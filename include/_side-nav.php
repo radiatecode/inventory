@@ -78,7 +78,6 @@
                             <li><a href="monthly-stock.php">Monthly Stock</a></li>
                             <li><a href="monthly-sales.php">Monthly Sales</a></li>
                             <li><a href="monthly-purchase.php">Monthly Purchase</a></li>
-                            <li><a href="#">Top Sales</a></li>
                         </ul>
                     </li>
                 </ul>

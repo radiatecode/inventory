@@ -33,7 +33,7 @@ if (isset($_POST['search'])){
         <div class="right_col" role="main">
             <div class="">
                 <div class="title_left">
-                    <h3>Monthly Product Stock</h3>
+                    <h3>Monthly Product Sales</h3>
                 </div>
                 <div class="clearfix"></div>
 
@@ -46,7 +46,7 @@ if (isset($_POST['search'])){
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>Monthly Products <small> Stock</small></h2>
+                                <h2>Monthly Products <small> Sales</small></h2>
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">

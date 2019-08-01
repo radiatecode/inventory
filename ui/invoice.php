@@ -36,7 +36,7 @@ if (isset($_POST['generate'])){
         <div class="right_col" role="main">
             <div class="">
                 <div class="title_left">
-                    <h3>Product Stock</h3>
+                    <h3>IMS INVOICE</h3>
                 </div>
                 <div class="clearfix"></div>
 
@@ -46,7 +46,7 @@ if (isset($_POST['generate'])){
                     <div class="col-md-12">
                         <div class="x_panel">
                             <div class="x_title">
-                                <h2>Invoice Design <small>Sample user invoice design</small></h2>
+                                <h2>Invoice <small></small></h2>
                                 <ul class="nav navbar-right panel_toolbox">
                                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                     </li>
