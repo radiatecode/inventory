@@ -1,0 +1,281 @@
+<?php
+session_start();
+error_reporting(E_ALL & ~E_NOTICE);
+require_once( "../lib/fpdf/fpdf.php" );
+require_once ("../vendor/autoload.php");
+redirectIfNotAuthenticate();
+if (isset($_GET['invoice_type']) && isset($_GET['orders'])) {
+    $report = new Report();
+    $data = $report->generateInvoice([
+        'invoice_type' => $_GET['invoice_type'],
+        'orders' => $_GET['orders']
+    ]);
+    if (count($data) > 0) {
+        extract($data);
+        $total = $data['sub_total'] - (($data['sub_total'] * $data['discount']) / 100);
+        $vat_amount = ($total * $data['vat']) / 100;
+        $grand_total = $total + $vat_amount;
+// Begin configuration
+        $textColour = array(0, 0, 0);
+        $headerColour = array(100, 100, 100);
+        $tableHeaderTopTextColour = array(255, 255, 255);
+        $tableHeaderTopFillColour = array(125, 152, 179);
+        $tableHeaderTopProductTextColour = array(0, 0, 0);
+        $tableHeaderTopProductFillColour = array(143, 173, 204);
+        $tableHeaderLeftTextColour = array(99, 42, 57);
+        $tableHeaderLeftFillColour = array(184, 207, 229);
+        $tableBorderColour = array(50, 50, 50);
+        $tableRowFillColour = array(213, 170, 170);
+        $chartColours = array(
+            array(255, 100, 100),
+            array(100, 255, 100),
+            array(100, 100, 255),
+            array(255, 255, 100),
+        );
+        $data = array(
+            array(200),
+            array(300),
+            array(400),
+        );
+        $pdf = new FPDF('P', 'mm', 'A4');
+        $pdf->AddPage();
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', '', 17);
+        $pdf->Cell(0, 0, ucwords($_GET['invoice_type']) . ' Invoice', 0, 0, 'C');
+        $pdf->Ln(6);
+        $pdf->SetTextColor($headerColour[0], $headerColour[1], $headerColour[2]);
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(0, 0, 'PGDIT-07 JU, Savar, Jahangir Nagar-555.', 0, 0, 'C');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->Ln(20);
+        $pdf->Ln(2);
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(60, 7, "FROM, ", 0, 0, 'L');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(70, 7, "TO, ", 0, 0, 'L');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(60, 7, " ", 0, 0, 'C');
+        $pdf->Ln(7);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(25, 5, "Name ", 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(35, 5, $from_name, 0, 0, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(25, 5, "Name ", 0, 0, 'R');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(45, 5, $to_name, 0, 0, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(25, 5, "Invoice ", 0, 0, 'R');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(35, 5, $order, 0, 0, 'L');
+        $pdf->Ln(5);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(25, 5, "Address ", 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(35, 5, substr($from_address,0,30), 0, 0, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(25, 5, "Address ", 0, 0, 'R');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(45, 5, substr($to_address,0,30), 0, 0, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(25, 5, "Order ID ", 0, 0, 'R');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(35, 5, $order, 0, 0, 'L');
+        $pdf->Ln(5);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(25, 5, "Phone ", 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(35, 5, $from_phone, 0, 0, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(25, 5, "Phone ", 0, 0, 'R');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(45, 5, $to_phone, 0, 0, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(25, 5, "Paid ", 0, 0, 'R');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(35, 5, $paid, 0, 0, 'L');
+        $pdf->Ln(5);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(25, 5, "Email ", 0, 0, 'L');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(35, 5, $from_email, 0, 0, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(25, 5, "Email ", 0, 0, 'R');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(45, 5, $to_email, 0, 0, 'L');
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(25, 5, "Due ", 0, 0, 'R');
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(35, 5, $due, 0, 0, 'L');
+        $pdf->Ln(5);
+// shifted information
+        if (count($items_data) > 0) {
+            $pdf->Ln(8);
+            $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->Cell(10, 7, "SL", 1, 0, 'L');
+            $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->Cell(45, 7, "Product", 1, 0, 'L');
+            $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->Cell(35, 7, "Model", 1, 0, 'C');
+            $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->Cell(30, 7, "Unit Price", 1, 0, 'C');
+            $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->Cell(30, 7, "Qty", 1, 0, 'C');
+            $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->Cell(40, 7, "Total", 1, 0, 'C');
+            $pdf->Ln(7);
+            foreach ($items_data as $key=>$row) {
+                $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(10, 7, ++$key, 0, 0, 'L');
+                $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(45, 7, $row['product_name'], 0, 0, 'L');
+                $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(35, 7, $row['model'], 0, 0, 'C');
+                $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(30, 7, $row['unit_price'], 0, 0, 'C');
+                $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(30, 7, $row['quantity'], 0, 0, 'C');
+                $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+                $pdf->SetFont('Arial', 'B', 10);
+                $pdf->Cell(40, 7, ($row['unit_price']*$row['quantity']), 0, 0, 'C');
+                $pdf->Ln(7);
+            }
+        } else {
+            $pdf->Ln(30);
+        }
+        $pdf->Ln(10);
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(100, 7, "", 0, 0, 'L');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(50, 7, "Sub Total:", 0, 0, 'R');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(40, 7, $sub_total, 0, 0, 'C');
+        $pdf->Ln(7);
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(100, 7, "", 0, 0, 'L');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(50, 7, "Discount (%):", 0, 0, 'R');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(40, 7, $discount, 0, 0, 'C');
+        $pdf->Ln(7);
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(100, 7, "", 0, 0, 'L');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(50, 7, "Total:", 0, 0, 'R');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(40, 7, $total, 0, 0, 'C');
+        $pdf->Ln(7);
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(100, 7, "", 0, 0, 'L');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(50, 7, "Vat (%):", 0, 0, 'R');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(40, 7, $vat, 0, 0, 'C');
+        $pdf->Ln(7);
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(100, 7, "", 0, 0, 'L');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(50, 7, "Vat Amount:", 0, 0, 'R');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(40, 7, $vat_amount, 0, 0, 'C');
+        $pdf->Ln(7);
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(100, 7, "", 0, 0, 'L');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(50, 7, "Grand Total:", 0, 0, 'R');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(40, 7, $grand_total, 0, 0, 'C');
+        $pdf->Ln(7);
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(100, 7, "", 0, 0, 'L');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(50, 7, "Paid Amount:", 0, 0, 'R');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(40, 7, $paid, 0, 0, 'C');
+        $pdf->Ln(7);
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(100, 7, "", 0, 0, 'L');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(50, 7, "Due Amount:", 0, 0, 'R');
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(40, 7, $due, 0, 0, 'C');
+        $pdf->Ln(7);
+        $pdf->Ln(80);
+        $pdf->SetTextColor($headerColour[0], $headerColour[1], $headerColour[2]);
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(0, 5, '___________________', 0, 0, 'L');
+        $pdf->Ln(5);
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(0, 5, 'Customer Signature', 0, 0, 'L');
+        $pdf->Ln(-5);
+        $pdf->SetTextColor($headerColour[0], $headerColour[1], $headerColour[2]);
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(0, 5, '___________________', 0, 0, 'C');
+        $pdf->Ln(5);
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(0, 5, 'Generated By', 0, 0, 'C');
+        $pdf->Ln(-5);
+        $pdf->SetTextColor($headerColour[0], $headerColour[1], $headerColour[2]);
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(0, 5, '___________________', 0, 0, 'R');
+        $pdf->Ln(5);
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(0, 5, 'Authorised Signature', 0, 0, 'R');
+        $pdf->Ln(10);
+        $pdf->Ln(4);
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(0, 15, 'House # 262/A, Road # 27 (Old), Dhanmondi - R/A, Dhaka 1209. Phone - 88 +02 9127348, 88 + 01511 777791-5', 1, 0, 'C');
+        $pdf->Ln(12);
+        $pdf->SetTextColor($textColour[0], $textColour[1], $textColour[2]);
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(0, 0, 'www.whitehallconventioncenter.com', 0, 0, 'C');
+        $pdf->Output('test' . "-report.pdf", "I");
+    }else{
+        echo "no data found";
+    }
+}else{
+    header('location:invoice.php');
+}
+?>

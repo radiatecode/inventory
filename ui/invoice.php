@@ -2,12 +2,14 @@
 error_reporting(E_ALL & ~E_NOTICE);
 require_once '../vendor/autoload.php';
 $report = new Report();
-$data=[];
+$data=[];$type=null;$order=null;
 if (isset($_POST['generate'])){
     $data = $report->generateInvoice($_POST);
     $total = $data['sub_total']-(($data['sub_total']*$data['discount'])/100);
     $vat_amount = ($total*$data['vat'])/100;
     $grand_total = $total+$vat_amount;
+    $type = $data['search']['invoice_type']?$data['search']['invoice_type']:'';
+    $order = $data['search']['orders']?$data['search']['orders']:'';
 }
 ?>
 <!DOCTYPE html>
@@ -64,8 +66,6 @@ if (isset($_POST['generate'])){
                                                     <option value="">-- Select Type --</option>
                                                     <option value="purchase">Purchase</option>
                                                     <option value="sales">Sales</option>
-                                                    <option value="purchase return">Purchase Return</option>
-                                                    <option value="sales return">Sales Return</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -92,6 +92,7 @@ if (isset($_POST['generate'])){
                                 </form>
                                 <hr>
                                 <br>
+                                <?php if (count($data)>0){ ?>
                                 <section class="content invoice">
                                     <div id="print_area">
                                     <div class="row">
@@ -221,10 +222,12 @@ if (isset($_POST['generate'])){
                                     </div>
                                     <div class="row no-print">
                                         <div class="col-xs-12">
-                                            <button type="button" id="print_invoice" onclick="printDiv()" class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-print"></i> PRINT</button>
+                                            <a target="_blank" href="report.php?invoice_type=<?= $type ?>&orders=<?= $order ?>"
+                                               class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-print"></i> Generate PDF</a>
                                         </div>
                                     </div>
                                 </section>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
@@ -243,21 +246,6 @@ if (isset($_POST['generate'])){
 <script src="../assets/js/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="../assets/js/datatables.net-bs/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
 <script>
-    function printDiv()
-    {
-
-        var divToPrint=document.getElementById('print_area');
-
-        var newWin=window.open('','Print-Window');
-
-        newWin.document.open();
-
-        newWin.document.write('<html><body onload="window.print()">'+divToPrint.innerHTML+'</body></html>');
-
-        newWin.document.close();
-        setTimeout(function(){newWin.close();},10);
-
-    }
     $('#invoice_type').change(function () {
         var invoice_type = $(this).val();
         var dropdown = '';
@@ -273,14 +261,6 @@ if (isset($_POST['generate'])){
                         dropdown += '<option value="' + value.purchase_order_no + '">' + value.purchase_order_no + '</option>';
                     });
                 }else if(invoice_type==="sales"){
-                    $.each(response, function (key, value) {
-                        dropdown += '<option value="' + value.sales_order + '">' + value.sales_order + '</option>';
-                    });
-                }else if(invoice_type==="purchase return"){
-                    $.each(response, function (key, value) {
-                        dropdown += '<option value="' + value.purchase_order_no + '">' + value.purchase_order_no + '</option>';
-                    });
-                }else if(invoice_type==="sales return"){
                     $.each(response, function (key, value) {
                         dropdown += '<option value="' + value.sales_order + '">' + value.sales_order + '</option>';
                     });

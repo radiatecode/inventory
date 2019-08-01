@@ -229,21 +229,6 @@ class Report
                 ->get();
             return $this->_db->fetchAll($sales);
 
-        }elseif ($type=="purchase return"){
-            $purchase_return = $this->_db->select(['purchase_order_no'])
-                ->table('purchase')
-                ->join('purchase_return','purchase_return.purchase_id','purchase.id')
-                ->orderBy('purchase_order_no','DESC')
-                ->get();
-            return $this->_db->fetchAll($purchase_return);
-
-        }elseif ($type=="sales return"){
-            $sales_return = $this->_db->select(['sales_order'])
-                ->table('orders')
-                ->join('order_return','order_return.order_id','orders.id')
-                ->orderBy('sales_order','DESC')
-                ->get();
-            return $this->_db->fetchAll($sales_return);
         }
         return false;
     }
@@ -290,7 +275,50 @@ class Report
                     'sub_total'=>$data['sub_total'],
                     'payment_method'=>$data['payment_method'],
                     'note'=>$data['note'],
-                    'items_data'=>$items_data
+                    'items_data'=>$items_data,
+                    'search'=>[
+                        'invoice_type'=>$post['invoice_type'],
+                        'orders'=>$post['orders']
+                    ]
+                ];
+            }if ($post['invoice_type']=="sales"){
+                $orders = $this->_db->select(['orders.id as order_id','sales_order','order_date','order_payment.*','customers.*'])
+                    ->table('orders')
+                    ->join('customers','orders.customer_id','customers.id')
+                    ->join('order_payment','orders.id','order_payment.order_id')
+                    ->where('sales_order','=',$post['orders'])
+                    ->orderBy('orders.id','DESC')
+                    ->get();
+                $data = $this->_db->fetchAssoc($orders);
+                $items = $this->_db->select(['product_name','model','order_items.*'])
+                    ->table('order_items')
+                    ->join('products','products.id','order_items.product_id')
+                    ->where('order_id','=',$data['order_id'])
+                    ->get();
+                $items_data = $this->_db->fetchAll($items);
+                $custom = [
+                    'from_name'=>'PGDIT07 Ju Inc',
+                    'from_address'=>'Savar 1287, Jahangir Nagar, Dhaka',
+                    'from_phone'=>'018XXXXXXX',
+                    'from_email'=>'pgd@email.com',
+                    'to_name'=>$data['name'],
+                    'to_address'=>$data['present_address'],
+                    'to_phone'=>$data['phone'],
+                    'to_email'=>$data['email'],
+                    'order'=>$data['sales_order'],
+                    'payment_date'=>$data['order_date'],
+                    'paid'=>$data['paid_amount'],
+                    'due'=>$data['due_amount'],
+                    'vat'=>$data['vat'],
+                    'discount'=>$data['discount'],
+                    'sub_total'=>$data['sub_total'],
+                    'payment_method'=>$data['payment_method'],
+                    'note'=>$data['note'],
+                    'items_data'=>$items_data,
+                    'search'=>[
+                        'invoice_type'=>$post['invoice_type'],
+                        'orders'=>$post['orders']
+                    ]
                 ];
             }
             return $custom;
