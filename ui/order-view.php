@@ -295,7 +295,7 @@ if (isset($_GET['id'])){
         todayHighlight: true,
         autoclose: true
     });
-    var products = <?php echo json_encode($products) ?>;
+    var products = <?php echo $product->jsonProducts(); ?>;
     //$(function () {
     //    var drop_down = '';
 

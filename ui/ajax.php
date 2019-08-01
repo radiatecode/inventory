@@ -380,3 +380,13 @@ if (isset($_GET['ajax']) && $_GET['ajax']=='enable_disable_attribute'){
     }
 }
 
+if (isset($_GET['ajax']) && $_GET['ajax']=='invoice_order'){
+    if (isset($_GET['type'])){
+        $report = new Report();
+        $data = $report->getOrders($_GET['type']);
+        echo json_encode($data);
+    }
+}
+
+
+

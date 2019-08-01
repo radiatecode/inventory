@@ -187,7 +187,23 @@ class Products
         if (!$products){
             Session::flush('failed','Query Error! '.$this->_db->sql_error());
         }
-        return $this->_db->fetchAll($products);
+        return $products;
+    }
+
+    public function jsonProducts(){
+        $products = $this->_db->select(['products.*','brands.brand_name',
+            'categories.name'])
+            ->table('products')
+            ->join('brands','brands.id','products.brand_id')
+            ->join('categories','categories.id','products.category_id')
+            ->where('products.enable','=',1)
+            ->orderBy('products.id','DESC')
+            ->get();
+        if (!$products){
+            Session::flush('failed','Query Error! '.$this->_db->sql_error());
+        }
+        $result = $this->_db->fetchAll($products);
+        return json_encode($result);
     }
 
     public function allProducts(){
@@ -201,7 +217,7 @@ class Products
         if (!$products){
             Session::flush('failed','Query Error! '.$this->_db->sql_error());
         }
-        return $this->_db->fetchAll($products);
+        return $products;
     }
 
     public function stock(){
@@ -217,12 +233,41 @@ class Products
             ->leftJoin('order_items','order_items.product_id','products.id')
             ->leftJoin('purchase_return_items','purchase_return_items.product_id','products.id')
             ->groupBy(['purchase_items.product_id','order_items.product_id','purchase_return_items.product_id'])
-            ->orderBy('products.id','DESC')
             ->get();
-        if (!$products){
+        $custom= [];
+        foreach ($products as $product){
+            $sales_query = $this->_db->select(['sum(order_items.quantity) AS sale_quantity'])
+                ->table('order_items')
+                ->where('product_id','=',$product['id'])
+                ->groupBy(['order_items.product_id'])->get();
+            $sales_result = $this->_db->fetchAssoc($sales_query);
+            $purchase_query = $this->_db->select(['sum(purchase_items.quantity) AS purchase_quantity'])
+                ->table('purchase_items')
+                ->where('product_id','=',$product['id'])
+                ->groupBy(['purchase_items.product_id'])->get();
+            $purchase_result = $this->_db->fetchAssoc($purchase_query);
+            $purchase_return_query = $this->_db->select(['sum(purchase_return_items.quantity) AS purchase_return_quantity'])
+                ->table('purchase_return_items')
+                ->where('product_id','=',$product['id'])
+                ->groupBy(['purchase_return_items.product_id'])->get();
+            $purchase_return_result = $this->_db->fetchAssoc($purchase_return_query);
+            $available = ($purchase_result['purchase_quantity']-($sales_result['sale_quantity']+$purchase_return_result['purchase_return_quantity']));
+
+            $custom[]=[
+                'name'=>$product['name'],
+                'thumb'=>$product['thumb'],
+                'product_name'=>$product['product_name'],
+                'brand_name'=>$product['brand_name'],
+                'repurchase_qty'=>$product['repurchase_qty'],
+                'mrp'=>$product['mrp'],
+                'available'=>$available
+            ];
+
+        }
+        if (!$custom){
             Session::flush('failed','Stock Query Error! '.$this->_db->sql_error());
         }
-        return $products;
+        return $custom;
     }
 
     public function stock_available($product_id){

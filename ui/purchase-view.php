@@ -294,7 +294,7 @@ if (isset($_GET['id'])) {
         todayHighlight: true,
         autoclose: true
     });
-    var products = <?php echo json_encode($products) ?>;
+    var products = <?php echo $product->jsonProducts(); ?>;
     function searchObjects(data,id) {
        var searchField = "id";
        for (var i=0 ; i < data.length ; i++)

@@ -1,13 +1,21 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 require_once '../vendor/autoload.php';
-$product = new Products();
+$report = new Report();
+$data=[];
+if (isset($_POST['generate'])){
+    $data = $report->generateInvoice($_POST);
+    $total = $data['sub_total']-(($data['sub_total']*$data['discount'])/100);
+    $vat_amount = ($total*$data['vat'])/100;
+    $grand_total = $total+$vat_amount;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <?php include('../include/_head.php') ?>
     <link href="../assets/js/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="https://printjs-4de6.kxcdn.com/print.min.css" rel="stylesheet">
 
 </head>
 
@@ -40,28 +48,57 @@ $product = new Products();
                                 <ul class="nav navbar-right panel_toolbox">
                                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                     </li>
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#">Settings 1</a>
-                                            </li>
-                                            <li><a href="#">Settings 2</a>
-                                            </li>
-                                        </ul>
-                                    </li>
                                     <li><a class="close-link"><i class="fa fa-close"></i></a>
                                     </li>
                                 </ul>
                                 <div class="clearfix"></div>
                             </div>
                             <div class="x_content">
+                                <form class="form-horizontal" action="invoice.php" method="post">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label" for="last-name">Invoice Type
+                                            </label>
+                                            <div class="">
+                                                <select class="form-control" name="invoice_type" id="invoice_type">
+                                                    <option value="">-- Select Type --</option>
+                                                    <option value="purchase">Purchase</option>
+                                                    <option value="sales">Sales</option>
+                                                    <option value="purchase return">Purchase Return</option>
+                                                    <option value="sales return">Sales Return</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label" for="last-name">Orders
+                                            </label>
+                                            <div class="">
+                                                <select class="form-control" name="orders" id="orders">
+                                                    <option value="">-- Select Order --</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label" for="last-name"><i class="fa fa-search-plus"></i></label>
+                                            <div class="">
+                                                <button type="submit" name="generate" class="btn btn-success btn-md"><i class="fa fa-search"></i> Generate</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <hr>
+                                <br>
                                 <section class="content invoice">
-
+                                    <div id="print_area">
                                     <div class="row">
                                         <div class="col-xs-12 invoice-header">
                                             <h1>
                                                 <i class="fa fa-globe"></i> Invoice.
-                                                <small class="pull-right">Date: 16/08/2016</small>
+                                                <small class="pull-right">Date: <?= date('Y-m-d') ?></small>
                                             </h1>
                                         </div>
 
@@ -71,34 +108,30 @@ $product = new Products();
                                         <div class="col-sm-4 invoice-col">
                                             From
                                             <address>
-                                                <strong>Iron Admin, Inc.</strong>
-                                                <br>795 Freedom Ave, Suite 600
-                                                <br>New York, CA 94107
-                                                <br>Phone: 1 (804) 123-9876
-                                                <br>Email: ironadmin.com
+                                                <strong><?=  $data['from_name'] ?></strong>
+                                                <br><?= $data['from_address'] ?>
+                                                <br>Phone: <?= $data['from_phone'] ?>
+                                                <br>Email: <?= $data['from_email'] ?>
                                             </address>
                                         </div>
 
                                         <div class="col-sm-4 invoice-col">
                                             To
                                             <address>
-                                                <strong>John Doe</strong>
-                                                <br>795 Freedom Ave, Suite 600
-                                                <br>New York, CA 94107
-                                                <br>Phone: 1 (804) 123-9876
-                                                <br>Email: jon@ironadmin.com
+                                                <strong><?= $data['to_name'] ?></strong>
+                                                <br><?= $data['to_address'] ?>
+                                                <br>Phone: <?= $data['to_phone'] ?>
+                                                <br>Email: <?= $data['to_email'] ?>
                                             </address>
                                         </div>
 
                                         <div class="col-sm-4 invoice-col">
-                                            <b>Invoice #007612</b>
+                                            <b>Invoice #<?= $data['order'] ?></b>
                                             <br>
                                             <br>
-                                            <b>Order ID:</b> 4F3S8J
+                                            <b>Order ID:</b> <?= $data['order'] ?>
                                             <br>
-                                            <b>Payment Due:</b> 2/22/2014
-                                            <br>
-                                            <b>Account:</b> 968-34567
+                                            <b>Payment Due:</b> <?= $data['due'] ?>
                                         </div>
 
                                     </div>
@@ -109,43 +142,25 @@ $product = new Products();
                                             <table class="table table-striped">
                                                 <thead>
                                                 <tr>
-                                                    <th>Qty</th>
+                                                    <th>SL</th>
                                                     <th>Product</th>
-                                                    <th>Serial #</th>
-                                                    <th style="width: 59%">Description</th>
-                                                    <th>Subtotal</th>
+                                                    <th>Model #</th>
+                                                    <th>Unit Price</th>
+                                                    <th>Qty</th>
+                                                    <th>Total</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Call of Duty</td>
-                                                    <td>455-981-221</td>
-                                                    <td>El snort testosterone trophy driving gloves handsome gerry Richardson helvetica tousled street art master testosterone trophy driving gloves handsome gerry Richardson
-                                                    </td>
-                                                    <td>$64.50</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Need for Speed IV</td>
-                                                    <td>247-925-726</td>
-                                                    <td>Wes Anderson umami biodiesel</td>
-                                                    <td>$50.00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Monsters DVD</td>
-                                                    <td>735-845-642</td>
-                                                    <td>Terry Richardson helvetica tousled street art master, El snort testosterone trophy driving gloves handsome letterpress erry Richardson helvetica tousled</td>
-                                                    <td>$10.70</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>Grown Ups Blue Ray</td>
-                                                    <td>422-568-642</td>
-                                                    <td>Tousled lomo letterpress erry Richardson helvetica tousled street art master helvetica tousled street art master, El snort testosterone</td>
-                                                    <td>$25.99</td>
-                                                </tr>
+                                                <?php $sl=1; foreach ($data['items_data'] as $item){ ?>
+                                                    <tr>
+                                                        <td><?= $sl; ?></td>
+                                                        <td><?= $item['product_name'] ?></td>
+                                                        <td><?= $item['model'] ?></td>
+                                                        <td><?= $item['unit_price'] ?></td>
+                                                        <td><?= $item['quantity'] ?></td>
+                                                        <td><?= $item['unit_price']*$item['quantity'] ?></td>
+                                                    </tr>
+                                                <?php $sl++; } ?>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -155,36 +170,47 @@ $product = new Products();
                                     <div class="row">
 
                                         <div class="col-xs-6">
-                                            <p class="lead">Payment Methods:</p>
-                                            <img src="images/visa.png" alt="Visa">
-                                            <img src="images/mastercard.png" alt="Mastercard">
-                                            <img src="images/american-express.png" alt="American Express">
-                                            <img src="images/paypal.png" alt="Paypal">
+                                            <p class="lead">Payment Methods: <?= $data['payment_method'] ?></p>
                                             <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                                                Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem plugg dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+                                                <?= $data['note'] ?>
                                             </p>
                                         </div>
 
                                         <div class="col-xs-6">
-                                            <p class="lead">Amount Due 2/22/2014</p>
                                             <div class="table-responsive">
                                                 <table class="table">
                                                     <tbody>
                                                     <tr>
                                                         <th style="width:50%">Subtotal:</th>
-                                                        <td>$250.30</td>
+                                                        <td><?= $data['sub_total'] ?></td>
                                                     </tr>
                                                     <tr>
-                                                        <th>Tax (9.3%)</th>
-                                                        <td>$10.34</td>
+                                                        <th>Discount (%)</th>
+                                                        <td><?= $data['discount'] ?></td>
                                                     </tr>
                                                     <tr>
-                                                        <th>Shipping:</th>
-                                                        <td>$5.80</td>
+                                                        <th>Total</th>
+                                                        <td><?= $total ?></td>
                                                     </tr>
                                                     <tr>
-                                                        <th>Total:</th>
-                                                        <td>$265.24</td>
+                                                        <th>Vat (%)</th>
+                                                        <td><?= $data['vat'] ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Vat</th>
+                                                        <td><?= $vat_amount ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Grand Total</th>
+                                                        <td><?= $grand_total ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Paid</th>
+                                                        <td><?= $data['paid'] ?></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Due</th>
+                                                        <td><?= $data['due'] ?></td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -192,13 +218,10 @@ $product = new Products();
                                         </div>
 
                                     </div>
-
-
+                                    </div>
                                     <div class="row no-print">
                                         <div class="col-xs-12">
-                                            <button class="btn btn-default" onclick="if (!window.__cfRLUnblockHandlers) return false; window.print();"><i class="fa fa-print"></i> Print</button>
-                                            <button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment</button>
-                                            <button class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</button>
+                                            <button type="button" id="print_invoice" onclick="printDiv()" class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-print"></i> PRINT</button>
                                         </div>
                                     </div>
                                 </section>
@@ -216,11 +239,59 @@ $product = new Products();
     </div>
 </div>
 <?php include('../include/_script.php') ?>
+<script src="https://printjs-4de6.kxcdn.com/print.min.js" type="text/javascript"></script>
 <script src="../assets/js/datatables.net/js/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="../assets/js/datatables.net-bs/js/dataTables.bootstrap.min.js" type="text/javascript"></script>
-
 <script>
+    function printDiv()
+    {
 
+        var divToPrint=document.getElementById('print_area');
+
+        var newWin=window.open('','Print-Window');
+
+        newWin.document.open();
+
+        newWin.document.write('<html><body onload="window.print()">'+divToPrint.innerHTML+'</body></html>');
+
+        newWin.document.close();
+        setTimeout(function(){newWin.close();},10);
+
+    }
+    $('#invoice_type').change(function () {
+        var invoice_type = $(this).val();
+        var dropdown = '';
+        $.ajax({
+            url:"ajax.php?ajax=invoice_order&type="+invoice_type,
+            type:'GET',
+            dataType:'json',
+            success:function (response) {
+                $('#orders').children('option:not(:first)').remove();
+                console.log(response);
+                if (invoice_type==="purchase") {
+                    $.each(response, function (key, value) {
+                        dropdown += '<option value="' + value.purchase_order_no + '">' + value.purchase_order_no + '</option>';
+                    });
+                }else if(invoice_type==="sales"){
+                    $.each(response, function (key, value) {
+                        dropdown += '<option value="' + value.sales_order + '">' + value.sales_order + '</option>';
+                    });
+                }else if(invoice_type==="purchase return"){
+                    $.each(response, function (key, value) {
+                        dropdown += '<option value="' + value.purchase_order_no + '">' + value.purchase_order_no + '</option>';
+                    });
+                }else if(invoice_type==="sales return"){
+                    $.each(response, function (key, value) {
+                        dropdown += '<option value="' + value.sales_order + '">' + value.sales_order + '</option>';
+                    });
+                }
+                $('#orders').append(dropdown);
+            },
+            error:function (error) {
+                console.log(error);
+            }
+        });
+    });
 </script>
 </body>
 </html>

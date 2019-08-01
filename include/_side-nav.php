@@ -72,11 +72,12 @@
                             <li><a href="customers.php">List</a></li>
                         </ul>
                     </li>
+                    <li><a href="invoice.php"><i class="fa fa-globe"></i> Invoice</a></li>
                     <li><a><i class="fa fa-bar-chart"></i> Reports <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
                             <li><a href="monthly-stock.php">Monthly Stock</a></li>
-                            <li><a href="#">Monthly Sales</a></li>
-                            <li><a href="#">Monthly Purchase</a></li>
+                            <li><a href="monthly-sales.php">Monthly Sales</a></li>
+                            <li><a href="monthly-purchase.php">Monthly Purchase</a></li>
                             <li><a href="#">Top Sales</a></li>
                         </ul>
                     </li>

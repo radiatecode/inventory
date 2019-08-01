@@ -47,16 +47,15 @@ $product = new Products();
                                             <th>SL</th>
                                             <th>Category</th>
                                             <th>Product Name</th>
+                                            <th>Repurchase Qty</th>
                                             <th>Brand</th>
                                             <th>Price</th>
                                             <th>Available Qty</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <?php $sl=1; foreach ($product->stock() as $row){
-                                            $available = ($row['purchase_quantity']-($row['sale_quantity']+$row['purchase_return_quantity']));
-                                            ?>
-                                            <tr style="<?= $available<=$row['repurchase_qty'] ? 'background-color: #cd494c; color: white':'' ?>">
+                                        <?php $sl=1; foreach ($product->stock() as $row){ ?>
+                                            <tr style="<?= $row['available']<=$row['repurchase_qty'] ? 'background-color: #cd494c; color: white':'' ?>">
                                                 <td><?= $sl ?></td>
                                                 <td><?= $row['name'] ?></td>
                                                 <td>
@@ -66,9 +65,10 @@ $product = new Products();
                                                     <?php } ?>
                                                     <?= $row['product_name'] ?>
                                                 </td>
+                                                <td><?= $row['repurchase_qty'] ?></td>
                                                 <td><?= $row['brand_name'] ?></td>
                                                 <td><?= $row['mrp'] ?></td>
-                                                <td><?= $available ?></td>
+                                                <td><?= $row['available'] ?></td>
                                             </tr>
                                         <?php $sl++; } ?>
                                         </tbody>
