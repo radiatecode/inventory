@@ -60,14 +60,18 @@ $purchase = new Purchase();
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <?php foreach ($purchase->allPurchased() as $row){ ?>
+                                        <?php foreach ($purchase->allPurchased() as $row){
+                                            $total_amount = $row['sub_total']-(($row['sub_total']*$row['discount'])/100);
+                                            $vat_amount = ($total_amount*$row['vat'])/100;
+                                            $grand = $total_amount+$vat_amount;
+                                            ?>
                                             <tr>
                                                 <td><input type="checkbox" name="ids[]" id="ids" value="<?= $row['purchase_id'] ?>"></td>
                                                 <td><?= $row['name'] ?></td>
                                                 <td><?= $row['purchase_order_no'] ?></td>
                                                 <td><?= $row['order_date'] ?></td>
                                                 <td><?= $row['total_qty'] ?></td>
-                                                <td><?= $row['sub_total'] ?></td>
+                                                <td><?= $grand ?></td>
                                                 <td><?= $row['paid_amount'] ?></td>
                                                 <td><?= $row['due_amount'] ?></td>
                                                 <td><?= $row['created_at'] ?></td>

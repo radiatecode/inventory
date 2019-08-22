@@ -60,7 +60,11 @@ $orders = new Order();
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <?php foreach ($orders->allOrders() as $row){ ?>
+                                        <?php foreach ($orders->allOrders() as $row){
+                                            $total_amount = $row['sub_total']-(($row['sub_total']*$row['discount'])/100);
+                                            $vat_amount = ($total_amount*$row['vat'])/100;
+                                            $grand = $total_amount+$vat_amount;
+                                            ?>
                                             <tr>
                                                 <td><input type="checkbox" name="ids[]" id="ids" value="<?= $row['order_id'] ?>"></td>
                                                 <td><?= $row['name'] ?></td>
@@ -72,7 +76,7 @@ $orders = new Order();
                                                     <?= $row['total_qty'] ?>
                                                 </td>
                                                 <td>
-                                                    <?= $row['sub_total'] ?>
+                                                    <?= $grand ?>
                                                 </td>
                                                 <td><?= $row['paid_amount'] ?></td>
                                                 <td><?= $row['due_amount'] ?></td>

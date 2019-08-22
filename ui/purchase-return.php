@@ -59,13 +59,17 @@ $purchaseReturn = new PurchaseReturn();
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <?php foreach ($purchaseReturn->allPurchaseReturn() as $row){ ?>
+                                        <?php foreach ($purchaseReturn->allPurchaseReturn() as $row){
+                                            $total_amount = $row['sub_total']-(($row['sub_total']*$row['discount_given'])/100);
+                                            $vat_amount = ($total_amount*$row['vat'])/100;
+                                            $grand = $total_amount+$vat_amount;
+                                            ?>
                                             <tr>
                                                 <td><input type="checkbox" name="ids[]" id="ids" value="<?= $row['return_id'] ?>"></td>
                                                 <td><?= $row['purchase_order_no'] ?></td>
                                                 <td><?= $row['return_date'] ?></td>
                                                 <td><?= $row['total_qty'] ?></td>
-                                                <td><?= $row['sub_total'] ?></td>
+                                                <td><?= $grand ?></td>
                                                 <td><?= $row['receipt_amount'] ?></td>
                                                 <td><?= $row['adjust_amount'] ?></td>
                                                 <td><?= $row['created_at'] ?></td>
