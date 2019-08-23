@@ -99,14 +99,14 @@ if (isset($_GET['id'])) {
                                                  <label class="control-label" for="last-name">Return Date <span class="required">*</span>
                                                  </label>
                                                  <div class="">
-                                                     <input type="text" id="return_date" name="return_date" value="<?= $viewReturn['return_date'] ?>" class="form-control col-md-7 col-xs-12">
+                                                     <input type="text" id="return_date" name="return_date" value="<?= $viewReturn['return_date'] ?>" class="form-control col-md-7 col-xs-12" required>
                                                  </div>
                                              </div>
                                              <div class="form-group">
                                                  <label class="control-label" for="last-name">Payment Method <span class="required">*</span>
                                                  </label>
                                                  <div class="">
-                                                     <select class="form-control" name="payment_method">
+                                                     <select class="form-control" name="payment_method" required>
                                                          <option value="">-- Select Payment Method --</option>
                                                          <option value="bkash" <?= $viewReturn['payment_method']=='bkash'?'selected':'' ?>>Bkash</option>
                                                          <option value="cash" <?= $viewReturn['payment_method']=='cash'?'selected':'' ?>>Cash</option>
@@ -142,13 +142,13 @@ if (isset($_GET['id'])) {
                                                                <input type="text" class="form-control col-md-7 col-xs-12" ng-model="item.purchase_qty" readonly>
                                                            </td>
                                                            <td>
-                                                               <input type="text" name="unit_price[]" class="form-control col-md-7 col-xs-12" ng-model="item.unit_price" >
+                                                               <input type="text" name="unit_price[]" class="form-control col-md-7 col-xs-12" ng-model="item.unit_price" required>
                                                            </td>
                                                            <td>
-                                                               <input type="text" name="quantity[]" class="form-control col-md-7 col-xs-12" ng-model="item.quantity" ng-change="calculate(item);getTotal();">
+                                                               <input type="text" name="quantity[]" class="form-control col-md-7 col-xs-12" ng-model="item.quantity" ng-change="calculate(item);getTotal();" required>
                                                            </td>
                                                            <td>
-                                                               <input type="text" name="total[]" class="form-control col-md-7 col-xs-12" ng-model="item.total" readonly>
+                                                               <input type="text" name="total[]" class="form-control col-md-7 col-xs-12" ng-model="item.total" required readonly>
                                                            </td>
                                                        </tr>
                                                     </tbody>
@@ -170,36 +170,36 @@ if (isset($_GET['id'])) {
                                                 <label class="control-label" for="last-name">Sub Total <span class="required">*</span>
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="sub_total" name="sub_total" ng-model="sub_total"
-                                                           class="form-control col-md-7 col-xs-12" readonly>
+                                                    <input type="number" id="sub_total" name="sub_total" ng-model="sub_total"
+                                                           class="form-control col-md-7 col-xs-12" step=".01" min="0" readonly>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label" for="last-name">Discount Given (%)
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="discount" name="discount" ng-model="discount" class="form-control col-md-7 col-xs-12" readonly>
+                                                    <input type="number" id="discount" name="discount" ng-model="discount" class="form-control col-md-7 col-xs-12" readonly>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label" for="last-name">Total Amount
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="total_amount" name="total_amount" ng-model="total_amount" class="form-control col-md-7 col-xs-12" readonly>
+                                                    <input type="number" id="total_amount" name="total_amount" ng-model="total_amount" class="form-control col-md-7 col-xs-12" step=".01" min="0" required readonly>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label" for="last-name">VAT (%) <span class="required">*</span>
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="vat" name="vat" class="form-control col-md-7 col-xs-12" ng-model="vat" ng-change="getTotal();">
+                                                    <input type="number" id="vat" name="vat" class="form-control col-md-7 col-xs-12" ng-model="vat" ng-change="getTotal();" min="0">
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label" for="last-name">VAT <span class="required">*</span>
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="vat_amount" ng-model="vat_amount" name="vat_amount" class="form-control col-md-7 col-xs-12" readonly>
+                                                    <input type="number" id="vat_amount" ng-model="vat_amount" name="vat_amount" class="form-control col-md-7 col-xs-12" step=".01" readonly>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -213,14 +213,14 @@ if (isset($_GET['id'])) {
                                                 <label class="control-label" for="last-name">Receipt Amount <span class="required">*</span>
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="receipt_amount" name="receipt_amount"  ng-model="receipt_amount" ng-change="getTotal();" class="form-control col-md-7 col-xs-12" >
+                                                    <input type="number" id="receipt_amount" name="receipt_amount"  ng-model="receipt_amount" ng-change="getTotal();" class="form-control col-md-7 col-xs-12" step=".01" min="0" required >
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label class="control-label" for="last-name">Adjust Amount <span class="required">*</span>
                                                 </label>
                                                 <div class="">
-                                                    <input type="text" id="adjust_amount" name="adjust_amount" ng-model="adjust_amount" class="form-control col-md-7 col-xs-12" readonly>
+                                                    <input type="number" id="adjust_amount" name="adjust_amount" ng-model="adjust_amount" class="form-control col-md-7 col-xs-12" step=".01" min="0" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -278,6 +278,7 @@ if (isset($_GET['id'])) {
                 }
             }
             $scope.sub_total = total_bdt;
+            $scope.receipt_amount = 0;
         };
 
         $scope.getTotal = function(){
@@ -299,14 +300,14 @@ if (isset($_GET['id'])) {
     });
 
     function view_return($scope) {
-        $scope.sub_total = '<?= $viewReturn['sub_total'] ?>';
-        $scope.discount = '<?= $viewReturn['discount_given'] ?>';
-        $scope.total_amount = '<?= $total ?>';
-        $scope.vat = '<?= $viewReturn['vat'] ?>';
-        $scope.vat_amount = '<?= $vat ?>';
-        $scope.grand_total = '<?= $grand_total ?>';
-        $scope.receipt_amount = '<?= $viewReturn['receipt_amount'] ?>';
-        $scope.adjust_amount = '<?= $viewReturn['adjust_amount'] ?>';
+        $scope.sub_total = parseFloat('<?= $viewReturn['sub_total'] ?>');
+        $scope.discount = parseInt('<?= $viewReturn['discount_given'] ?>');
+        $scope.total_amount = parseFloat('<?= $total ?>');
+        $scope.vat = parseInt('<?= $viewReturn['vat'] ?>');
+        $scope.vat_amount = parseFloat('<?= $vat ?>');
+        $scope.grand_total = parseFloat('<?= $grand_total ?>');
+        $scope.receipt_amount = parseFloat('<?= $viewReturn['receipt_amount'] ?>');
+        $scope.adjust_amount = parseFloat('<?= $viewReturn['adjust_amount'] ?>');
     }
 </script>
 </body>

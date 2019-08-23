@@ -23,7 +23,7 @@ class Auth
     public function credentials($email,$pass){
         if (isset($email) && isset($pass)){
             $this->email = $email;
-            $this->password = $pass;
+            $this->password = md5($pass);
             $this->login();
         }
     }

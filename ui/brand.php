@@ -137,7 +137,7 @@ if (isset($_POST['add_brand'])) {
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-                                        <button  type="submit" id="submit_brand" name="add_brand" class="btn btn-success"><i class="fa fa-save"></i> Save Comment</button>
+                                        <button  type="submit" id="submit_brand" name="add_brand" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
                                     </div>
                                 </form>
                             </div>

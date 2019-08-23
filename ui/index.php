@@ -38,7 +38,7 @@ $sales_chart = $dashboard->sales_chart();
                     <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="tile-stats">
                             <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
-                            <div class="count"><?= $data['purchase_qty']?$data['purchase_qty']:0; ?></div>
+                            <div class="count"><?= $data['purchase_qty']?round($data['purchase_qty']):0; ?></div>
                             <h3>Purchased</h3>
                             <p>Total Purchased Product</p>
                         </div>
@@ -46,7 +46,7 @@ $sales_chart = $dashboard->sales_chart();
                     <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="tile-stats">
                             <div class="icon"><i class="fa fa-cart-plus"></i></div>
-                            <div class="count"><?= $data['sales_qty']?$data['sales_qty']:0; ?></div>
+                            <div class="count"><?= $data['sales_qty']?round($data['sales_qty']):0; ?></div>
                             <h3>Sales</h3>
                             <p>Total Sales</p>
                         </div>
@@ -54,7 +54,7 @@ $sales_chart = $dashboard->sales_chart();
                     <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="tile-stats">
                             <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
-                            <div class="count"><?= $data['purchase_return_qty']?$data['purchase_return_qty']:0; ?></div>
+                            <div class="count"><?= $data['purchase_return_qty']?round($data['purchase_return_qty']):0; ?></div>
                             <h3>Purchase Return</h3>
                             <p>Total Purchase Return</p>
                         </div>
@@ -62,7 +62,7 @@ $sales_chart = $dashboard->sales_chart();
                     <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div class="tile-stats">
                             <div class="icon"><i class="fa fa-cart-arrow-down"></i></div>
-                            <div class="count"><?= $data['sales_return_qty']?$data['sales_return_qty']:0; ?></div>
+                            <div class="count"><?= $data['sales_return_qty']?round($data['sales_return_qty']):0; ?></div>
                             <h3>Sales Return</h3>
                             <p>Total Sales Return</p>
                         </div>

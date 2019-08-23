@@ -165,7 +165,7 @@ class Products
         ->get();
 
         if ($update){
-            Session::flush('success','Successfully Updated Product Data');
+            Session::flush('success','Successfully Updated Product Prices');
         }else{
             Session::flush('failed','Update Error! '.$this->_db->sql_error());
         }

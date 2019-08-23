@@ -126,8 +126,8 @@ $product = new Products();
         var id = $(this).attr('id');
         console.log(id);
         Swal.fire({
-            title: "Add Product Quantity",
-            text: "Add Quantity for the product ",
+            title: "Update Product Quantity",
+            text: "Update Quantity for the product ",
             showCancelButton: true,
             confirmButtonText:"Submit",
             html:'<form class="form-horizontal">' +
@@ -147,7 +147,7 @@ $product = new Products();
                 var qty = document.getElementById('qty').value;
                 var sale_price = parseFloat(document.getElementById('sale_price').value);
                 var sale_discount = parseFloat(document.getElementById('sale_discount').value);
-                var mrp = (sale_price * sale_discount)/100;
+                var mrp = sale_price - ((sale_price * sale_discount)/100);
                 $.ajax({
                     url:'ajax.php?ajax=add_product_quantity&id='+id,
                     type:'POST',
@@ -157,7 +157,7 @@ $product = new Products();
                         'repurchase_qty':qty,
                         'sale_price':sale_price,
                         'sale_discount':sale_discount,
-                        'mrp':(sale_price+mrp)
+                        'mrp':mrp
                     },
                     success:function (response) {
                         if (response==='success') {

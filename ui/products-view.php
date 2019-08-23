@@ -73,7 +73,7 @@ if (isset($_GET['id'])){
                                             </li>
                                             <li role="presentation" class=""><a href="#tab_content2" role="tab" id="attributes-tab" data-toggle="tab" aria-expanded="false">Attributes</a>
                                             </li>
-                                            <li role="presentation" class=""><a href="#tab_content3" role="tab" id="stock-tab" data-toggle="tab" aria-expanded="false">Data</a>
+                                            <li role="presentation" class=""><a href="#tab_content3" role="tab" id="stock-tab" data-toggle="tab" aria-expanded="false">Prices</a>
                                             </li>
                                         </ul>
                                         <div id="myTabContent" class="tab-content">
@@ -84,7 +84,7 @@ if (isset($_GET['id'])){
                                                         <label class="control-label" for="last-name">Brands <span class="required">*</span>
                                                         </label>
                                                         <div class="">
-                                                           <select name="brand" id="brand" class="form-control">
+                                                           <select name="brand" id="brand" class="form-control" required>
                                                                <option value="">-- Select Brand --</option>
                                                                <?php foreach ($brand->enableBrands() as $row){ ?>
                                                                   <option value="<?= $row['id'] ?>" <?= $view_product['brand_id']==$row['id']?'selected':'' ?>><?= $row['brand_name'] ?></option>
@@ -96,21 +96,21 @@ if (isset($_GET['id'])){
                                                         <label class="control-label" for="last-name">Product Name <span class="required">*</span>
                                                         </label>
                                                         <div class="">
-                                                            <input type="text" id="product_name" name="product_name" value="<?= $view_product['product_name'] ?>" class="form-control col-md-7 col-xs-12">
+                                                            <input type="text" id="product_name" name="product_name" value="<?= $view_product['product_name'] ?>" class="form-control col-md-7 col-xs-12" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="control-label" for="last-name">Product Model <span class="required">*</span>
                                                         </label>
                                                         <div class="">
-                                                            <input type="text" id="model" name="model" value="<?= $view_product['model'] ?>" class="form-control col-md-7 col-xs-12">
+                                                            <input type="text" id="model" name="model" value="<?= $view_product['model'] ?>" class="form-control col-md-7 col-xs-12" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="control-label" for="last-name">Product Details <span class="required">*</span>
                                                         </label>
                                                         <div class="">
-                                                            <textarea name="description" id="description"><?= $view_product['product_details'] ?></textarea>
+                                                            <textarea name="description" id="description" required><?= $view_product['product_details'] ?></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -144,7 +144,7 @@ if (isset($_GET['id'])){
                                                         <label class="control-label" for="last-name">Category <span class="required">*</span>
                                                         </label>
                                                         <div class="">
-                                                            <select name="category" id="category" class="form-control">
+                                                            <select name="category" id="category" class="form-control" required>
                                                                 <option value="">-- Select Category --</option>
                                                                 <?php foreach ($category->displayCategory() as $row){ ?>
                                                                     <option value="<?= $row['id'] ?>" <?= $view_product['category_id']==$row['id']?'selected':'' ?>><?= $row['name'] ?></option>
@@ -167,7 +167,7 @@ if (isset($_GET['id'])){
                                                                         <tr>
                                                                             <td>
                                                                                 <input type="hidden" name="product_attribute_id[]" value="<?= $attr['id'] ?>">
-                                                                                <select name="update_attribute[]" class="form-control">
+                                                                                <select name="update_attribute[]" class="form-control" required>
                                                                                     <option value="">-- Select Attribute --</option>
                                                                                     <?php foreach ($category_attributes as $row){ ?>
                                                                                         <option value="<?= $row['id'] ?>"
@@ -176,7 +176,7 @@ if (isset($_GET['id'])){
                                                                                 </select>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="text" name="update_attribute_value[]" value="<?= $attr['attribute_value'] ?>" class="form-control col-md-7 col-xs-12">
+                                                                                <input type="text" name="update_attribute_value[]" value="<?= $attr['attribute_value'] ?>" class="form-control col-md-7 col-xs-12" required>
                                                                             </td>
                                                                             <td>
                                                                                 <button type="button" id="<?= $attr['id'] ?>" class="btn btn-danger btn-xs delete_attributes"><i class="fa fa-trash-o"></i></button>
@@ -235,42 +235,42 @@ if (isset($_GET['id'])){
                                                         <label class="control-label" for="last-name">Purchase Price <span class="required">*</span>
                                                         </label>
                                                         <div class="">
-                                                            <input type="text" id="purchase_price" name="purchase_price" value="<?= $view_product['purchase_price'] ?>" class="form-control col-md-7 col-xs-12">
+                                                            <input type="number" id="purchase_price" name="purchase_price" value="<?= $view_product['purchase_price'] ?>" class="form-control col-md-7 col-xs-12" step=".01" min="0" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="control-label" for="last-name">Purchase Discount (%) <span class="required">*</span>
                                                         </label>
                                                         <div class="">
-                                                            <input type="text" id="purchase_discount" name="purchase_discount" value="<?= $view_product['purchase_discount'] ?>" class="form-control col-md-7 col-xs-12">
+                                                            <input type="number" id="purchase_discount" name="purchase_discount" value="<?= $view_product['purchase_discount'] ?>" class="form-control col-md-7 col-xs-12" min="0">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="control-label" for="last-name">Repurchase Qty <span class="required">*</span>
                                                         </label>
                                                         <div class="">
-                                                            <input type="text" id="repurchase_qty" name="repurchase_qty" value="<?= $view_product['repurchase_qty'] ?>" class="form-control col-md-7 col-xs-12">
+                                                            <input type="number" id="repurchase_qty" name="repurchase_qty" value="<?= $view_product['repurchase_qty'] ?>" class="form-control col-md-7 col-xs-12" min="0" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="control-label" for="last-name">Sale Price <span class="required">*</span>
                                                         </label>
                                                         <div class="">
-                                                            <input type="text" id="sale_price" name="sale_price" value="<?= $view_product['sale_price'] ?>" class="form-control col-md-7 col-xs-12">
+                                                            <input type="number" id="sale_price" name="sale_price" value="<?= $view_product['sale_price'] ?>" class="form-control col-md-7 col-xs-12" step=".01" min="0" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="control-label" for="last-name">Sale Discount (%) <span class="required">*</span>
                                                         </label>
                                                         <div class="">
-                                                            <input type="text" id="sale_discount" name="sale_discount" value="<?= $view_product['sale_discount'] ?>" class="form-control col-md-7 col-xs-12">
+                                                            <input type="number" id="sale_discount" name="sale_discount" value="<?= $view_product['sale_discount'] ?>" class="form-control col-md-7 col-xs-12" min="0">
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="control-label" for="last-name">MRP <span class="required">*</span>
                                                         </label>
                                                         <div class="">
-                                                            <input type="text" id="mrp" name="mrp" value="<?= $view_product['mrp'] ?>" class="form-control col-md-7 col-xs-12" readonly>
+                                                            <input type="number" id="mrp" name="mrp" value="<?= $view_product['mrp'] ?>" class="form-control col-md-7 col-xs-12" step=".01" min="0" required>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12 col-lg-12 col-xs-12">
@@ -299,6 +299,12 @@ if (isset($_GET['id'])){
 <?php include('../include/_script.php') ?>
 <script src="//cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
 <script>
+    $('input[name=sale_discount]').add('input[name=sale_price]').keyup(function () {
+        var sale_price = $('input[name=sale_price]').val();
+        var sale_discount = $('input[name=sale_discount]').val();
+        var mrp = sale_price - ((sale_price*sale_discount)/100);
+        $('input[name=mrp]').val(mrp);
+    });
     CKEDITOR.replace( 'description' );
     function readURL(input) {
         if (input.files && input.files[0]) {
@@ -413,12 +419,7 @@ if (isset($_GET['id'])){
             }
         });
     });
-    $('#sale_discount').keyup(function () {
-        var price = parseFloat($('#sale_price').val());
-        var discount =  parseFloat($(this).val());
-        var mrp = (price * discount)/100;
-        $('#mrp').val(price+mrp);
-    });
+
     $("#update_basic").click(function (event) {
         if( !confirm('Are you sure that you want to update basic info') ){
             event.preventDefault();

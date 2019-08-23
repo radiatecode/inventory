@@ -14,6 +14,7 @@
 <link href="../assets/js/nprogress/nprogress.css" rel="stylesheet">
 <!-- Animate.css -->
 <link href="../assets/js/animate.css/animate.min.css" rel="stylesheet">
+<link href="../assets/js/select2/dist/css/select2.min.css" rel="stylesheet">
 
 <!-- Custom Theme Style -->
 <link href="../assets/css/custom.min.css" rel="stylesheet">

@@ -5,6 +5,7 @@ redirectIfAuthenticate();
 
 $auth = new Auth();
 $auth->credentials($_POST['email'],$_POST['password']);
+//echo md5('12345678');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +22,7 @@ $auth->credentials($_POST['email'],$_POST['password']);
                 <form action="login.php" method="post">
                     <h1>IMS User Login</h1>
                     <div>
-                        <input type="text" class="form-control" placeholder="Email" name="email" value="" required="" />
+                        <input type="email" class="form-control" placeholder="Email" name="email" value="" required="" />
                     </div>
                     <div>
                         <input type="password" class="form-control" placeholder="Password" name="password" required="" />

@@ -54,7 +54,7 @@ if (isset($_POST['submit'])){
                                             </li>
                                             <li role="presentation" class=""><a href="#tab_content2" role="tab" id="attribute-tab" data-toggle="tab" aria-expanded="false">Attributes</a>
                                             </li>
-                                            <li role="presentation" class=""><a href="#tab_content3" role="tab" id="stock-tab" data-toggle="tab" aria-expanded="false">Data</a>
+                                            <li role="presentation" class=""><a href="#tab_content3" role="tab" id="stock-tab" data-toggle="tab" aria-expanded="false">Prices</a>
                                             </li>
                                         </ul>
                                         <div id="myTabContent" class="tab-content">
@@ -64,7 +64,7 @@ if (isset($_POST['submit'])){
                                                         <label class="control-label" for="last-name">Brands <span class="required">*</span>
                                                         </label>
                                                         <div class="">
-                                                           <select name="brand" id="brand" class="form-control">
+                                                           <select name="brand" id="brand" class="form-control" required>
                                                                <option value="">-- Select Brand --</option>
                                                                <?php foreach ($brand->enableBrands() as $row){ ?>
                                                                   <option value="<?= $row['id'] ?>"><?= $row['brand_name'] ?></option>
@@ -76,21 +76,21 @@ if (isset($_POST['submit'])){
                                                         <label class="control-label" for="last-name">Product Name <span class="required">*</span>
                                                         </label>
                                                         <div class="">
-                                                            <input type="text" id="product_name" name="product_name" class="form-control col-md-7 col-xs-12">
+                                                            <input type="text" id="product_name" name="product_name" class="form-control col-md-7 col-xs-12" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="control-label" for="last-name">Product Model <span class="required">*</span>
                                                         </label>
                                                         <div class="">
-                                                            <input type="text" id="model" name="model" class="form-control col-md-7 col-xs-12">
+                                                            <input type="text" id="model" name="model" class="form-control col-md-7 col-xs-12" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="control-label" for="last-name">Product Details <span class="required">*</span>
                                                         </label>
                                                         <div class="">
-                                                            <textarea name="description" id="description"></textarea>
+                                                            <textarea name="description" id="description" required></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -116,7 +116,7 @@ if (isset($_POST['submit'])){
                                                     <label class="control-label" for="last-name">Category <span class="required">*</span>
                                                     </label>
                                                     <div class="">
-                                                        <select name="category" id="category" class="form-control">
+                                                        <select name="category" id="category" class="form-control" required>
                                                             <option value="">-- Select Category --</option>
                                                             <?php foreach ($category->displayCategory() as $row){ ?>
                                                                 <option value="<?= $row['id'] ?>"><?= $row['name'] ?></option>
@@ -144,13 +144,13 @@ if (isset($_POST['submit'])){
                                                             <tbody>
                                                              <tr>
                                                                  <td>
-                                                                     <select name="attribute[]" id="constant_attribute" class="form-control attribute">
+                                                                     <select name="attribute[]" id="constant_attribute" class="form-control attribute" required>
                                                                          <option value="">-- Select Attribute --</option>
 
                                                                      </select>
                                                                  </td>
                                                                  <td>
-                                                                     <input type="text" name="attribute_value[]" class="form-control col-md-7 col-xs-12 attribute_value">
+                                                                     <input type="text" name="attribute_value[]" class="form-control col-md-7 col-xs-12 attribute_value" required>
                                                                  </td>
                                                              </tr>
                                                             </tbody>
@@ -164,42 +164,42 @@ if (isset($_POST['submit'])){
                                                     <label class="control-label" for="last-name">Purchase Price <span class="required">*</span>
                                                     </label>
                                                     <div class="">
-                                                        <input type="text" id="purchase_price" name="purchase_price" class="form-control col-md-7 col-xs-12">
+                                                        <input type="number" id="purchase_price" name="purchase_price" class="form-control col-md-7 col-xs-12" step=".01" min="0" required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label" for="last-name">Purchase Discount <span class="required">*</span>
                                                     </label>
                                                     <div class="">
-                                                        <input type="text" id="purchase_discount" name="purchase_discount" class="form-control col-md-7 col-xs-12">
+                                                        <input type="number" id="purchase_discount" name="purchase_discount" value="0" min="0" class="form-control col-md-7 col-xs-12">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label" for="last-name">Repurchase Qty <span class="required">*</span>
                                                     </label>
                                                     <div class="">
-                                                        <input type="text" id="repurchase_qty" name="repurchase_qty" class="form-control col-md-7 col-xs-12">
+                                                        <input type="number" id="repurchase_qty" name="repurchase_qty" class="form-control col-md-7 col-xs-12" min="0" required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label" for="last-name">Sale Price <span class="required">*</span>
                                                     </label>
                                                     <div class="">
-                                                        <input type="text" id="sale_price" name="sale_price" class="form-control col-md-7 col-xs-12">
+                                                        <input type="number" id="sale_price" name="sale_price" class="form-control col-md-7 col-xs-12" step=".01" min="0" required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label" for="last-name">Sale Discount <span class="required">*</span>
                                                     </label>
                                                     <div class="">
-                                                        <input type="text" id="sale_discount" name="sale_discount" class="form-control col-md-7 col-xs-12">
+                                                        <input type="number" id="sale_discount" name="sale_discount" value="0" class="form-control col-md-7 col-xs-12" min="0">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="control-label" for="last-name">MRP <span class="required">*</span>
                                                     </label>
                                                     <div class="">
-                                                        <input type="text" id="mrp" name="mrp" class="form-control col-md-7 col-xs-12">
+                                                        <input type="number" id="mrp" name="mrp" class="form-control col-md-7 col-xs-12" step=".01" min="0" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -228,6 +228,12 @@ if (isset($_POST['submit'])){
 <script src="//cdn.ckeditor.com/4.11.4/standard/ckeditor.js"></script>
 <script>
     CKEDITOR.replace( 'description' );
+    $('input[name=sale_discount]').add('input[name=sale_price]').keyup(function () {
+       var sale_price = $('input[name=sale_price]').val();
+       var sale_discount = $('input[name=sale_discount]').val();
+       var mrp = sale_price - ((sale_price*sale_discount)/100);
+       $('input[name=mrp]').val(mrp);
+    });
     function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
