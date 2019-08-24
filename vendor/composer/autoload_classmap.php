@@ -21,5 +21,6 @@ return array(
     'SalesReturn' => $baseDir . '/classes/SalesReturn.php',
     'Session' => $baseDir . '/function/Session.php',
     'Suppliers' => $baseDir . '/classes/Suppliers.php',
+    'User' => $baseDir . '/classes/User.php',
     'Validation' => $baseDir . '/function/Validation.php',
 );

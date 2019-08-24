@@ -26,6 +26,7 @@ class ComposerStaticInitf29a6195b0a6d553983392a199d62eca
         'SalesReturn' => __DIR__ . '/../..' . '/classes/SalesReturn.php',
         'Session' => __DIR__ . '/../..' . '/function/Session.php',
         'Suppliers' => __DIR__ . '/../..' . '/classes/Suppliers.php',
+        'User' => __DIR__ . '/../..' . '/classes/User.php',
         'Validation' => __DIR__ . '/../..' . '/function/Validation.php',
     );
 
